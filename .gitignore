@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.specdev/backups/
+.specdev/install.lock
+.env
+.env.*
+!.env.example
+test-results/
+playwright-report/
+.test-tmp/

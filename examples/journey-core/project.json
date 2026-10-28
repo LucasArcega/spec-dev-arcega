@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "journey-core",
+    "language": "pt-BR"
+  },
+  "git": {
+    "remote": "origin",
+    "repository": "LucasArcega/journey-core",
+    "base_branch": "develop",
+    "branch_pattern": "{ticket}-{slug}"
+  },
+  "paths": {
+    "plans": "Plans",
+    "status": "Plans/STATUS.md"
+  },
+  "context": [
+    ".agents/context/dotnet-angular.md"
+  ],
+  "validation": [
+    {
+      "id": "backend-build",
+      "cwd": ".",
+      "argv": [
+        "dotnet",
+        "build",
+        "jorneycoreapi.sln"
+      ],
+      "surfaces": [
+        "backend"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "backend-unit",
+      "cwd": ".",
+      "argv": [
+        "dotnet",
+        "test",
+        "--filter",
+        "FullyQualifiedName!~Integration"
+      ],
+      "surfaces": [
+        "backend"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "backend-integration",
+      "cwd": ".",
+      "argv": [
+        "dotnet",
+        "test",
+        "--filter",
+        "FullyQualifiedName~Integration"
+      ],
+      "surfaces": [
+        "backend"
+      ],
+      "requires": [
+        "Docker disponível; banco isolado por Testcontainers."
+      ],
+      "required": true
+    },
+    {
+      "id": "frontend-build",
+      "cwd": "app",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "surfaces": [
+        "frontend"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "frontend-tests",
+      "cwd": "app",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "--watch=false"
+      ],
+      "surfaces": [
+        "frontend"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "ui",
+      "cwd": "visual-qa",
+      "argv": [
+        "npm",
+        "run",
+        "test:all"
+      ],
+      "surfaces": [
+        "ui"
+      ],
+      "requires": [
+        "Selecione os specs do plano para escopo delimitado; API, worker e frontend conforme cenário."
+      ],
+      "required": true
+    }
+  ],
+  "tracking": {
+    "provider": "clickup",
+    "list_id": "901325467803",
+    "workspace_id": "90133046349",
+    "statuses": {
+      "pending": "Pendente",
+      "in_progress": "in progress",
+      "done": "complete"
+    }
+  },
+  "delivery": {
+    "create_pr": false
+  },
+  "models": {
+    "codex": {},
+    "cursor": {},
+    "claude": {}
+  }
+}

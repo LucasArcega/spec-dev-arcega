@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "spec-dev-arcega",
+    "language": "pt-BR"
+  },
+  "git": {
+    "remote": "origin",
+    "repository": null,
+    "base_branch": "main",
+    "branch_pattern": "{ticket}-{slug}"
+  },
+  "paths": {
+    "plans": "Plans",
+    "status": "Plans/STATUS.md"
+  },
+  "context": [
+    ".agents/context/python.md"
+  ],
+  "validation": [
+    {
+      "id": "unit",
+      "cwd": ".",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "surfaces": [
+        "tooling"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "skills",
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "validate"
+      ],
+      "surfaces": [
+        "tooling",
+        "skills"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "integrity",
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "check",
+        "--target",
+        "."
+      ],
+      "surfaces": [
+        "tooling",
+        "skills"
+      ],
+      "requires": [],
+      "required": true
+    }
+  ],
+  "tracking": {
+    "provider": "none",
+    "list_id": null,
+    "workspace_id": null,
+    "statuses": {}
+  },
+  "delivery": {
+    "create_pr": false
+  },
+  "models": {
+    "codex": {},
+    "cursor": {},
+    "claude": {}
+  }
+}

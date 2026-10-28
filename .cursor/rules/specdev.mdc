@@ -1,0 +1,8 @@
+---
+description: Entrada compartilhada do Spec Dev Arcega
+alwaysApply: true
+---
+
+Leia AGENTS.md e .specdev/project.json. Siga .agents/rules/WORKFLOW.md.
+As skills canônicas estão em .agents/skills/; consulte .agents/CATALOG.md.
+Antes de delegar, leia .agents/rules/DELEGATION.md.

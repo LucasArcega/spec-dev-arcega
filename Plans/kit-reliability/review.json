@@ -1,0 +1,107 @@
+{
+  "schema_version": 2,
+  "summary": "P2/P3 corrigidos e itens 4 a 8 implementados. Duas revisoes independentes: contratos aprovados; achados de PATH/cwd e tracking legado corrigidos e aprovados na revisao focada. Sem achados abertos.",
+  "verdict": "approve",
+  "scope": {
+    "base": "snapshot:specdev-before; git:unborn",
+    "head": "working-tree:sha256:214f9f89d5ae1d26d01989f16226731db60b1aeb04259f6ff0083c08a0bdf8dd",
+    "files": [
+      ".agents/roles/explorer.md",
+      ".agents/roles/investigator.md",
+      ".agents/roles/reviewer.md",
+      ".agents/roles/worker.md",
+      ".agents/rules/DELEGATION.md",
+      ".agents/rules/WORKFLOW.md",
+      ".agents/skills/enrich-plan/SKILL.md",
+      ".agents/skills/fast-merge/SKILL.md",
+      ".agents/skills/implement-ticket/SKILL.md",
+      ".agents/skills/merge-and-close/SKILL.md",
+      ".agents/skills/review-changes/SKILL.md",
+      ".agents/skills/review-changes/references/review.schema.json",
+      ".agents/skills/review-changes/scripts/validate_review.py",
+      ".agents/templates/PLAN.md",
+      ".specdev/manifest.json",
+      "README.md",
+      "docs/COMPATIBILITY.md",
+      "docs/CONFIGURATION.md",
+      "docs/REVIEW.md",
+      "docs/WORKFLOWS.md",
+      "kit.json",
+      "scripts/specdev.py",
+      "tests/test_review_contract.py",
+      "tests/test_specdev.py"
+    ]
+  },
+  "checks": [
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "status": "passed",
+      "evidence": "49 testes passaram em Python 3.14.0, 44.999 s, exit 0. TEMP/TMP em pasta gravavel; testes usam diretorios temporarios."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "validate"
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; nove skills validas."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "check",
+        "--target",
+        "."
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; ok=true, issues=[], warnings=[]. Adaptadores conferidos com fontes canonicas."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "doctor",
+        "--target",
+        "."
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; integridade, configuracao e disponibilidade local prontas; executed=false. Este resultado nao substitui os testes."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "install",
+        "--target",
+        ".",
+        "--dry-run"
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; changed=[] apos regeneracao dos adaptadores, versao 0.2.0."
+    }
+  ],
+  "limitations": [
+    "Python 3.11 nao foi executado; suite executada em 3.14.0.",
+    "Cursor e Claude nao foram exercitados como clientes; configuracoes nativas verificadas por testes e integridade.",
+    "Modelos reais, autenticacao e allowlists em clientes nao foram verificados online.",
+    "Merge e fechamento revisados como contratos, sem mutacoes externas.",
+    "Snapshot calculado por caminho UTF-8, NUL, bytes, NUL, na ordem de scope.files; exclui o proprio review e os registros de conclusao do plano."
+  ],
+  "blockers": [],
+  "findings": []
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "configure-me",
+    "language": "pt-BR"
+  },
+  "git": {
+    "remote": "origin",
+    "repository": null,
+    "base_branch": "main",
+    "branch_pattern": "{ticket}-{slug}"
+  },
+  "paths": {
+    "plans": "Plans",
+    "status": "Plans/STATUS.md"
+  },
+  "context": [
+    ".agents/context/dotnet-angular.md"
+  ],
+  "validation": [
+    {
+      "id": "backend-build",
+      "cwd": ".",
+      "argv": [
+        "dotnet",
+        "build"
+      ],
+      "surfaces": [
+        "backend"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "backend-tests",
+      "cwd": ".",
+      "argv": [
+        "dotnet",
+        "test"
+      ],
+      "surfaces": [
+        "backend"
+      ],
+      "requires": [
+        "Configure a separação unit/integration conforme o projeto; Docker quando necessário."
+      ],
+      "required": true
+    },
+    {
+      "id": "frontend-build",
+      "cwd": "app",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "surfaces": [
+        "frontend"
+      ],
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "frontend-tests",
+      "cwd": "app",
+      "argv": [
+        "npm",
+        "test",
+        "--",
+        "--watch=false"
+      ],
+      "surfaces": [
+        "frontend"
+      ],
+      "requires": [],
+      "required": true
+    }
+  ],
+  "tracking": {
+    "provider": "none",
+    "list_id": null,
+    "workspace_id": null,
+    "statuses": {}
+  },
+  "delivery": {
+    "create_pr": false
+  },
+  "models": {
+    "codex": {},
+    "cursor": {},
+    "claude": {}
+  }
+}

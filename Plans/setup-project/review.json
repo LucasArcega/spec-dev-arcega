@@ -1,0 +1,93 @@
+{
+  "schema_version": 2,
+  "summary": "Setup compartilhado entregue; achado P2 de confirmacoes parciais corrigido, revisado e exercitado em retomada independente. Sem achados abertos.",
+  "verdict": "approve",
+  "scope": {
+    "base": "snapshot:setup-before; Git sem commits",
+    "head": "working-tree:sha256:560aea9c5dafcb5dfb5a0ee4e2967457e27e2b620c9fe144829fa3e6eeb1f75c",
+    "files": [
+      ".agents/CATALOG.md",
+      ".agents/skills/setup-project/SKILL.md",
+      ".agents/skills/setup-project/assets/project-context.md",
+      ".agents/skills/setup-project/references/questions.md",
+      ".claude/skills/setup-project/SKILL.md",
+      ".claude/skills/setup-project/assets/project-context.md",
+      ".claude/skills/setup-project/references/questions.md",
+      ".specdev/manifest.json",
+      "README.md",
+      "docs/COMPATIBILITY.md",
+      "docs/CONFIGURATION.md",
+      "docs/SETUP.md",
+      "kit.json",
+      "tests/test_specdev.py"
+    ]
+  },
+  "checks": [
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "status": "passed",
+      "evidence": "51 testes passaram em Python 3.14.0, 38.148 s, exit 0; TEMP/TMP em pasta gravavel."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "validate"
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; dez skills, incluindo setup-project."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "check",
+        "--target",
+        "."
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; ok=true e nenhuma issue; copias e manifest em sincronia."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "install",
+        "--target",
+        ".",
+        "--dry-run"
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; versao 0.3.0 e changed=[] apos gerar adaptadores."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "-"
+      ],
+      "status": "passed",
+      "evidence": "Conferencia de estado do projeto temporario apos entrevista: confirmacao parcial reaberta, respostas anteriores e contexto preservados, proxima pergunta registrada e execucao de comandos ausente no checkpoint."
+    }
+  ],
+  "limitations": [
+    "A avaliacao de entrevista usou agentes na sessao Codex com projeto e respostas ficticios; Cursor e Claude nao foram exercitados como clientes.",
+    "Python 3.11 nao foi executado; suite executada em 3.14.0.",
+    "O teste comportamental cobre inicio e retomadas; nao percorreu todas as perguntas ate conclusao.",
+    "Hash calculado na ordem de scope.files com caminho UTF-8, NUL, bytes e NUL; registros de plano e review excluidos."
+  ],
+  "blockers": [],
+  "findings": []
+}
