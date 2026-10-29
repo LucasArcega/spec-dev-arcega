@@ -84,6 +84,40 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(before, self.snapshot())
         self.assertTrue(kit.check(self.target, self.source)["ok"])
 
+    def test_english_update_preserves_consumer_language_and_local_instructions(self):
+        self.install()
+        config = self.config()
+        config["project"]["language"] = "pt-BR"
+        self.write_config(config)
+        config_bytes = (self.target / kit.CONFIG).read_bytes()
+        instructions = self.target / "AGENTS.md"
+        previous_block = f"{kit.BEGIN}\n## Spec Dev Arcega\nRead the old shared instructions.\n{kit.END}"
+        instructions.write_text("# Local instructions\n\nKeep our conventions.\n\n" + previous_block + "\n", encoding="utf-8")
+        skill_name = ".agents/skills/setup-project/SKILL.md"
+        skill = self.target / skill_name
+        previous_skill = b"---\nname: setup-project\ndescription: Old workflow\n---\n\nOld instructions.\n"
+        skill.write_bytes(previous_skill)
+        manifest_path = self.target / kit.MANIFEST
+        manifest = kit.read_json(manifest_path)
+        manifest["files"]["AGENTS.md"]["sha256"] = kit.digest(previous_block.encode("utf-8"))
+        manifest["files"][skill_name]["sha256"] = kit.digest(previous_skill)
+        manifest_path.write_text(kit.json_text(manifest), encoding="utf-8")
+
+        result = self.install()
+        self.assertIn("AGENTS.md", result["changed"])
+        self.assertIn(skill_name, result["changed"])
+        self.assertEqual((self.target / kit.CONFIG).read_bytes(), config_bytes)
+        self.assertEqual(self.config()["project"]["language"], "pt-BR")
+        self.assertTrue(instructions.read_text(encoding="utf-8").startswith("# Local instructions\n\nKeep our conventions."))
+        self.assertEqual(skill.read_bytes(), (self.source / skill_name).read_bytes())
+        self.assertTrue(kit.check(self.target, self.source)["ok"])
+
+    def test_new_profiles_default_to_english(self):
+        for profile in ("generic", "python", "dotnet-angular"):
+            with self.subTest(profile=profile):
+                config = kit.read_json(self.source / "profiles" / f"{profile}.json")
+                self.assertEqual(config["project"]["language"], "en")
+
     def test_setup_resources_are_distributed_without_starting_setup(self):
         self.install(tools=["codex", "cursor", "claude"])
         skill = ".agents/skills/setup-project"
@@ -465,7 +499,7 @@ class InstallerTests(unittest.TestCase):
         try:
             (self.target / ".agents").symlink_to(outside, target_is_directory=True)
         except OSError as exc:
-            self.skipTest(f"Symlink indisponível nesta sessão: {exc}")
+            self.skipTest(f"Symlink unavailable in this session: {exc}")
         with self.assertRaises(kit.KitError):
             self.install()
         self.assertEqual(list(outside.iterdir()), [])

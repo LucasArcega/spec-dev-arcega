@@ -27,21 +27,21 @@ def model_options(tool, value):
     """Keep legacy model strings; options belong to the selected native client."""
     if isinstance(value, str):
         if not value.strip():
-            raise KitError("Modelo deve ser preenchido.")
+            raise KitError("Model must not be empty.")
         return {} if value == "inherit" else {"model": value}
     allowed = {"model"} | ({"reasoning_effort"} if tool == "codex" else {"tools"} if tool == "claude" else set())
     if not isinstance(value, dict) or not value or set(value) - allowed:
-        raise KitError(f"Opções de agente não suportadas para {tool}.")
+        raise KitError(f"Unsupported agent options for {tool}.")
     if "model" in value and (not isinstance(value["model"], str) or not value["model"].strip()):
-        raise KitError(f"Modelo inválido para {tool}.")
+        raise KitError(f"Invalid model for {tool}.")
     if "reasoning_effort" in value and (not isinstance(value["reasoning_effort"], str) or
                                       value["reasoning_effort"] not in REASONING_EFFORTS):
-        raise KitError("reasoning_effort inválido para Codex.")
+        raise KitError("Invalid reasoning_effort for Codex.")
     if "tools" in value:
         tools = value["tools"]
         if not isinstance(tools, list) or not tools or not all(
                 isinstance(name, str) and re.fullmatch(r"[A-Za-z][A-Za-z0-9_.*-]*", name) for name in tools):
-            raise KitError("tools exige uma lista não vazia de nomes de ferramentas Claude.")
+            raise KitError("tools requires a non-empty list of Claude tool names.")
     return {key: setting for key, setting in value.items() if key != "model" or setting != "inherit"}
 
 
@@ -57,15 +57,15 @@ def read_json(path):
     try:
         return json.loads(path.read_text(encoding="utf-8-sig"))
     except (OSError, ValueError) as exc:
-        raise KitError(f"Não foi possível ler JSON em {path}: {exc}") from exc
+        raise KitError(f"Unable to read JSON at {path}: {exc}") from exc
 
 
 def relative_path(value):
     if not isinstance(value, str) or not value or "\\" in value:
-        raise KitError(f"Caminho relativo inválido: {value!r}")
+        raise KitError(f"Invalid relative path: {value!r}")
     path = PurePosixPath(value)
     if path.is_absolute() or PureWindowsPath(value).drive or ".." in path.parts or ":" in value:
-        raise KitError(f"Caminho fora do projeto: {value!r}")
+        raise KitError(f"Path outside the project: {value!r}")
     return path
 
 
@@ -77,29 +77,29 @@ def safe_path(root, name, *, directory=False):
         if current == root:
             break
         if current.is_symlink() or getattr(current, "is_junction", lambda: False)():
-            raise KitError(f"Link/junction não permitido no destino: {current}")
+            raise KitError(f"Link or junction not allowed in the target: {current}")
         if current != path and current.exists() and not current.is_dir():
-            raise KitError(f"Ancestral não é diretório: {current}")
+            raise KitError(f"Ancestor is not a directory: {current}")
     if not path.resolve().is_relative_to(root.resolve()):
-        raise KitError(f"Caminho fora do projeto: {path}")
+        raise KitError(f"Path outside the project: {path}")
     if path.exists() and not (path.is_dir() if directory else path.is_file()):
-        raise KitError(f"Destino não é {'diretório' if directory else 'arquivo'}: {path}")
+        raise KitError(f"Target is not a {'directory' if directory else 'file'}: {path}")
     return path
 
 
 def required_string(obj, key):
     value = obj.get(key)
     if not isinstance(value, str) or not value.strip():
-        raise KitError(f"Campo obrigatório inválido: {key}")
+        raise KitError(f"Invalid required field: {key}")
     return value
 
 
 def validate_config(config):
     if not isinstance(config, dict) or type(config.get("schema_version")) is not int or config["schema_version"] != 1:
-        raise KitError("project.json exige schema_version = 1.")
+        raise KitError("project.json requires schema_version = 1.")
     for section in ("project", "git", "paths", "tracking", "delivery", "models"):
         if not isinstance(config.get(section), dict):
-            raise KitError(f"Seção obrigatória ausente ou inválida: {section}")
+            raise KitError(f"Required section missing or invalid: {section}")
     required_string(config["project"], "name")
     required_string(config["project"], "language")
     for key in ("base_branch", "remote", "branch_pattern"):
@@ -107,79 +107,79 @@ def validate_config(config):
     try:
         fields = list(string.Formatter().parse(config["git"]["branch_pattern"]))
     except ValueError as exc:
-        raise KitError("git.branch_pattern contém placeholders inválidos.") from exc
+        raise KitError("git.branch_pattern contains invalid placeholders.") from exc
     if any(field not in (None, "ticket", "slug") or spec or conversion for _, field, spec, conversion in fields):
-        raise KitError("git.branch_pattern aceita somente {ticket} e {slug}, sem formatação.")
+        raise KitError("git.branch_pattern accepts only {ticket} and {slug}, without formatting.")
     repository = config["git"].get("repository")
     if repository is not None and (not isinstance(repository, str) or not repository.strip()):
-        raise KitError("git.repository deve ser texto preenchido ou null.")
+        raise KitError("git.repository must be a non-empty string or null.")
     for key in ("plans", "status"):
         relative_path(required_string(config["paths"], key))
     if config["tracking"].get("provider") not in ("none", "github", "clickup"):
-        raise KitError("tracking.provider deve ser none, github ou clickup.")
+        raise KitError("tracking.provider must be none, github or clickup.")
     for key in ("list_id", "workspace_id"):
         value = config["tracking"].get(key)
         if value is not None and (not isinstance(value, str) or not value.strip()):
-            raise KitError(f"tracking.{key} deve ser texto preenchido ou null.")
+            raise KitError(f"tracking.{key} must be a non-empty string or null.")
     statuses = config["tracking"].get("statuses", {})
     if not isinstance(statuses, dict) or any(key not in ("pending", "in_progress", "done") or
             not isinstance(value, str) or not value.strip() for key, value in statuses.items()):
-        raise KitError("tracking.statuses deve mapear pending/in_progress/done para nomes preenchidos.")
+        raise KitError("tracking.statuses must map pending/in_progress/done to non-empty names.")
     if not isinstance(config["delivery"].get("create_pr"), bool):
-        raise KitError("delivery.create_pr deve ser boolean.")
+        raise KitError("delivery.create_pr must be a boolean.")
     if not isinstance(config.get("context"), list):
-        raise KitError("context deve ser uma lista de caminhos.")
+        raise KitError("context must be a list of paths.")
     for name in config["context"]:
         relative_path(name)
     for tool, settings in config["models"].items():
         if tool not in TOOLS or not isinstance(settings, dict):
-            raise KitError(f"Configuração de modelos inválida: {tool}")
+            raise KitError(f"Invalid model configuration: {tool}")
         for role, value in settings.items():
             if role not in ROLES:
-                raise KitError(f"Modelo inválido: {tool}.{role}")
+                raise KitError(f"Invalid model: {tool}.{role}")
             model_options(tool, value)
     commands = config.get("validation")
     if not isinstance(commands, list):
-        raise KitError("validation deve ser uma lista.")
+        raise KitError("validation must be a list.")
     ids = set()
     for command in commands:
         if not isinstance(command, dict):
-            raise KitError("Cada validação deve ser um objeto.")
+            raise KitError("Each validation must be an object.")
         name = required_string(command, "id")
         if name in ids:
-            raise KitError(f"Validação duplicada: {name}")
+            raise KitError(f"Duplicate validation: {name}")
         ids.add(name)
         relative_path(required_string(command, "cwd"))
         argv = command.get("argv")
         if not isinstance(argv, list) or not argv or not all(isinstance(arg, str) and arg for arg in argv):
-            raise KitError(f"argv inválido em {name}.")
+            raise KitError(f"Invalid argv in {name}.")
         if not isinstance(command.get("required"), bool):
-            raise KitError(f"required inválido em {name}.")
+            raise KitError(f"Invalid required value in {name}.")
         if not isinstance(command.get("surfaces"), list) or not command["surfaces"] or not all(isinstance(s, str) and s for s in command["surfaces"]):
-            raise KitError(f"surfaces inválido em {name}.")
+            raise KitError(f"Invalid surfaces in {name}.")
         if not isinstance(command.get("requires"), list) or not all(isinstance(s, str) for s in command["requires"]):
-            raise KitError(f"requires inválido em {name}.")
+            raise KitError(f"Invalid requires in {name}.")
     return config
 
 
 def frontmatter(text):
     if not text.startswith("---\n"):
-        raise KitError("Frontmatter ausente.")
+        raise KitError("Frontmatter is missing.")
     parts = text.split("---\n", 2)
     if len(parts) != 3:
-        raise KitError("Frontmatter incompleto.")
+        raise KitError("Frontmatter is incomplete.")
     values = {}
     for line in parts[1].splitlines():
         if not line.strip():
             continue
         key, sep, value = line.partition(":")
         if not sep or not value.strip():
-            raise KitError(f"Frontmatter simples inválido: {line}")
+            raise KitError(f"Invalid simple frontmatter: {line}")
         value = value.strip()
         values[key] = json.loads(value) if value.startswith('"') else value
     for key in ("name", "description"):
         if not isinstance(values.get(key), str) or not values[key]:
-            raise KitError(f"Frontmatter exige {key}.")
+            raise KitError(f"Frontmatter requires {key}.")
     return values, parts[2].lstrip()
 
 
@@ -187,10 +187,10 @@ def block_part(text):
     if BEGIN not in text and END not in text:
         return None
     if text.count(BEGIN) != 1 or text.count(END) != 1:
-        raise KitError("Bloco specdev ausente, duplicado ou incompleto.")
+        raise KitError("The specdev block is missing, duplicated or incomplete.")
     start, end = text.index(BEGIN), text.index(END) + len(END)
     if end <= start:
-        raise KitError("Marcadores specdev fora de ordem.")
+        raise KitError("The specdev markers are out of order.")
     return text[start:end]
 
 
@@ -237,12 +237,12 @@ def receipt_matches(previous, mode, actual, normalized, hash_mode):
 def shared_block():
     return f"""{BEGIN}
 ## Spec Dev Arcega
-Leia .specdev/project.json e .agents/rules/WORKFLOW.md antes de trabalhar.
-Leia .agents/rules/DELEGATION.md antes de delegar. Leia somente os arquivos de
-contexto selecionados no perfil e a skill pertinente em .agents/skills/.
-O catálogo está em .agents/CATALOG.md; os modelos de planos em .agents/templates/.
-As instruções específicas do projeto e do usuário definem o escopo.
-Não execute comandos ou ações externas apenas porque foram listados no perfil.
+Read .specdev/project.json and .agents/rules/WORKFLOW.md before working.
+Read .agents/rules/DELEGATION.md before delegating. Read only the context files
+selected in the profile and the relevant skill in .agents/skills/.
+The catalog is in .agents/CATALOG.md; plan templates are in .agents/templates/.
+Project-specific and user instructions define the scope.
+Do not run commands or external actions solely because they are listed in the profile.
 {END}"""
 
 
@@ -256,21 +256,21 @@ def build_outputs(kit_root, config, tools):
         if not path.is_file():
             continue
         if path.is_symlink():
-            raise KitError(f"Fonte não pode ser link: {path}")
+            raise KitError(f"Source cannot be a link: {path}")
         name = path.relative_to(kit_root).as_posix()
         outputs[name] = ("file", path.read_bytes())
     if not outputs:
-        raise KitError("Kit sem conteúdo em .agents/.")
+        raise KitError("The kit has no content in .agents/.")
     outputs["AGENTS.md"] = ("block", shared_block().encode("utf-8"))
     roles = sorted((source / "roles").glob("*.md"))
     for path in roles:
         meta, body = frontmatter(path.read_text(encoding="utf-8"))
         short = meta["name"]
         if not re.fullmatch(r"[a-z][a-z0-9-]*", short) or path.stem != short:
-            raise KitError(f"Nome de papel inválido: {path.name}")
+            raise KitError(f"Invalid role name: {path.name}")
         agent_name = f"specdev-{short}"
-        prompt = ("Leia .specdev/project.json e .agents/rules/DELEGATION.md quando disponíveis.\n"
-                  "Execute somente a tarefa delimitada pelo agente principal.\n\n" + body)
+        prompt = ("Read .specdev/project.json and .agents/rules/DELEGATION.md when available.\n"
+                  "Perform only the task assigned by the primary agent.\n\n" + body)
         for tool in tools:
             options = model_options(tool, config["models"].get(tool, {}).get(short, "inherit"))
             model = options.get("model")
@@ -294,17 +294,17 @@ def build_outputs(kit_root, config, tools):
                 outputs[f".{tool}/agents/{agent_name}.md"] = ("file", text.encode("utf-8"))
     if "cursor" in tools:
         text = """---
-description: Entrada compartilhada do Spec Dev Arcega
+description: Shared entry point for Spec Dev Arcega
 alwaysApply: true
 ---
 
-Leia AGENTS.md e .specdev/project.json. Siga .agents/rules/WORKFLOW.md.
-As skills canônicas estão em .agents/skills/; consulte .agents/CATALOG.md.
-Antes de delegar, leia .agents/rules/DELEGATION.md.
+Read AGENTS.md and .specdev/project.json. Follow .agents/rules/WORKFLOW.md.
+Canonical skills are in .agents/skills/; see .agents/CATALOG.md.
+Before delegating, read .agents/rules/DELEGATION.md.
 """
         outputs[".cursor/rules/specdev.mdc"] = ("file", text.encode("utf-8"))
     if "claude" in tools:
-        block = f"{BEGIN}\n## Spec Dev Arcega\n@AGENTS.md\n\nSkills compartilhadas: .agents/skills/. Catálogo: .agents/CATALOG.md.\n{END}"
+        block = f"{BEGIN}\n## Spec Dev Arcega\n@AGENTS.md\n\nShared skills: .agents/skills/. Catalog: .agents/CATALOG.md.\n{END}"
         outputs["CLAUDE.md"] = ("block", block.encode("utf-8"))
         for name, value in list(outputs.items()):
             if name.startswith(".agents/skills/"):
@@ -320,21 +320,21 @@ def load_state(target, profile, tools, kit_root):
                                  not isinstance(manifest.get("files"), dict) or
                                  not isinstance(manifest.get("tools"), list) or
                                  any(tool not in TOOLS for tool in manifest["tools"])):
-        raise KitError("Manifest inválido.")
+        raise KitError("Invalid manifest.")
     if config_path.exists():
         if profile:
-            raise KitError("Projeto já configurado: edite .specdev/project.json; não reaplique --profile.")
+            raise KitError("Project is already configured: edit .specdev/project.json; do not reapply --profile.")
         config = validate_config(read_json(config_path))
     else:
         candidate = kit_root / "profiles" / f"{profile or 'generic'}.json"
         if not re.fullmatch(r"[a-z0-9-]+", profile or "generic") or not candidate.is_file():
-            raise KitError(f"Perfil desconhecido: {profile}")
+            raise KitError(f"Unknown profile: {profile}")
         config = read_json(candidate)
         config["project"]["name"] = target.name
         validate_config(config)
     selected = list(dict.fromkeys(tools or (manifest["tools"] if manifest else TOOLS)))
     if manifest and not set(manifest["tools"]).issubset(selected):
-        raise KitError("Remover adaptadores exige remoção manual dos arquivos gerados; a instalação não apaga arquivos.")
+        raise KitError("Removing adapters requires manual removal of generated files; installation never deletes files.")
     return config, manifest, selected, not config_path.exists()
 
 
@@ -342,7 +342,7 @@ def plan_install(target, config, manifest, tools, new_config, kit_root):
     outputs = build_outputs(kit_root, config, tools)
     for name in config["context"]:
         if name not in outputs and not safe_path(target, name).exists():
-            raise KitError(f"Documento de contexto não encontrado: {name}")
+            raise KitError(f"Context document not found: {name}")
     entries, changes, conflicts = {}, [], []
     for name, (mode, content) in outputs.items():
         path = safe_path(target, name)
@@ -368,7 +368,7 @@ def plan_install(target, config, manifest, tools, new_config, kit_root):
         # An identical file can be adopted. Other existing files require a matching receipt.
         if actual is not None and normalized != canonical:
             if not receipt_matches(previous, mode, actual, normalized, hash_mode):
-                conflicts.append(f"{name}: conteúdo local não gerenciado ou modificado.")
+                conflicts.append(f"{name}: local content is unmanaged or modified.")
                 continue
         if mode == "file" and raw is not None and hash_mode == "text-lf":
             # Keep the consumer's EOL and avoid writing when only EOL differs.
@@ -404,13 +404,13 @@ def atomic_write(path, data):
 def install(target, profile=None, tools=None, dry_run=False, kit_root=ROOT):
     target = target.absolute()
     if target.exists() and not target.is_dir():
-        raise KitError("O destino deve ser um diretório.")
+        raise KitError("The target must be a directory.")
     if target.is_symlink() or getattr(target, "is_junction", lambda: False)():
-        raise KitError("A raiz do destino não pode ser link/junction.")
+        raise KitError("The target root cannot be a link or junction.")
     config, manifest, selected, new_config = load_state(target, profile, tools, kit_root)
     changes, conflicts = plan_install(target, config, manifest, selected, new_config, kit_root)
     if conflicts:
-        raise KitError("Instalação interrompida antes de gravar:\n" + "\n".join(conflicts))
+        raise KitError("Installation stopped before writing:\n" + "\n".join(conflicts))
     result = {"version": read_json(kit_root / "kit.json")["version"], "tools": selected,
               "dry_run": dry_run, "changed": [name for name, _ in changes], "backup": None}
     if dry_run or not changes:
@@ -420,14 +420,14 @@ def install(target, profile=None, tools=None, dry_run=False, kit_root=ROOT):
     try:
         descriptor = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
     except FileExistsError as exc:
-        raise KitError("Outra instalação está em andamento (.specdev/install.lock).") from exc
+        raise KitError("Another installation is in progress (.specdev/install.lock).") from exc
     try:
         os.close(descriptor)
         # Recheck under the exclusive lock before touching any managed file.
         fresh_config, fresh_manifest, fresh_tools, fresh_new = load_state(target, profile, tools, kit_root)
         fresh_changes, fresh_conflicts = plan_install(target, fresh_config, fresh_manifest, fresh_tools, fresh_new, kit_root)
         if fresh_conflicts or fresh_changes != changes or fresh_tools != selected:
-            raise KitError("Destino mudou durante a instalação. Execute a simulação novamente.")
+            raise KitError("Target changed during installation. Run the dry run again.")
         backup_id = uuid.uuid4().hex
         for name, _ in changes:
             path = safe_path(target, name)
@@ -445,13 +445,13 @@ def install(target, profile=None, tools=None, dry_run=False, kit_root=ROOT):
 def check(target, kit_root=ROOT):
     target = target.absolute()
     if not safe_path(target, CONFIG).exists() or not safe_path(target, MANIFEST).exists():
-        raise KitError("Projeto ainda não instalado.")
+        raise KitError("The project has not been installed yet.")
     config, manifest, tools, new_config = load_state(target, None, None, kit_root)
     changes, conflicts = plan_install(target, config, manifest, tools, new_config, kit_root)
-    messages = conflicts + [f"Desatualizado/ausente: {name}" for name, _ in changes]
+    messages = conflicts + [f"Outdated/missing: {name}" for name, _ in changes]
     warnings = []
     if not config["validation"]:
-        warnings.append("Nenhuma validação configurada; configure os comandos antes de implementar tickets.")
+        warnings.append("No validations configured; configure commands before implementing tickets.")
     return {"ok": not messages, "issues": messages, "warnings": warnings}
 
 
@@ -463,12 +463,12 @@ def configuration_warnings(config):
         "tracking": {"provider", "list_id", "workspace_id", "statuses"},
         "delivery": {"create_pr"},
     }
-    warnings = [f"Campo desconhecido preservado: {key}" for key in config if key not in
+    warnings = [f"Unknown field preserved: {key}" for key in config if key not in
                 {*known, "schema_version", "context", "validation", "models"}]
     for section, fields in known.items():
-        warnings.extend(f"Campo desconhecido preservado: {section}.{key}" for key in config[section] if key not in fields)
+        warnings.extend(f"Unknown field preserved: {section}.{key}" for key in config[section] if key not in fields)
     for command in config["validation"]:
-        warnings.extend(f"Campo desconhecido preservado: validation.{command['id']}.{key}" for key in command if key not in
+        warnings.extend(f"Unknown field preserved: validation.{command['id']}.{key}" for key in command if key not in
                         {"id", "cwd", "argv", "surfaces", "requires", "required"})
     return warnings
 
@@ -501,9 +501,9 @@ def doctor(target, surfaces=None, kit_root=ROOT):
     environment = {"ready": False, "commands": [], "executed": False}
     result = {"ok": False, "integrity": {"ok": False, "issues": []},
               "configuration": configuration, "environment": environment,
-              "limitations": ["Não executa comandos, testes, Git ou serviços externos.",
-                              "requires exige verificação na tarefa; disponibilidade não comprova testes verdes.",
-                              "Modelos, autenticação e descoberta nos clientes não são verificados online."]}
+              "limitations": ["Does not run commands, tests, Git or external services.",
+                              "requires must be checked during the task; availability does not prove tests passed.",
+                              "Models, authentication and client discovery are not checked online."]}
     try:
         config = validate_config(read_json(safe_path(target, CONFIG)))
     except (KitError, OSError) as exc:
@@ -517,16 +517,16 @@ def doctor(target, surfaces=None, kit_root=ROOT):
     commands = [command for command in config["validation"]
                 if not surfaces or set(surfaces).intersection(command["surfaces"])]
     if not commands:
-        configuration["issues"].append("Nenhuma validação configurada para as superfícies selecionadas.")
+        configuration["issues"].append("No validations configured for the selected surfaces.")
     if surfaces:
         covered = {surface for command in commands for surface in command["surfaces"]}
-        configuration["issues"].extend(f"Superfície sem validação: {surface}" for surface in surfaces if surface not in covered)
+        configuration["issues"].extend(f"Surface without validation: {surface}" for surface in surfaces if surface not in covered)
     if config["project"]["name"] == "configure-me":
-        configuration["issues"].append("Configure project.name para este projeto.")
+        configuration["issues"].append("Configure project.name for this project.")
     if config["tracking"]["provider"] == "clickup":
         for key in ("list_id", "workspace_id"):
             if not config["tracking"].get(key):
-                configuration["issues"].append(f"Resolva tracking.{key} antes de usar ClickUp.")
+                configuration["issues"].append(f"Resolve tracking.{key} before using ClickUp.")
     configuration["ready"] = not configuration["issues"]
     required_ready = True
     for command in commands:
@@ -535,12 +535,12 @@ def doctor(target, surfaces=None, kit_root=ROOT):
         try:
             cwd = safe_path(target, command["cwd"], directory=True)
             if not cwd.is_dir():
-                raise KitError(f"Diretório não encontrado: {command['cwd']}")
+                raise KitError(f"Directory not found: {command['cwd']}")
             executable = command["argv"][0]
             resolved = find_executable(executable, cwd)
             entry["executable"] = resolved
             if resolved is None:
-                raise KitError(f"Executável não encontrado: {executable}")
+                raise KitError(f"Executable not found: {executable}")
             if command["requires"]:
                 entry["status"] = "requires_verification"
         except (KitError, OSError) as exc:
@@ -559,10 +559,10 @@ def validate_kit(kit_root=ROOT):
     for path in sorted((kit_root / ".agents/skills").glob("*/SKILL.md")):
         meta, _ = frontmatter(path.read_text(encoding="utf-8"))
         if meta["name"] != path.parent.name or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", meta["name"]):
-            raise KitError(f"Nome de skill inválido: {path}")
+            raise KitError(f"Invalid skill name: {path}")
         skills.append(meta["name"])
     if not skills:
-        raise KitError("Nenhuma skill encontrada.")
+        raise KitError("No skills found.")
     for profile in (kit_root / "profiles").glob("*.json"):
         config = validate_config(read_json(profile))
         build_outputs(kit_root, config, TOOLS)
@@ -572,17 +572,17 @@ def validate_kit(kit_root=ROOT):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     subs = parser.add_subparsers(dest="command", required=True)
-    command = subs.add_parser("install", help="Instala ou atualiza sem sobrescrever alterações locais.")
+    command = subs.add_parser("install", help="Install or update without overwriting local changes.")
     command.add_argument("--target", type=Path, required=True)
-    command.add_argument("--profile", help="generic, python ou dotnet-angular; apenas na primeira instalação.")
+    command.add_argument("--profile", help="generic, python or dotnet-angular; first installation only.")
     command.add_argument("--tools", nargs="+", choices=TOOLS)
     command.add_argument("--dry-run", action="store_true")
-    command = subs.add_parser("check", help="Confere configuração, integridade e versão.")
+    command = subs.add_parser("check", help="Check configuration, integrity and version.")
     command.add_argument("--target", type=Path, required=True)
-    command = subs.add_parser("doctor", help="Diagnóstico read-only de integridade, configuração e disponibilidade local.")
+    command = subs.add_parser("doctor", help="Read-only diagnosis of integrity, configuration and local availability.")
     command.add_argument("--target", type=Path, required=True)
-    command.add_argument("--surfaces", nargs="+", help="Superfícies de validação a diagnosticar; padrão: todas.")
-    subs.add_parser("validate", help="Valida as skills e os perfis do kit.")
+    command.add_argument("--surfaces", nargs="+", help="Validation surfaces to diagnose; defaults to all.")
+    subs.add_parser("validate", help="Validate the kit's skills and profiles.")
     args = parser.parse_args(argv)
     try:
         if args.command == "install":
@@ -596,7 +596,7 @@ def main(argv=None):
         print(json_text(result), end="")
         return 0 if result.get("ok", True) else 1
     except (KitError, OSError, UnicodeError, ValueError) as exc:
-        print(f"Erro: {exc}", file=sys.stderr)
+        print(f"Error: {exc}", file=sys.stderr)
         return 2
 
 

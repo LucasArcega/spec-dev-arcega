@@ -1,35 +1,35 @@
 ---
 name: fast-merge
-description: "Executa merge direto com Git quando o usuário pedir fast-merge ou merge sem PR e CI."
+description: "Performs a direct Git merge when the user requests fast-merge or a merge without PR and CI."
 ---
 
-# Merge direto
+# Direct merge
 
-Ative somente para pedido explícito de merge direto/fast-merge.
-Leia git.remote e git.base_branch do perfil; um alvo explícito no pedido prevalece.
-A origem é a branch atual. Este fluxo dispensa gates de PR, CI e rastreador;
-não publique em outro destino ou com force.
+Activate only on an explicit request for direct merge/fast-merge.
+Read git.remote and git.base_branch from the profile; an explicit target in the
+request takes precedence. The current branch is the source. This workflow
+dispenses with PR, CI and tracker gates; do not publish to another target or force.
 
-Antes de mutar, confira cwd/repositório, branch de origem e SHA de HEAD. Exija
-HEAD em uma branch e árvore limpa, incluindo arquivos não rastreados e ausência
-de merge/rebase em andamento. Se não estiver limpa, registre o bloqueio; não faça
-stash, commit automático, reset ou limpeza. Valide a identidade do remote e o
-nome da branch alvo, sem trocar de remote nem deduzir outro destino.
+Before mutation, check cwd/repository, source branch and HEAD SHA. Require HEAD
+on a branch and a clean tree, including untracked files and no merge/rebase in
+progress. If not clean, record the blocker; do not stash, auto-commit, reset or
+clean. Validate remote identity and target branch name without changing the
+remote or deducing another destination.
 
-Com remote e alvo resolvidos, execute sequencialmente, passando valores como
-argumentos, sem construir comandos de shell com texto interpolado:
+With remote and target resolved, execute sequentially, passing values as
+arguments without building shell commands from interpolated text:
 1. git fetch REMOTE
-2. Resolva e registre o SHA de refs/remotes/REMOTE/ALVO. Se a referência não
-   existir, pare. Confira novamente origem/HEAD/estado para detectar mudanças.
-3. git merge --no-edit SHA_ALVO
-4. Registre SHA_RESULTANTE e confirme que a branch de origem continua ativa e
-   a árvore está limpa. git push REMOTE SHA_RESULTANTE:refs/heads/ALVO
+2. Resolve and record the SHA of refs/remotes/REMOTE/TARGET. If the ref does not
+   exist, stop. Recheck source/HEAD/state for changes.
+3. git merge --no-edit TARGET_SHA
+4. Record RESULT_SHA and confirm the source branch is still active and the
+   tree is clean. git push REMOTE RESULT_SHA:refs/heads/TARGET
 
-Não faça checkout da base, não crie PR nem feche ticket.
-Se houver conflito, não resolva e não aborte automaticamente. Mostre git status
-e git diff --name-only --diff-filter=U; aguarde a decisão.
-Se o push ou outro comando falhar, apresente o erro e pare; não repita em loop
-nem use --force. Confirme a referência remota após o push e informe origem, alvo
-e SHA publicado. Se houver interrupção, releia Git e o remote antes de retomar;
-não repita um push já confirmado nem presuma sucesso de uma resposta ausente.
-Autenticação e permissões da sessão continuam sendo respeitadas.
+Do not check out the base, create a PR or close a ticket.
+If there is a conflict, do not resolve or abort automatically. Show git status
+and git diff --name-only --diff-filter=U; wait for a decision.
+If push or another command fails, present the error and stop; do not retry in a
+loop or use --force. Confirm the remote ref after pushing and report source,
+target and published SHA. After interruption, reread local and remote Git state
+before resuming; do not repeat a confirmed push or assume success from a missing
+response. Session authentication and permissions still apply.

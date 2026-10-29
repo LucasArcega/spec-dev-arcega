@@ -1,9 +1,10 @@
-# Estado dos planos locais
+# Local plan status
 
-| Plano | Estado | Evidência |
+| Plan | Status | Evidence |
 | --- | --- | --- |
-| [kit-reliability](kit-reliability/README.md) | Concluído localmente | 49 testes verdes; validate/check/doctor verdes; review v2 aprovado; adaptadores sincronizados |
-| [setup-project](setup-project/README.md) | Concluído localmente | 51 testes verdes; validate/check íntegros; retomada isolada e review v2 aprovados |
+| [kit-reliability](kit-reliability/README.md) | Completed locally | 49 tests passed; validate/check/doctor passed; review v2 approved; adapters synchronized |
+| [setup-project](setup-project/README.md) | Completed locally | 51 tests passed; validate/check passed; isolated resumption and review v2 approved |
+| [english-migration](english-migration/README.md) | Completed locally | 53 tests passed; validate/check passed; translation and migration reviews approved |
 
-Não houve commit, merge ou publicação. Limitações e identidade do conteúdo estão
-registradas no plano e em seu review.
+The previous plans record their state at completion. Their limitations and content
+identities are recorded in each plan and its review.

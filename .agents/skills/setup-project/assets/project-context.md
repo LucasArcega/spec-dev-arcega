@@ -1,20 +1,20 @@
-# Contexto do projeto
+# Project context
 
-## Produto e domínio
+## Product and domain
 
-Registre objetivo, público e termos de domínio confirmados.
+Record the confirmed purpose, audience and domain terms.
 
-## Arquitetura e convenções
+## Architecture and conventions
 
-Registre componentes reais, suas responsabilidades e convenções específicas
-confirmadas, com referências locais quando disponíveis.
+Record real components, their responsibilities and confirmed project-specific
+conventions, with local references when available.
 
-## Ambiente de desenvolvimento
+## Development environment
 
-Registre preparação, dependências e serviços aplicáveis. Para autenticação, cite
-apenas mecanismos e nomes de variáveis, sem valores de credenciais.
+Record applicable setup, dependencies and services. For authentication, mention
+only mechanisms and environment variable names, without credential values.
 
-## Validação e entrega
+## Validation and delivery
 
-Registre particularidades necessárias para interpretar os comandos e o fluxo de
-entrega configurados no perfil. Diferencie requisitos confirmados de pendências.
+Record details needed to interpret the commands and delivery workflow configured
+in the profile. Distinguish confirmed requirements from pending items.

@@ -1,63 +1,66 @@
-# Confiabilidade do kit e evolução dos contratos
+# Kit reliability and contract evolution
 
-**Identificador local:** kit-reliability
-**Status:** Concluído localmente
-**Branch:** main existente, sem commits; nenhuma publicação autorizada.
-**Dependências:** nenhuma dependência externa nova.
+**Local identifier:** kit-reliability
+**Status:** Completed locally
+**Branch:** existing main, with no commits at that time; publication was not authorized.
+**Dependencies:** no new external dependencies.
 
-## Escopo aceito
+## Accepted scope
 
-Corrigir os achados P2/P3 da auditoria e evoluir os itens 4 a 8 da resposta:
-review rastreável, agentes, retomada de entregas, diagnóstico de configuração
-e vínculo entre critérios e evidências. Preservar consumidores existentes,
-fonte canônica, Python 3.11+ e biblioteca padrão.
+Fix audit findings P2/P3 and evolve items 4 through 8 of the response: traceable
+review, agents, delivery resumption, configuration diagnostics, and links between
+criteria and evidence. Preserve existing consumers, canonical source, Python 3.11+
+and the standard library.
 
-## Critérios e evidência
+## Criteria and evidence
 
-| ID | Comportamento obrigatório | Implementação/teste | Evidência e revisão |
+| ID | Required behavior | Implementation/test | Evidence and review |
 | --- | --- | --- | --- |
-| AC1 | EOL equivalente não bloqueia instalação; edição real continua protegida | scripts/specdev.py; testes CRLF, legado e binário | Passou; suíte completa e review sem achados abertos |
-| AC2 | Schema e validador de review concordam, com legado preservado | schema/validador; tests/test_review_contract.py | Passou; casos válidos/inválidos e regras interpretadas do schema |
-| AC3 | Novos reviews registram escopo, checks e bloqueios | Review v2 e flag --require-evidence | Passou; testes de CLI, evidência, blockers e compatibilidade |
-| AC4 | Agentes têm retorno/interrupção definidos e opções nativas suportadas | DELEGATION, roles, gerador e testes de opções | Passou; contratos revisados, TOML/frontmatter e isolamento por cliente testados |
-| AC5 | Entrega retoma merge concluído e associa evidência ao conteúdo validado | Skills de implementação, merge e fast-merge | Passou na revisão de contratos; sem executar mutações externas |
-| AC6 | Diagnóstico separa integridade, configuração e disponibilidade sem executar comandos | doctor e testes com snapshots/marker | Passou; PATH relativo ao cwd, marker não executado e arquivos preservados |
-| AC7 | Planos ligam critérios a implementação/teste e evidência | Template PLAN, enrich-plan e WORKFLOW | Passou na revisão de contratos e no registro deste plano |
+| AC1 | Equivalent EOL does not block installation; real edits remain protected | scripts/specdev.py; CRLF, legacy and binary tests | Passed; full suite and review with no open findings |
+| AC2 | Review schema and validator agree, preserving legacy | schema/validator; tests/test_review_contract.py | Passed; valid/invalid cases and schema-interpreted rules |
+| AC3 | New reviews record scope, checks and blockers | Review v2 and --require-evidence flag | Passed; CLI, evidence, blocker and compatibility tests |
+| AC4 | Agents have defined return/interruption behavior and supported native options | DELEGATION, roles, generator and option tests | Passed; reviewed contracts, TOML/frontmatter and client isolation tested |
+| AC5 | Delivery resumes a completed merge and links evidence to validated content | implementation, merge and fast-merge skills | Passed contract review; no external mutations executed |
+| AC6 | Diagnostics separate integrity, configuration and availability without executing commands | doctor and snapshot/marker tests | Passed; cwd-relative PATH, marker not executed, files preserved |
+| AC7 | Plans link criteria to implementation/tests and evidence | PLAN template, enrich-plan and WORKFLOW | Passed contract review and this plan's record |
 
-## Validação
+## Validation
 
 - `python -m unittest discover -s tests -v`
 - `python scripts/specdev.py validate`
 - `python scripts/specdev.py check --target .`
 - `python scripts/specdev.py doctor --target .`
-- Review estruturado v2 contra snapshot anterior, pois o Git está sem commits.
+- Structured v2 review against an earlier snapshot, because Git had no commits.
 
-Resultado em 27/10/2026: 49 testes passaram em Python 3.14.0 (44,999 s).
-validate retornou nove skills; check sem issues/warnings; doctor com os três
-grupos prontos e executed=false; install --dry-run retornou changed=[].
-Adaptadores regenerados com backup pelo instalador. Revisão consolidada em
-[review.json](review.json), validada com --require-evidence.
+On 27 October 2026, 49 tests passed on Python 3.14.0 (44.999 s). `validate`
+returned nine skills; `check` returned no issues/warnings; `doctor` reported all
+three groups ready and `executed=false`; `install --dry-run` returned `changed=[]`.
+Adapters were regenerated with backups by the installer. Consolidated review in
+[review.json](review.json), validated with `--require-evidence`.
 
-O TEMP/TMP padrão do sandbox apresentou acesso negado na auditoria; usar pasta
-temporária gravável quando necessário. Isso não altera o resultado esperado
-da suíte. Descoberta nos aplicativos não comprova todos os fluxos externos.
+The sandbox's default TEMP/TMP denied access during the audit; a writable
+folder was used when necessary. This does not change the expected suite result.
+Client discovery does not prove all external workflows.
 
 ## Checkpoint
 
-- Último passo confirmado: implementação, adaptação, revisão e validações concluídas.
-- Conteúdo validado: snapshot SHA-256 em review.json; Git sem commits. Os hashes
-  das duas revisões independentes foram reconferidos após a suíte completa.
-- Bloqueios: nenhum conhecido.
-- Próxima ação: handoff local; publicação, commit e merge não autorizados.
+- Last confirmed step: implementation, adaptation, review and validation completed.
+- Validated content: SHA-256 snapshot in review.json; Git had no commits at that time.
+  Both independent review hashes were rechecked after the full suite.
+- Blockers: none known.
+- Next action at that time: local handoff; publication, commit and merge required a separate request.
 
-## Limites da validação
+## Validation limits
 
-Python 3.11 e clientes Cursor/Claude não foram exercitados nesta mudança. Modelos
-reais e allowlists foram verificados como configuração/formatos gerados, sem
-consulta de disponibilidade na conta. Merge/fechamento foram revisados como
-contratos; nenhuma operação real de GitHub ou rastreador foi executada.
+Python 3.11 and the Cursor/Claude clients were not exercised for this change.
+Actual models and allowlists were checked as configuration/generated formats,
+without checking account availability. Merge/closure were reviewed as contracts;
+no real GitHub or tracker operations were performed as part of that work.
 
-## Fora do escopo
+## Out of scope
 
-Corpus de avaliações comportamentais do item 3, novos provedores, novos papéis,
-publicação, commit, merge e alterações no JourneyCore.
+Behavioral evaluation corpus for item 3, new providers, new roles, publication,
+commit, merge and changes to JourneyCore.
+
+The accompanying review JSON is a translation of the historical record; its
+original recorded snapshot hashes and scope identifiers are unchanged.

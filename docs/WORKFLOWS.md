@@ -1,71 +1,82 @@
-# Evidência, conclusão e retomada
+# Evidence, completion and resumption
 
-Os fluxos canônicos mantêm critérios, revisão e resultados ligados ao conteúdo
-realmente analisado. O nível de registro acompanha o tamanho da tarefa.
+Canonical workflows link criteria, review and results to the content actually
+examined. The amount of recorded information should match the size of the task.
 
-## Critérios e validação
+## Questions and decisions
 
-O [modelo de plano](../.agents/templates/PLAN.md) atribui IDs estáveis aos critérios.
-A matriz de validação relaciona cada ID à implementação/teste e à evidência.
-Enquanto o teste não foi executado, registre o resultado esperado e estado
-pendente. Depois, substitua a expectativa por comando/artefato, resultado
-observado e revisão coberta. Um teste verde sem cobertura do critério não o conclui.
+When a decision needs user input, the agent uses the session's native question
+tool when available, with grounded choices and a way to give a custom answer.
+If it is unavailable, the agent asks in chat. Decisions already resolved by the
+request or project context are not asked again. Enrichment, implementation and
+ticket writing can group related questions and continue independent work while
+waiting. Guided setup instead collects its answers before making changes, as
+described in [guided setup](SETUP.md).
 
-Use [enrich-plan](../.agents/skills/enrich-plan/SKILL.md) para preparar os vínculos
-e [implement-ticket](../.agents/skills/implement-ticket/SKILL.md) para mantê-los
-durante a execução. Não crie testes que apenas procurem palavras nos documentos.
+## Criteria and validation
 
-## Identidade da evidência
+The [plan template](../.agents/templates/PLAN.md) assigns stable IDs to criteria.
+The validation matrix links each ID to implementation/tests and evidence. Until a
+test runs, record the expected result and pending state. Afterwards, replace the
+expectation with the command/artifact, observed result and covered revision. A
+green test that does not cover a criterion does not complete it.
 
-Registre base e head quando existirem, além da identidade do diff local ou de um
-snapshot dos arquivos examinados. O SHA de HEAD sozinho não identifica alterações
-não commitadas. Na ausência de commits, use um snapshot verificável e declare
-essa condição, sem inventar um SHA.
+Use [enrich-plan](../.agents/skills/enrich-plan/SKILL.md) to prepare the links and
+[implement-ticket](../.agents/skills/implement-ticket/SKILL.md) to maintain them
+during implementation. Do not create tests that merely search documentation for
+words.
 
-Mudanças em head ou no conteúdo local exigem verificar o impacto sobre a evidência.
-Invalide e repita review/testes afetados; não afirme cobertura da revisão nova com
-resultado antigo. O [review](../.agents/skills/review-changes/SKILL.md) usa o contrato
-v2 e a opção `--require-evidence` no validador para as novas revisões.
+## Evidence identity
 
-## Checkpoint proporcional
+Record base and head when available, plus the identity of the local diff or a
+snapshot of the files examined. HEAD SHA alone does not identify uncommitted
+changes. If there are no commits, use a verifiable snapshot and declare that
+condition without inventing a SHA.
 
-Para trabalho longo ou interrompido, registre no próprio plano:
+Changes to head or local content require assessing their impact on evidence.
+Invalidate and repeat affected reviews/tests; do not claim a new revision is
+covered by an old result. New [reviews](../.agents/skills/review-changes/SKILL.md)
+use the v2 contract and validator option `--require-evidence`.
 
-- Último passo efetivamente concluído.
-- Revisão e evidências correspondentes.
-- Bloqueio real, ou ausência de bloqueio.
-- Próxima ação concreta.
-- Identificadores e estados de PR/ticket e commit de merge, quando existirem.
+## Proportionate checkpoint
 
-Ao retomar, releia os registros e consulte o estado atual antes de agir. Não
-repita operações já concluídas nem trate intenção registrada como prova de sucesso.
-Em tarefa pequena, essas informações podem ficar no handoff; não é necessário
-criar um plano ou artefato adicional apenas para checkpoint.
+For long or interrupted work, record in the plan itself:
 
-## Merge e fechamento parcial
+- The last step actually completed.
+- The corresponding revision and evidence.
+- The actual blocker, or absence of one.
+- The next concrete action.
+- PR/ticket identifiers and states and merge commit, when available.
 
-[merge-and-close](../.agents/skills/merge-and-close/SKILL.md) distingue PR aberto,
-merged e fechado sem merge. Um PR já merged pode ter apenas fechamento de ticket
-pendente: confirme sua identidade e commit e prossiga só com essa etapa autorizada.
-Ticket já concluído não precisa de nova atualização. PR fechado sem merge é
-bloqueio, não autorização para reabertura ou criação de outro PR.
+When resuming, reread the records and inspect current state before acting. Do not
+repeat completed mutations or treat recorded intent as proof of success. For a
+small task, this information can be in the handoff; there is no need to create
+an additional plan or artifact solely for a checkpoint.
 
-Em PR aberto, vincule checks/reviews ao SHA de head e use merge condicional ao
-SHA esperado quando a ferramenta o oferecer. Se head mudou, revalide. Sem essa
-capacidade, faça a consulta imediatamente anterior à operação e declare o limite
-de atomicidade. Se o projeto exigir garantia atômica, a ausência é bloqueio.
+## Merge and partial closure
 
-A atualização da base local pode ficar pendente se o checkout não permitir
-fast-forward seguro. Relate esse estado separadamente do merge e do ticket.
+[merge-and-close](../.agents/skills/merge-and-close/SKILL.md) distinguishes open,
+merged and closed-without-merge PRs. A merged PR may have only ticket closure
+pending: verify its identity and commit and proceed only with that authorized
+step. An already completed ticket needs no repeated update. A PR closed without
+merge is a blocker, not authorization to reopen it or create another PR.
 
-## Merge direto
+For an open PR, bind checks/reviews to head SHA and use a merge conditional on the
+expected SHA when supported by the tool. Revalidate if head changed. Without this
+capability, reread immediately before the operation and report the atomicity
+limit. If the project requires an atomic guarantee, its absence is a blocker.
 
-[fast-merge](../.agents/skills/fast-merge/SKILL.md) continua dispensando PR, CI e
-rastreador quando explicitamente solicitado. A preparação verifica branch de
-origem, HEAD, árvore limpa, remote e alvo. O fluxo registra o SHA remoto utilizado
-no merge e publica o SHA resultante explicitamente, sem force.
+Updating the local base may remain pending if the checkout does not allow a safe
+fast-forward. Report that state separately from the merge and ticket.
 
-Conflito ou estado inesperado interrompe a sequência. Preserve as alterações e
-aguarde a decisão sobre resolução; não faça stash, reset, limpeza ou aborto como
-efeito colateral. Após interrupção, confirme os estados local e remoto antes de
-retomar, inclusive se a resposta do push não chegou.
+## Direct merge
+
+[fast-merge](../.agents/skills/fast-merge/SKILL.md) continues to bypass PR, CI and
+tracker when explicitly requested. Preparation checks the source branch, HEAD,
+clean working tree, remote and target. The workflow records the remote SHA used
+for the merge and pushes the resulting SHA explicitly, without force.
+
+Conflicts or unexpected state stop the sequence. Preserve changes and wait for a
+decision on resolution; do not stash, reset, clean or abort as a side effect.
+After interruption, confirm local and remote state before resuming, including
+when the push response was not received.

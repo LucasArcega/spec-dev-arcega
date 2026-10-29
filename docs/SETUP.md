@@ -1,76 +1,92 @@
-# Setup guiado do projeto
+# Guided project setup
 
-Após instalar o kit, abra o projeto consumidor em um agente e peça, por exemplo:
+After installing the kit, open the consumer project in an agent and ask, for
+example:
 
-> Use setup-project para conhecer e configurar este projeto.
+> Use setup-project to learn about and configure this project.
 
-A skill canônica está em [setup-project](../.agents/skills/setup-project/SKILL.md).
-O agente investiga a documentação e os arquivos relevantes, distingue fatos
-verificados de hipóteses e pergunta uma decisão relevante por vez. Ele registra
-as respostas progressivamente e retoma de onde parou. O roteiro em
-[questions.md](../.agents/skills/setup-project/references/questions.md) organiza
-as decisões por assunto, sem impor uma lista fixa de perguntas.
+The canonical skill is [setup-project](../.agents/skills/setup-project/SKILL.md).
+The agent investigates documentation and relevant files, distinguishes verified
+facts from hypotheses, and asks one relevant decision at a time using the
+client's question selector when available. It collects all answers first, then
+applies the configuration and records any pending decisions. The
+[questions.md](../.agents/skills/setup-project/references/questions.md) guide
+organizes decisions by topic without imposing a fixed questionnaire.
 
-O fluxo depende de capacidades de leitura, edição e diálogo, não de um cliente,
-terminal, Python ou comando específico. Ele pode consultar ferramentas locais
-disponíveis, incluindo doctor, quando isso ajudar. Não executa validações apenas
-porque foram encontradas no perfil; disponibilidade e execução são registradas
-separadamente. Se o kit ou perfil ainda não estiver instalado, informe a etapa
-de instalação. O instalador do kit continua usando Python 3.11+.
+The workflow depends on reading, editing and conversation capabilities, not a
+specific client, terminal, Python or command. It may consult available local
+tools, including doctor, when helpful. It does not run validation just because
+it appears in the profile; availability and execution are recorded separately.
+If the kit or profile is not installed, report the installation step. The kit
+installer still requires Python 3.11+.
 
-## Arquivos do consumidor
+The interview uses the native question tool available in the current session:
+Cursor's question tool, Claude Code's `AskUserQuestion`, or Codex's available
+user-input tool. Availability depends on the client and mode. When a selector
+is unavailable, the agent explains this and asks in chat; custom answers remain
+possible. The agent waits for each response and does no project work between
+questions. It applies changes only after the interview ends.
 
-| Arquivo | Uso |
+## Consumer-owned files
+
+| File | Purpose |
 | --- | --- |
-| `.specdev/project.json` | Configuração operacional confirmada: caminhos, validações, Git e integrações aplicáveis. |
-| `docs/PROJECT_CONTEXT.md` | Caminho sugerido para informações próprias do projeto; outro caminho local pode ser utilizado. |
-| `.specdev/setup-state.json` | Checkpoint de progresso da entrevista, pertencente ao consumidor. |
+| `.specdev/project.json` | Confirmed operational configuration: paths, validations, Git and applicable integrations. |
+| `docs/PROJECT_CONTEXT.md` | Suggested path for project-specific information; another local path may be used. |
+| `.specdev/setup-state.json` | Consumer-owned checkpoint written after the interview. |
 
-O instalador distribui a skill, a referência e o template, mas não cria o contexto
-ou checkpoint do projeto. A skill os cria ou atualiza durante o setup solicitado.
-Ela preserva a configuração local e documentos existentes. Quando usa um
-documento local de contexto, acrescenta o caminho ao array `context` depois de o
-arquivo existir, sem duplicar entradas. Se o documento sugerido já existir, o
-agente lê e preserva seu conteúdo e combina outro caminho quando necessário.
+The installer distributes the skill, reference and template, but does not create
+the project's context or checkpoint. The skill creates or updates them during
+requested setup. It preserves local configuration and existing documents. When
+using a local context document, it adds the path to `context` after the file
+exists, without duplicating entries. If the suggested document already exists,
+the agent reads and preserves its content and agrees on another path if needed.
 
-O [template de contexto](../.agents/skills/setup-project/assets/project-context.md)
-é adaptado apenas às seções úteis. Não armazene credenciais ou valores de segredos
-no perfil, contexto ou checkpoint. A configuração de conexões e permissões do
-cliente continua sob responsabilidade da sessão.
+The [context template](../.agents/skills/setup-project/assets/project-context.md)
+is adapted only to useful sections. Do not store credentials or secret values in
+the profile, context or checkpoint. Client connections and permissions remain
+the session's responsibility.
 
-## Retomada e estados
+## Resuming and states
 
-O checkpoint v1 guarda `schema_version`, `status`, `context_path`, `scope`,
-`decisions`, `pending`, `next_question` e `verification`. `scope` identifica
-as decisões do pedido; as demais não são consideradas avaliadas em um setup
-parcial. As decisões têm um ID estável, estado e fonte resumida. Os valores
-confirmados ficam no perfil ou contexto, evitando duplicá-los no checkpoint.
+Answers collected during an interrupted interview remain only in the
+conversation until the interview finishes. Resume from that history when it is
+available; if it is lost, the unsaved answers need to be provided again. The
+checkpoint is created or updated after the interview, including when the user
+explicitly skips a decision, so later setup can resume pending work.
 
-- `confirmed`: resposta do usuário ou fato diretamente verificado, com fonte.
-- `inferred`: hipótese, ainda pendente de confirmação.
-- `pending`: decisão ainda não resolvida.
-- `not_applicable`: decisão explicitamente não aplicável ou comprovada como tal.
+Checkpoint v1 stores `schema_version`, `status`, `context_path`, `scope`,
+`decisions`, `pending`, `next_question` and `verification`. `scope` identifies
+the decisions in the request; other decisions are not considered assessed in a
+partial setup. Decisions have a stable ID, state and summarized source. Confirmed
+values remain in the profile or context instead of being duplicated in state.
 
-`pending` lista os IDs aplicáveis ainda pendentes ou inferidos; `next_question`
-guarda a próxima pergunta ou `null`. `verification` registra em texto o estado
-da configuração, a disponibilidade observada e o que foi executado. Isso não
-transforma uma hipótese em fato nem um comando configurado em teste executado.
-Quando um ID agrupa vários campos, todos os campos aplicáveis precisam estar
-confirmados, verificados ou expressamente considerados não aplicáveis antes de
-resolver o grupo. O agente preserva os campos já conhecidos e mantém pendentes
-os demais; confirmações parciais não concluem o ID inteiro.
+- `confirmed`: user answer or directly verified fact, with source.
+- `inferred`: hypothesis still awaiting confirmation.
+- `pending`: unresolved decision.
+- `not_applicable`: explicitly inapplicable or proven inapplicable.
 
-Na retomada, o agente relê estado e arquivos, reconciliando divergências sem
-apagar alterações locais. Versão desconhecida, estado inválido ou caminho inseguro
-interrompem a edição afetada, preservando os dados para resolução. A conclusão
-exige decisões do escopo resolvidas, nenhuma pendência e configuração estruturalmente
-conferida. Disponibilidade de serviços e execução de testes são relatadas conforme
-o observado; não são requisitos automáticos para concluir a configuração.
+`pending` lists applicable IDs still pending or inferred; `next_question` stores
+the next question or `null`. `verification` records configuration status,
+observed availability and what was executed as text. This does not turn a
+hypothesis into fact or a configured command into an executed test.
 
-## Compatibilidade
+When an ID groups multiple fields, all applicable fields must be confirmed,
+verified or explicitly found inapplicable before the group is resolved. The agent
+preserves known fields and keeps the rest pending; partial confirmations do not
+complete the whole ID.
 
-O instalador fornece a fonte compartilhada para Codex e Cursor e gera a cópia para
-Claude Code com os mesmos recursos. Outro cliente pode ler a skill pelo catálogo
-e seguir seu contrato com as capacidades disponíveis. O reconhecimento automático
-e a execução real dependem da versão e da sessão de cada cliente; confira-os no
-ambiente em que o kit será utilizado.
+On resumption, the agent rereads state and files, reconciling differences without
+deleting local changes. Unknown versions, invalid state or unsafe paths stop the
+affected edit and preserve data for resolution. Completion requires resolved
+in-scope decisions, no pending IDs and a structurally checked configuration.
+Service availability and test execution are reported as observed; they are not
+automatic prerequisites for completing configuration.
+
+## Compatibility
+
+The installer provides the shared source for Codex and Cursor and generates the
+Claude Code copy with the same resources. Another client can read the skill via
+the catalog and follow its contract using available capabilities. Automatic
+recognition and actual execution depend on each client's version and session;
+check them in the environment where the kit will be used.

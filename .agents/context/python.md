@@ -1,11 +1,11 @@
-# Perfil Python
+# Python profile
 
-Leia somente quando selecionado em context. Use o gerenciador, ambiente virtual,
-estilo de imports e runner já adotados pelo projeto. Não migre para pytest,
-uv, poetry ou outra ferramenta como efeito colateral.
+Read only when selected in context. Use the manager, virtual environment, import
+style, and runner already adopted by the project. Do not migrate to pytest, uv,
+poetry, or another tool as a side effect.
 
-Novos scripts de arquivos precisam preservar dados existentes e restringir
-caminhos ao destino autorizado. Use subprocess com lista de argumentos e
-shell=False quando executar programas; não use eval para comandos do perfil.
-Teste invariantes observáveis, falhas e efeitos colaterais relevantes.
-Para o próprio kit, o runner é unittest da biblioteca padrão.
+New file-handling scripts must preserve existing data and restrict paths to the
+authorized target. Use subprocess with an argument list and shell=False when
+executing programs; do not use eval for profile commands.
+Test observable invariants, failures, and relevant side effects.
+For the kit itself, the runner is standard-library unittest.

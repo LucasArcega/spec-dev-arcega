@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "summary": "Setup compartilhado entregue; achado P2 de confirmacoes parciais corrigido, revisado e exercitado em retomada independente. Sem achados abertos.",
+  "summary": "Shared setup delivered; P2 finding involving partial confirmations was fixed, reviewed and exercised in an independent resumption. No open findings.",
   "verdict": "approve",
   "scope": {
-    "base": "snapshot:setup-before; Git sem commits",
+    "base": "snapshot:setup-before; Git unborn",
     "head": "working-tree:sha256:560aea9c5dafcb5dfb5a0ee4e2967457e27e2b620c9fe144829fa3e6eeb1f75c",
     "files": [
       ".agents/CATALOG.md",
@@ -35,7 +35,7 @@
         "-v"
       ],
       "status": "passed",
-      "evidence": "51 testes passaram em Python 3.14.0, 38.148 s, exit 0; TEMP/TMP em pasta gravavel."
+      "evidence": "51 tests passed on Python 3.14.0 in 38.148 s, exit 0; TEMP/TMP used a writable directory."
     },
     {
       "cwd": ".",
@@ -45,7 +45,7 @@
         "validate"
       ],
       "status": "passed",
-      "evidence": "Exit 0; dez skills, incluindo setup-project."
+      "evidence": "Exit 0; ten skills, including setup-project."
     },
     {
       "cwd": ".",
@@ -57,7 +57,7 @@
         "."
       ],
       "status": "passed",
-      "evidence": "Exit 0; ok=true e nenhuma issue; copias e manifest em sincronia."
+      "evidence": "Exit 0; ok=true and no issues; copies and manifest synchronized."
     },
     {
       "cwd": ".",
@@ -70,7 +70,7 @@
         "--dry-run"
       ],
       "status": "passed",
-      "evidence": "Exit 0; versao 0.3.0 e changed=[] apos gerar adaptadores."
+      "evidence": "Exit 0; version 0.3.0 and changed=[] after generating adapters."
     },
     {
       "cwd": ".",
@@ -79,14 +79,14 @@
         "-"
       ],
       "status": "passed",
-      "evidence": "Conferencia de estado do projeto temporario apos entrevista: confirmacao parcial reaberta, respostas anteriores e contexto preservados, proxima pergunta registrada e execucao de comandos ausente no checkpoint."
+      "evidence": "Checked temporary project state after interview: partial confirmation reopened, previous answers and context preserved, next question recorded, and no command execution recorded in the checkpoint."
     }
   ],
   "limitations": [
-    "A avaliacao de entrevista usou agentes na sessao Codex com projeto e respostas ficticios; Cursor e Claude nao foram exercitados como clientes.",
-    "Python 3.11 nao foi executado; suite executada em 3.14.0.",
-    "O teste comportamental cobre inicio e retomadas; nao percorreu todas as perguntas ate conclusao.",
-    "Hash calculado na ordem de scope.files com caminho UTF-8, NUL, bytes e NUL; registros de plano e review excluidos."
+    "Interview evaluation used agents in a Codex session with a fictional project and answers; Cursor and Claude were not exercised as clients.",
+    "Python 3.11 was not run; the suite ran on 3.14.0.",
+    "The behavioral test covers the start and resumptions; it did not go through every question to completion.",
+    "Hash calculated in scope.files order using UTF-8 path, NUL, bytes and NUL; plan and review records excluded."
   ],
   "blockers": [],
   "findings": []

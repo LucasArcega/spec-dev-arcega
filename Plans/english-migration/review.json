@@ -1,0 +1,157 @@
+{
+  "schema_version": 2,
+  "summary": "English migration reviewed across canonical workflows, generated adapters, installer, profiles and documentation. No actionable findings remain.",
+  "verdict": "approve",
+  "scope": {
+    "base": "9f7881430163f05932e074757d199d2b5abab9a3",
+    "head": "working-tree:sha256:a1250c5701ae4ecd37764039acd476105baaa49e0dfcb74c3f5a594bc272287a",
+    "files": [
+      ".agents/CATALOG.md",
+      ".agents/context/dotnet-angular.md",
+      ".agents/context/python.md",
+      ".agents/integrations/clickup.md",
+      ".agents/integrations/github.md",
+      ".agents/roles/explorer.md",
+      ".agents/roles/investigator.md",
+      ".agents/roles/reviewer.md",
+      ".agents/roles/worker.md",
+      ".agents/rules/DELEGATION.md",
+      ".agents/rules/WORKFLOW.md",
+      ".agents/skills/create-pr/SKILL.md",
+      ".agents/skills/enrich-plan/SKILL.md",
+      ".agents/skills/fast-merge/SKILL.md",
+      ".agents/skills/implement-in-worktree/SKILL.md",
+      ".agents/skills/implement-ticket/SKILL.md",
+      ".agents/skills/merge-and-close/SKILL.md",
+      ".agents/skills/record-test/SKILL.md",
+      ".agents/skills/review-changes/SKILL.md",
+      ".agents/skills/review-changes/scripts/validate_review.py",
+      ".agents/skills/setup-project/SKILL.md",
+      ".agents/skills/setup-project/assets/project-context.md",
+      ".agents/skills/setup-project/references/questions.md",
+      ".agents/skills/write-ticket/SKILL.md",
+      ".agents/templates/BACKEND.md",
+      ".agents/templates/FRONTEND.md",
+      ".agents/templates/PLAN.md",
+      ".agents/templates/PLAYWRIGHT.md",
+      ".claude/agents/specdev-explorer.md",
+      ".claude/agents/specdev-investigator.md",
+      ".claude/agents/specdev-reviewer.md",
+      ".claude/agents/specdev-worker.md",
+      ".claude/skills/create-pr/SKILL.md",
+      ".claude/skills/enrich-plan/SKILL.md",
+      ".claude/skills/fast-merge/SKILL.md",
+      ".claude/skills/implement-in-worktree/SKILL.md",
+      ".claude/skills/implement-ticket/SKILL.md",
+      ".claude/skills/merge-and-close/SKILL.md",
+      ".claude/skills/record-test/SKILL.md",
+      ".claude/skills/review-changes/SKILL.md",
+      ".claude/skills/review-changes/scripts/validate_review.py",
+      ".claude/skills/setup-project/SKILL.md",
+      ".claude/skills/setup-project/assets/project-context.md",
+      ".claude/skills/setup-project/references/questions.md",
+      ".claude/skills/write-ticket/SKILL.md",
+      ".codex/agents/specdev-explorer.toml",
+      ".codex/agents/specdev-investigator.toml",
+      ".codex/agents/specdev-reviewer.toml",
+      ".codex/agents/specdev-worker.toml",
+      ".cursor/agents/specdev-explorer.md",
+      ".cursor/agents/specdev-investigator.md",
+      ".cursor/agents/specdev-reviewer.md",
+      ".cursor/agents/specdev-worker.md",
+      ".cursor/rules/specdev.mdc",
+      ".specdev/manifest.json",
+      ".specdev/project.json",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "INSTALL.md",
+      "Plans/kit-reliability/README.md",
+      "Plans/kit-reliability/review.json",
+      "Plans/setup-project/README.md",
+      "Plans/setup-project/review.json",
+      "README.md",
+      "docs/COMPATIBILITY.md",
+      "docs/CONFIGURATION.md",
+      "docs/EXTRACTION.md",
+      "docs/INSTALACAO-MANUAL.md",
+      "docs/REVIEW.md",
+      "docs/SETUP.md",
+      "docs/WORKFLOWS.md",
+      "examples/journey-core/project.json",
+      "kit.json",
+      "profiles/dotnet-angular.json",
+      "profiles/generic.json",
+      "profiles/python.json",
+      "scripts/specdev.py",
+      "tests/test_specdev.py"
+    ]
+  },
+  "checks": [
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "status": "passed",
+      "evidence": "53 tests passed in Python 3.14.0; TEMP and TMP pointed to a writable directory."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "validate"
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; all 10 skills validated."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "check",
+        "--target",
+        "."
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; no issues or warnings; adapters match canonical files."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "scripts/specdev.py",
+        "install",
+        "--target",
+        ".",
+        "--dry-run"
+      ],
+      "status": "passed",
+      "evidence": "Exit 0; version 0.4.0 and no pending changes."
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python",
+        "-"
+      ],
+      "status": "passed",
+      "evidence": "Exported committed version 0.3.0 into a temporary directory and upgraded a consumer to 0.4.0; pt-BR profile bytes, local instructions, context and checkpoint were preserved, check passed and reinstall was idempotent."
+    }
+  ],
+  "limitations": [
+    "The additional interactive English setup smoke did not run because the subagent reached a usage limit.",
+    "Python 3.11 and real Cursor and Claude sessions were not exercised.",
+    "The JourneyCore example retains its real pt-BR locale and tracker status names as project-specific data.",
+    "The snapshot hashes each listed UTF-8 path, NUL, file bytes and NUL in scope.files order; the status and this review record are excluded."
+  ],
+  "blockers": [],
+  "findings": []
+}

@@ -1,49 +1,48 @@
 ---
 name: review-changes
-description: "Revisa um diff ou conjunto de arquivos e devolve achados estruturados para um ciclo de correção."
+description: "Reviews a diff or set of files and returns structured findings for a correction cycle."
 ---
 
-# Revisar mudanças
+# Review changes
 
-Leia o perfil, os critérios do plano e o diff solicitado. A base vem do pedido
-ou de git.base_branch. Distinga mudanças commitadas e locais: um diff de branches
-não contém automaticamente o working tree. Registre o conjunto efetivamente revisado.
+Read the profile, plan criteria and requested diff. The base comes from the
+request or git.base_branch. Distinguish committed and local changes: a branch
+diff does not automatically include the working tree. Record the actual set reviewed.
 
-Revise bugs, regressões, segurança, contratos, concorrência e lacunas de testes
-relacionadas ao comportamento. Inspecione contexto e linhas reais.
-Para código amplo, use specdev-reviewer em partes independentes, se disponível;
-mantenha o resultado consolidado sob responsabilidade do principal.
-Não exija um executável específico nem troque o modelo da sessão.
-Se usar CLI, inspecione as capacidades da versão e o caminho disponível;
-não force binários bloqueados nem relaxe permissões como pré-requisito.
+Review bugs, regressions, security, contracts, concurrency and test gaps related
+to behavior. Inspect real context and lines. For broad code, use
+specdev-reviewer on independent portions when available; keep the consolidated
+result under the lead's responsibility. Do not require a specific executable or
+change the session model. If using a CLI, inspect the version's capabilities and
+available path; do not force blocked binaries or relax permissions as a prerequisite.
 
-Produza JSON v2 conforme references/review.schema.json, com schema_version = 2:
-- summary e verdict (approve, request_changes ou blocked).
-- scope com base, head e files não vazio. Resolva revisões exatas; para arquivos
-  locais use identidade explícita de working tree/snapshot e registre os arquivos.
-- checks com cwd, argv, status (passed, failed ou not_run) e evidence.
-  Registre apenas comandos realmente executados como passed/failed; leitura de
-  testes ou ambiente indisponível não é execução. Não invente checks para preencher.
-- limitations e blockers como listas de textos; use listas vazias quando ausentes.
-- findings contendo severity (P1/P2/P3), file, line, title e body.
+Produce v2 JSON according to references/review.schema.json, with schema_version = 2:
+- summary and verdict (approve, request_changes or blocked).
+- scope with non-empty base, head and files. Resolve exact revisions; for local
+  files use an explicit working tree/snapshot identity and record reviewed files.
+- checks with cwd, argv, status (passed, failed or not_run) and evidence.
+  Record only actually executed commands as passed/failed; reading tests or an
+  unavailable environment is not execution. Do not invent checks to fill the document.
+- limitations and blockers as lists of text; use empty lists when absent.
+- findings containing severity (P1/P2/P3), file, line, title and body.
 
-P1 bloqueia por falha grave; P2 é bug ou regressão relevante; P3 é observação de
-baixo impacto. Cada finding explica condição e consequência verificáveis.
-approve exige ausência de P1/P2, de blockers e de checks failed/not_run.
-request_changes exige ao menos um P1/P2; blocked exige um blocker explícito.
-Checks podem ficar vazios quando não houver comandos aplicáveis; explique a
-limitação pertinente sem inventar execução. JSON inválido não conclui o review.
-O formato legado continua aceito pelo validador sem a flag abaixo apenas para
-histórico/compatibilidade; não substitui evidência v2 em novas revisões.
+P1 blocks for a severe failure; P2 is a meaningful bug or regression; P3 is a
+low-impact observation. Each finding explains verifiable conditions and effects.
+approve requires no P1/P2, blockers or failed/not_run checks. request_changes
+requires at least one P1/P2; blocked requires an explicit blocker.
+Checks may be empty when no commands apply; explain a relevant limitation without
+inventing execution. Invalid JSON does not complete the review.
+The validator still accepts the legacy format without the flag below for
+history/compatibility only; it does not replace v2 evidence for new reviews.
 
-Use o validador local:
-python .agents/skills/review-changes/scripts/validate_review.py CAMINHO_DO_JSON --require-evidence
+Use the local validator:
+python .agents/skills/review-changes/scripts/validate_review.py PATH_TO_JSON --require-evidence
 
-Ao receber autorização para corrigir, implemente os achados pertinentes e rode
-testes afetados. Para correção ampla, faça uma nova revisão delimitada.
-Se o reviewer/parse falhar, tente uma vez com conjunto menor; persistindo,
-registre o bloqueio. Não descarte achados apenas porque o limite foi atingido.
-Informe conjunto revisado, limitações, achados abertos e evidência de validação.
-Se base, head ou arquivos locais mudarem, reavalie o trecho afetado e atualize a
-identidade da revisão antes de reutilizar evidência. O validador confere contrato,
-não comprova a existência dos caminhos, a execução dos comandos ou sua cobertura.
+When authorized to fix, implement relevant findings and run affected tests.
+For broad fixes, perform another focused review. If reviewer/parsing fails, try
+once with a smaller set; if it still fails, record the blocker. Do not discard
+findings merely because the limit was reached. Report the reviewed set,
+limitations, open findings and validation evidence.
+If base, head or local files change, reassess the affected portion and update the
+review identity before reusing evidence. The validator checks the contract; it
+does not prove that paths exist, commands ran or coverage is sufficient.

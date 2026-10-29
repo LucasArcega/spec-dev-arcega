@@ -1,20 +1,20 @@
 # GitHub
 
-Use quando a tarefa autorizar uma ação de GitHub. Prefira o conector disponível;
-use gh autenticado como alternativa. Obtenha owner/repo de git.repository quando
-preenchido e confira o remote configurado. Se ausente, derive do remote e valide.
-Nunca substitua silenciosamente um remote.
+Use when the task authorizes a GitHub action. Prefer the available connector;
+use authenticated gh as an alternative. Get owner/repo from git.repository when
+populated and check the configured remote. If absent, derive and validate it from
+the remote. Never silently replace a remote.
 
-Para PR, resolva branch de origem e base a partir da tarefa e do perfil. Antes de
-criar, procure PR existente com origem, base e repositório exatos. Atualize apenas
-se isso fizer parte do pedido. Evite PRs duplicados.
-Use descrição com problema, mudança observável e validação. Em gh, preserve
-multilinhas com --body-file em vez de construir comandos com texto interpolado.
-Após criar, releia o PR e confirme origem/base/URL.
+For a PR, resolve source and base branches from the task and profile. Before
+creating one, look for an existing PR with the exact source, base, and repository.
+Update only when requested. Avoid duplicate PRs.
+Use a description with the problem, observable change, and validation. With gh,
+preserve multiline text with --body-file rather than constructing commands with
+interpolated text. After creation, reread the PR and confirm source/base/URL.
 
-Tickets GitHub exigem repositório e número exatos. Para vínculo e fechamento,
-confira a identidade; não use similaridade de título como autorização.
-Para merge, siga merge-and-close. Não use bypass de proteção, --admin ou --force.
+GitHub tickets require the exact repository and number. For links and closure,
+check identity; do not use title similarity as authorization. For merge, follow
+merge-and-close. Do not bypass protection or use --admin or --force.
 
-O kit não configura tokens, conexões, remotes ou permissões. Ferramenta indisponível
-é uma limitação a reportar; não simule resultado.
+The kit does not configure tokens, connections, remotes, or permissions. Report an
+unavailable tool as a limitation; do not simulate a result.

@@ -1,13 +1,13 @@
 # Frontend — {{title}}
 
-## Fluxo e componentes
+## Flows and components
 
 {{real_routes_components_contracts_and_services}}
 
-## Estados e interação
+## States and interaction
 
 {{loading_empty_error_success_overlays_keyboard_responsiveness_and_supported_themes}}
 
-## Testes e critérios
+## Tests and criteria
 
 {{required_behavior_tests_commands_and_environment}}

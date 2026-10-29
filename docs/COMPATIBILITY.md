@@ -1,59 +1,74 @@
-# Compatibilidade
+# Compatibility
 
-Há uma fonte compartilhada em .agents/, mas cada cliente possui descoberta e
-formatos próprios. O instalador gera as entradas nativas selecionadas.
-Compatibilidade com todas as ferramentas existentes não é presumida.
+There is one shared source in `.agents/`, while each client has its own discovery
+rules and formats. The installer generates the selected native entry points.
+Compatibility with every existing tool is not assumed.
 
-| Cliente | Entrada | Skills | Agentes |
+| Client | Entry point | Skills | Agents |
 | --- | --- | --- | --- |
-| Codex | AGENTS.md | .agents/skills/ | .codex/agents/specdev-*.toml |
-| Cursor | AGENTS.md e .cursor/rules/specdev.mdc | .agents/skills/ | .cursor/agents/specdev-*.md |
-| Claude Code | CLAUDE.md importa AGENTS.md | .claude/skills/ gerado | .claude/agents/specdev-*.md |
-| Outro cliente | Leia AGENTS.md e o catálogo explicitamente | Conforme suporte ao padrão | Requer adaptador nativo |
+| Codex | `AGENTS.md` | `.agents/skills/` | `.codex/agents/specdev-*.toml` |
+| Cursor | `AGENTS.md` and `.cursor/rules/specdev.mdc` | `.agents/skills/` | `.cursor/agents/specdev-*.md` |
+| Claude Code | `CLAUDE.md` imports `AGENTS.md` | Generated `.claude/skills/` | `.claude/agents/specdev-*.md` |
+| Other clients | Read `AGENTS.md` and the catalog explicitly | Depends on support for the standard | Requires a native adapter |
 
-As cópias de skills para Claude são geradas a partir de .agents/; a origem
-permanece única. Cursor também pode descobrir diretórios de compatibilidade.
-Evite skills pessoais ou manuais de mesmo nome; confira a origem exibida pelo
-cliente quando houver mais de uma definição. O kit não remove skills globais.
+Claude's skill copies are generated from `.agents/`; the source remains unique.
+Cursor may also discover compatibility directories. Avoid personal or manual
+skills with the same name; check the source shown by the client when more than
+one definition exists. The kit does not remove global skills.
 
-Papéis de leitura usam readonly no Cursor. Em Codex e Claude, a proibição de
-edição está no prompt; não representa um sandbox separado.
-Claude pode receber uma allowlist tools por papel, configurada explicitamente
-no perfil. Isso reduz a superfície de ferramentas, sem criar sandbox separado
-ou conceder aprovação. Codex pode receber model_reasoning_effort junto ao modelo;
-o kit não traduz essa opção para Cursor ou Claude.
-O kit não altera permissões, configurações globais, autenticação ou MCPs.
-Modelos são herdados quando não configurados. Os clientes podem impor sua
-própria precedência e restrições de conta.
+Read-only roles use `readonly` in Cursor. In Codex and Claude, the prohibition on
+editing is in the prompt; it is not a separate sandbox. Claude can receive a
+per-role `tools` allowlist explicitly configured in the profile. This limits tool
+access without creating a separate sandbox or granting approval. Codex can receive
+`model_reasoning_effort` alongside the model; the kit does not translate that
+option to Cursor or Claude.
 
-## Fontes oficiais consultadas em 27/10/2026
+The kit does not modify permissions, global configuration, authentication or
+MCPs. Models are inherited when not configured. Clients may enforce their own
+precedence and account restrictions. New profiles default to English; existing
+consumer languages remain unchanged during updates, and `project.language` can
+select another language, including `pt-BR`.
 
-- [Codex: skills e localização](https://learn.chatgpt.com/docs/build-skills)
-- [Codex: instruções AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
-- [Codex: papéis personalizados](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+## Official sources consulted on 27 October 2026
+
+- [Codex: skills and location](https://learn.chatgpt.com/docs/build-skills)
+- [Codex: AGENTS.md instructions](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
+- [Codex: custom agents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
 - [Cursor: skills](https://cursor.com/docs/skills)
 - [Cursor: subagents](https://cursor.com/docs/subagents)
 - [Claude Code: skills](https://code.claude.com/docs/en/skills)
 - [Claude Code: subagents](https://code.claude.com/docs/en/sub-agents)
-- [Claude Code: memória e imports](https://code.claude.com/docs/en/memory)
+- [Claude Code: memory and imports](https://code.claude.com/docs/en/memory)
 
-A verificação automatizada cobre os formatos e efeitos em disco.
-Smoke nos clientes reais precisa confirmar skills e papéis listados na sessão;
-ele não foi executado como parte do bootstrap deste repositório.
+Automated checks cover formats and on-disk effects. A smoke test in each actual
+client must confirm that skills and roles are listed in the session; this was not
+performed during this repository's bootstrap.
 
-O setup guiado é uma skill compartilhada em `.agents/skills/setup-project/`;
-Claude recebe uma cópia gerada com suas referências e template. Ele depende das
-capacidades de leitura, edição e diálogo do agente, sem exigir CLI ou doctor.
-Outro cliente pode ler a skill e os recursos explicitamente pelo catálogo.
-Suporte de descoberta automática e aplicação efetiva depende do cliente e da sessão.
+Guided setup is a shared skill under `.agents/skills/setup-project/`; Claude
+receives a generated copy with its references and template. It needs the agent's
+reading, editing and conversation capabilities, not a CLI or doctor. Another
+client can read the skill and resources explicitly through the catalog. Automatic
+discovery and actual execution depend on the client and session.
 
-Na auditoria local, explorer e reviewer foram usados no Codex. Isso não comprova
-todos os papéis, opções de modelos, fluxos ou os clientes Cursor/Claude.
-O comando doctor verifica somente configuração e disponibilidade local; não
-substitui esse smoke. A suíte atual foi executada em Python 3.14; compatibilidade
-com o mínimo 3.11 também depende de execução nessa versão, não só leitura de código.
+For setup and other workflows, use the current session's native question tool when exposed:
+Cursor's question tool, Claude Code's `AskUserQuestion`, or Codex's user-input
+tool. A popup is not guaranteed across client versions and modes; if unavailable,
+the workflow falls back to chat. For example, Cursor documents a blocking
+multiple-choice request in its [ACP integration](https://cursor.com/docs/cli/acp),
+which is a specific integration and does not establish availability in every
+Cursor session. Test the selector in each target client and mode.
 
-Versão 0.2 preserva os perfis com IDs de modelo como strings e os reviews legados.
-Novos reviews usam v2 com --require-evidence. Hashes de textos toleram LF/CRLF,
-inclusive na migração de instalações 0.1. Veja [configuração](CONFIGURATION.md),
-[review](REVIEW.md) e [retomada](WORKFLOWS.md).
+During the local audit, explorer and reviewer were used in Codex. This does not
+prove all roles, model options, workflows, or the Cursor/Claude clients. `doctor`
+only checks configuration and local availability; it does not replace that smoke
+test. The suite was run under Python 3.14; compatibility with the 3.11 minimum
+also requires running it on that version, not just reading the code.
+
+Version 0.2 preserves profiles with string model IDs and legacy reviews. New
+reviews use v2 with `--require-evidence`. Text hashes tolerate LF/CRLF, including
+migration from 0.1 installations. See [configuration](CONFIGURATION.md),
+[review](REVIEW.md) and [resuming](WORKFLOWS.md).
+
+Version 0.4 uses English for the shared instructions and new profiles. Upgrading
+an existing installation preserves its consumer-owned `project.language` and
+other project configuration; review changes with `install --dry-run` first.

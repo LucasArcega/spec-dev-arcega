@@ -60,7 +60,7 @@
         "backend"
       ],
       "requires": [
-        "Docker disponível; banco isolado por Testcontainers."
+        "Docker available; database isolated with Testcontainers."
       ],
       "required": true
     },
@@ -105,7 +105,7 @@
         "ui"
       ],
       "requires": [
-        "Selecione os specs do plano para escopo delimitado; API, worker e frontend conforme cenário."
+        "Select the plan's specs for the requested scope; API, worker and frontend as required by the scenario."
       ],
       "required": true
     }

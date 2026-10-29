@@ -1,79 +1,81 @@
-# Instalação do Spec Dev Arcega para agentes
+# Spec Dev Arcega installation for agents
 
-Este arquivo orienta um agente a instalar o kit em um projeto consumidor. Siga
-o pedido do usuário, as instruções do projeto e as permissões da sessão. O kit
-não concede autoridade para publicar, commitar, fazer merge ou usar rastreadores.
+This file guides an agent through installing the kit in a consumer project.
+Follow the user's request, the project's instructions and the session's
+permissions. The kit does not grant authority to publish, commit, merge or use
+trackers.
 
-## 1. Identifique destino e origem
+## 1. Identify the destination and source
 
-- O **destino** é a raiz do projeto que o usuário pediu para configurar. Se o
-  projeto estiver aberto na sessão, use sua raiz; respeite outro destino explícito.
-  Se houver mais de um destino possível, esclareça antes de instalar.
-- A **origem** é uma cópia completa do Spec Dev Arcega contendo este arquivo,
-  `kit.json`, `profiles/`, `.agents/` e `scripts/specdev.py`. Se este arquivo foi
-  lido de uma cópia local completa, use essa raiz. Se foi recebido por link,
-  obtenha a mesma revisão do repositório que contém o arquivo usando os meios
-  disponíveis na sessão. Uma cópia apenas deste `.md` não contém o instalador.
-- Se a origem completa não estiver acessível ou não puder ser identificada pelo
-  link, peça o caminho de uma cópia ou o endereço do repositório do kit. Não
-  confunda o repositório de destino com o de origem nem invente URLs ou revisões.
-- Leia as instruções locais do destino e confira o estado dos arquivos existentes.
-  Preserve configuração, instruções, credenciais e alterações do projeto.
+- The **destination** is the root of the project the user asked to configure.
+  If the project is open in the session, use its root; respect an explicitly
+  named destination. If multiple destinations are possible, clarify first.
+- The **source** is a complete copy of Spec Dev Arcega containing this file,
+  `kit.json`, `profiles/`, `.agents/` and `scripts/specdev.py`. If this file was
+  read from a complete local copy, use its root. If it was provided by link,
+  obtain the same revision of the repository containing the file using the
+  tools available in the session. This `.md` file alone is not the installer.
+- If the full source is inaccessible or cannot be identified from the link, ask
+  for a local copy's path or the kit repository address. Do not confuse the
+  destination repository with the source or invent URLs or revisions.
+- Read the destination's local instructions and inspect its existing files.
+  Preserve its configuration, instructions, credentials and changes.
 
-## 2. Prepare a instalação
+## 2. Prepare the installation
 
-O instalador requer Python 3.11 ou superior e usa apenas a biblioteca padrão.
-Identifique um executável disponível (`python`, `python3` ou equivalente) e
-confira sua versão. Se estiver indisponível, informe o bloqueio; não instale nem
-altere runtimes do sistema por conta própria.
+The installer requires Python 3.11 or later and uses only the standard library.
+Find an available executable (`python`, `python3` or equivalent) and check its
+version. If it is unavailable, report the blocker; do not install or change system
+runtimes on your own.
 
-Para a primeira instalação, use o perfil `generic`, salvo se o usuário tiver
-escolhido outro perfil existente. Por padrão, omita `--tools`: o instalador
-seleciona Codex, Cursor e Claude. Se o usuário especificar clientes, passe-os em
-`--tools`. Em projeto já configurado, não use `--profile`; preserve o perfil
-existente. Em atualização, omitir `--tools` mantém os clientes registrados;
-para adicionar clientes, informe todos os já instalados e os novos.
+For a first installation, use the `generic` profile unless the user chose another
+existing profile. By default, omit `--tools`: the installer selects Codex, Cursor
+and Claude. If the user specifies clients, pass them through `--tools`. For an
+already configured project, do not use `--profile`; preserve its existing profile.
+When updating, omitting `--tools` keeps the registered clients; when adding
+clients, include both the existing and new clients.
 
-## 3. Instale e confira
+## 3. Install and check
 
-Execute o script **a partir da raiz da origem**, com o caminho absoluto do
-destino. Passe os caminhos e argumentos separadamente conforme o ambiente; não
-use `eval` nem construa comandos de shell com conteúdo não confiável.
+Run the script **from the source root**, with the destination's absolute path.
+Pass paths and arguments separately as appropriate for the environment; do not
+use `eval` or construct shell commands from untrusted content.
 
-1. Execute `install --target DESTINO` com as opções escolhidas e `--dry-run`.
-2. Se houver conflito, leia a mensagem, preserve os arquivos e resolva o que
-   estiver autorizado. Não use reset, limpeza, substituição forçada ou edição
-   de arquivos gerenciados para contornar a proteção.
-3. Se a simulação estiver sem conflitos, execute o mesmo `install` sem `--dry-run`.
-4. Execute `check --target DESTINO`. Confirme o resultado e informe qualquer
-   aviso, inclusive ausência de validações configuradas no perfil `generic`.
+1. Run `install --target DESTINATION` with the selected options and `--dry-run`.
+2. If there is a conflict, read the message, preserve the files and resolve what
+   is authorized. Do not use reset, cleanup, forced replacement or edits to
+   managed files to bypass the protection.
+3. If the simulation has no conflicts, run the same `install` without `--dry-run`.
+4. Run `check --target DESTINATION`. Confirm the result and report warnings,
+   including missing validation commands in the `generic` profile.
 
-Em termos de argumentos, os comandos são equivalentes a:
+In terms of arguments, the commands are equivalent to:
 
 ```text
-PYTHON scripts/specdev.py install --target DESTINO --profile generic --dry-run
-PYTHON scripts/specdev.py install --target DESTINO --profile generic
-PYTHON scripts/specdev.py check --target DESTINO
+PYTHON scripts/specdev.py install --target DESTINATION --profile generic --dry-run
+PYTHON scripts/specdev.py install --target DESTINATION --profile generic
+PYTHON scripts/specdev.py check --target DESTINATION
 ```
 
-`PYTHON` e `DESTINO` representam o executável e o caminho resolvidos; eles não
-são valores literais. Inclua `--profile` somente na primeira instalação e
-`--tools` apenas quando necessário, conforme a etapa anterior. O instalador
-preserva o perfil existente e não executa os comandos declarados nele.
+`PYTHON` and `DESTINATION` stand for the resolved executable and path; they are
+not literal values. Include `--profile` only on first installation and `--tools`
+only when needed, as described above. The installer preserves existing profiles
+and does not run the commands declared in them.
 
-## 4. Configure o projeto quando solicitado
+## 4. Configure the project when requested
 
-Se o pedido incluir configuração ou setup guiado, leia no **destino**
-`.agents/skills/setup-project/SKILL.md` e siga o fluxo: investigue o projeto,
-faça perguntas sobre decisões relevantes e registre as respostas progressivamente.
-A configuração e o checkpoint pertencem ao projeto consumidor. A skill pode ser
-lida diretamente mesmo se a lista de skills da sessão ainda não tiver sido atualizada.
+If the request includes configuration or guided setup, read
+`.agents/skills/setup-project/SKILL.md` in the **destination** and follow the
+workflow: investigate the project, collect all relevant answers, then apply the
+configuration. Configuration and checkpoints belong to the consumer
+project. The skill can be read directly even if the session's skill list has not
+been refreshed.
 
-O perfil `generic` começa sem comandos de validação. Isso é uma pendência de
-configuração, não um teste aprovado. O `doctor` é opcional para a instalação e
-para o setup; ele não executa testes nem comprova que o projeto está funcional.
+The `generic` profile starts without validation commands. This is a configuration
+item to resolve, not a passing test. `doctor` is optional for installation and
+setup; it neither runs tests nor proves the project works.
 
-Ao terminar, informe origem e destino, clientes selecionados, resultado do
-`check`, arquivos instalados ou conflitos, avisos e a próxima ação. Distinga
-instalação concluída de setup ainda em andamento. Não afirme que um cliente
-descobriu a skill automaticamente ou que testes passaram sem evidência.
+At handoff, report the source and destination, selected clients, `check` result,
+installed files or conflicts, warnings and the next action. Distinguish a
+completed installation from a setup still in progress. Do not claim a client
+automatically discovered the skill or tests passed without evidence.

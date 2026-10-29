@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project": {
     "name": "spec-dev-arcega",
-    "language": "pt-BR"
+    "language": "en"
   },
   "git": {
     "remote": "origin",

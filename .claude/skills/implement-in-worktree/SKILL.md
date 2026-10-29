@@ -1,32 +1,32 @@
 ---
 name: implement-in-worktree
-description: "Prepara uma worktree isolada e segue o fluxo de implementação de um ticket."
+description: "Prepares an isolated worktree and follows the ticket implementation workflow."
 ---
 
-# Implementar em worktree
+# Implement in a worktree
 
-Leia perfil, plano e dependências. Se já estiver na worktree correta, siga
-implement-ticket. Não recrie nem resete uma worktree existente.
+Read the profile, plan and dependencies. If already in the correct worktree,
+follow implement-ticket. Do not recreate or reset an existing worktree.
 
-Resolva branch por git.branch_pattern e base por git.base_branch.
-Confira git worktree list para localizar checkouts existentes e evite usar uma
-branch que já está ativa em outro lugar. Preserve o checkout principal.
-Prefira o recurso nativo de worktree quando disponível; caso contrário, use Git
-com diretório explícito acordado/derivado para a tarefa, fora dos arquivos de produto.
+Resolve the branch using git.branch_pattern and the base using git.base_branch.
+Check git worktree list to find existing checkouts and avoid a branch already
+active elsewhere. Preserve the main checkout. Prefer the native worktree feature
+when available; otherwise use Git with an explicit agreed or task-derived
+directory outside product files.
 
-Faça fetch do remote/base quando necessário. Crie a worktree a partir da base
-resolvida ou reutilize a branch existente sem reset. Não troque a branch do
-checkout principal como etapa de preparação.
+Fetch the remote/base when needed. Create the worktree from the resolved base
+or reuse the existing branch without resetting. Do not change the branch of the
+main checkout as a preparation step.
 
-Confirme cwd, git branch --show-current e git worktree list antes de editar.
-Use caminhos explícitos se o runtime não permitir mudar o diretório da sessão.
-Verifique se .specdev e as skills estão presentes no checkout criado; se a
-configuração só estava em mudanças não commitadas, prepare o kit ali sem copiar
-arquivos de produto ou credenciais do checkout principal.
+Confirm cwd, git branch --show-current and git worktree list before editing.
+Use explicit paths if the runtime cannot change the session's working directory.
+Check that .specdev and the skills exist in the new checkout; if configuration
+was only in uncommitted changes, prepare the kit there without copying product
+files or credentials from the main checkout.
 
-Siga implement-ticket pulando a criação de branch já concluída.
-Defina portas, banco, filas e dados por worktree antes de iniciar serviços de UI
-ou integração. Não suponha que compartilhar a infraestrutura é seguro.
-O kit não provisiona slots de banco nem copia secrets automaticamente.
-Entregue caminho, branch, validações e URLs produzidas. Remova/arquive a worktree
-somente quando não for mais necessária e a ação estiver autorizada.
+Follow implement-ticket, skipping the branch creation already completed.
+Define ports, database, queues and data per worktree before starting UI or
+integration services. Do not assume shared infrastructure is safe.
+The kit does not provision database slots or copy secrets automatically.
+Deliver the path, branch, validations and URLs produced. Remove/archive the
+worktree only when it is no longer needed and the action is authorized.

@@ -2,187 +2,191 @@
 
 # Spec Dev Arcega
 
-**Um kit de skills e agentes para trabalhar com o seu projeto.**
+**A kit of skills and agents for working on your project.**
 
-Do planejamento à entrega, seguindo o contexto e as regras da sua equipe.
+From planning through delivery, following your team's context and rules.
 
-`Codex` · `Cursor` · `Claude Code` · `outras ferramentas compatíveis`
+`Codex` · `Cursor` · `Claude Code` · `other compatible tools`
+
+Current kit version: **0.4.0**
 
 </div>
 
 ---
 
-## Instale com uma mensagem
+## Install with one message
 
-Abra o projeto que receberá o kit no seu agente e envie:
+Open the project that will receive the kit in your agent and send:
 
 ```text
-Leia https://github.com/LucasArcega/spec-dev-arcega/blob/main/INSTALL.md e instale o kit neste projeto.
-Depois, inicie o setup guiado.
+Read https://github.com/LucasArcega/spec-dev-arcega/blob/main/INSTALL.md and install the kit in this project.
+Then start the guided setup.
 ```
 
-O agente vai localizar o kit, conferir o projeto, simular a instalação e
-aplicar as alterações. Depois, vai fazer algumas perguntas para conhecer o
-projeto e preencher a configuração com você.
+The agent will locate the kit, inspect the project, simulate the installation,
+and apply the changes. It will then ask questions to learn about your project
+and help you fill in its configuration.
 
-> **Acesso ao kit:** o agente precisa acessar este repositório ou uma cópia local
-> completa. Se não conseguir localizar a origem, ele pedirá o caminho ou o endereço.
+> **Access to the kit:** the agent needs access to this repository or a complete
+> local copy. If it cannot find the source, it will ask for the path or address.
 
-O instalador requer **Python 3.11+** na máquina que fará a instalação. O setup
-guiado usa as capacidades do agente e não depende de um cliente específico.
+The installer requires **Python 3.11+** on the machine performing the
+installation. Guided setup uses the agent's capabilities and is not tied to a
+specific client.
 
-## O que acontece depois?
+## What happens next?
 
-| Etapa | Seu agente cuida de |
+| Step | Your agent will |
 | --- | --- |
-| **Instalar** | Confere a origem e o destino, simula e instala o kit. |
-| **Conhecer** | Lê a documentação e as convenções do projeto. |
-| **Perguntar** | Pergunta o que precisa ser definido, uma decisão por vez. |
-| **Configurar** | Registra as respostas e permite retomar o setup depois. |
-| **Conferir** | Verifica a instalação e informa o que ficou pendente. |
+| **Install** | Check the source and destination, simulate and install the kit. |
+| **Explore** | Read the project's documentation and conventions. |
+| **Ask** | Collect the decisions, one at a time, using your client's selector when available. |
+| **Configure** | Apply the answers after the interview and record any pending decisions. |
+| **Check** | Verify the installation and report anything still pending. |
 
-O perfil `generic` começa sem comandos de validação. Durante o setup, o agente
-ajuda a registrar os comandos e pré-requisitos reais do projeto. O instalador
-não executa esses comandos automaticamente.
+The `generic` profile starts without validation commands. During setup, the agent
+helps register the actual commands and prerequisites for your project. The
+installer does not run those commands automatically.
 
-## Como usar as skills
+## How to use the skills
 
-Depois da instalação, você pode pedir as tarefas em linguagem natural ou citar
-o nome da skill para deixar o fluxo mais claro. Os exemplos abaixo são mensagens
-para enviar **no chat do agente**. Troque os números e caminhos pelos do seu
-projeto; eles não são comandos de terminal.
+After installation, you can request tasks in natural language or name the skill
+when you want to be specific. Send the examples below **in the agent chat**.
+Replace ticket numbers and paths with those of your project; these are not
+terminal commands.
 
-| Skill | Quando usar | Exemplo de pedido |
+| Skill | When to use it | Example request |
 | --- | --- | --- |
-| [`setup-project`](.agents/skills/setup-project/SKILL.md) | Configurar o projeto ou continuar o setup. | `Use setup-project para configurar este projeto.` |
-| [`write-ticket`](.agents/skills/write-ticket/SKILL.md) | Redigir ou revisar um ticket. | `Use write-ticket para redigir um ticket sobre exportação de relatórios.` |
-| [`enrich-plan`](.agents/skills/enrich-plan/SKILL.md) | Investigar e completar o plano de um ticket. | `Use enrich-plan para preparar o plano do ticket 12.` |
-| [`implement-ticket`](.agents/skills/implement-ticket/SKILL.md) | Implementar o plano, revisar e validar. | `Use implement-ticket para implementar o plano do ticket 12.` |
-| [`implement-in-worktree`](.agents/skills/implement-in-worktree/SKILL.md) | Fazer a implementação em uma worktree isolada. | `Use implement-in-worktree para implementar o ticket 12.` |
-| [`review-changes`](.agents/skills/review-changes/SKILL.md) | Revisar alterações e apontar problemas. | `Use review-changes para revisar as alterações desta branch.` |
-| [`create-pr`](.agents/skills/create-pr/SKILL.md) | Criar ou reutilizar um PR e vincular o ticket, quando solicitado. | `Use create-pr para abrir o PR desta branch e vincular o ticket 12.` |
-| [`merge-and-close`](.agents/skills/merge-and-close/SKILL.md) | Fazer merge do PR validado e fechar o ticket. | `Use merge-and-close para fazer merge do PR 34 e fechar o ticket 12.` |
-| [`fast-merge`](.agents/skills/fast-merge/SKILL.md) | Fazer merge direto, sem PR ou CI, quando isso for pedido. | `Use fast-merge para fazer merge direto da branch atual em develop.` |
-| [`record-test`](.agents/skills/record-test/SKILL.md) | Gravar um teste de interface específico. | `Use record-test para gravar o teste em caminho/do/spec.` |
+| [`setup-project`](.agents/skills/setup-project/SKILL.md) | Configure the project or continue setup. | `Use setup-project to configure this project.` |
+| [`write-ticket`](.agents/skills/write-ticket/SKILL.md) | Draft or review a ticket. | `Use write-ticket to draft a ticket about report exports.` |
+| [`enrich-plan`](.agents/skills/enrich-plan/SKILL.md) | Investigate and complete a ticket's plan. | `Use enrich-plan to prepare the plan for ticket 12.` |
+| [`implement-ticket`](.agents/skills/implement-ticket/SKILL.md) | Implement, review and validate the plan. | `Use implement-ticket to implement the plan for ticket 12.` |
+| [`implement-in-worktree`](.agents/skills/implement-in-worktree/SKILL.md) | Implement the task in an isolated worktree. | `Use implement-in-worktree to implement ticket 12.` |
+| [`review-changes`](.agents/skills/review-changes/SKILL.md) | Review changes and identify problems. | `Use review-changes to review the changes on this branch.` |
+| [`create-pr`](.agents/skills/create-pr/SKILL.md) | Create or reuse a PR and link the ticket when requested. | `Use create-pr to open a PR for this branch and link ticket 12.` |
+| [`merge-and-close`](.agents/skills/merge-and-close/SKILL.md) | Merge a validated PR and close the ticket. | `Use merge-and-close to merge PR 34 and close ticket 12.` |
+| [`fast-merge`](.agents/skills/fast-merge/SKILL.md) | Perform a direct merge without PR or CI when explicitly requested. | `Use fast-merge to merge the current branch directly into develop.` |
+| [`record-test`](.agents/skills/record-test/SKILL.md) | Record a specific UI test. | `Use record-test to record the test at path/to/spec.` |
 
-Para continuar uma configuração interrompida, peça:
+To resume an interrupted setup, ask:
 
 ```text
-Use setup-project para continuar o setup de onde paramos.
+Use setup-project to continue setup from where we left off.
 ```
 
-Um fluxo comum é preparar o plano com `enrich-plan`, implementar com
-`implement-ticket` e, quando estiver pronto para entrega, pedir o `create-pr`
-ou o `merge-and-close`. O `fast-merge` é para o caso em que você quer pedir
-**merge direto**, dispensando PR e CI.
+A typical workflow is to prepare a plan with `enrich-plan`, implement it with
+`implement-ticket`, then request `create-pr` or `merge-and-close` when you are
+ready to deliver. Use `fast-merge` when you explicitly want a **direct merge**
+without PR or CI.
 
-O `enrich-plan` prepara o plano sem implementar o código. O `implement-ticket`
-vai até revisão, validação e handoff; commit, push e PR dependem do pedido.
-As skills de PR e merge usam GitHub nesta versão. O vínculo e o fechamento do
-ticket dependem do rastreador configurado e da operação solicitada.
+`enrich-plan` prepares a plan without implementing code. `implement-ticket`
+goes through review, validation and handoff; commit, push and PR depend on the
+request. PR and merge skills currently use GitHub. Linking or closing a ticket
+depends on the configured tracker and the requested action.
 
-O kit também inclui papéis de agentes, regras e templates. A fonte compartilhada
-fica em `.agents/`; cada cliente recebe os formatos disponíveis para ele.
-Veja o [catálogo completo](.agents/CATALOG.md).
+The kit also includes agent roles, rules and templates. The shared source lives
+in `.agents/`; each client receives its supported formats. See the full
+[catalog](.agents/CATALOG.md).
 
-## Comandos do instalador
+## Installer commands
 
-O caminho mais simples é pedir ao agente para seguir o [INSTALL.md](INSTALL.md).
-Se precisar rodar os comandos você mesmo, abra um terminal **na pasta do Spec Dev**,
-onde está `scripts/specdev.py`, e troque o caminho pelo projeto de destino.
+The easiest way is to ask your agent to follow [INSTALL.md](INSTALL.md). To run
+the commands yourself, open a terminal **in the Spec Dev directory** containing
+`scripts/specdev.py` and replace the destination with your project path.
 
-Os exemplos usam `python`. No macOS/Linux, use `python3` se esse for o comando
-disponível. O instalador precisa de Python 3.11 ou superior.
+The examples use `python`. On macOS/Linux, use `python3` if that is the available
+command. The installer requires Python 3.11 or later.
 
-### Instalar pela primeira vez
+### First installation
 
-Primeiro, simule a instalação para conferir os arquivos e possíveis conflitos:
+First, simulate the installation to inspect the files and potential conflicts:
 
 ```powershell
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --profile generic --tools codex cursor claude --dry-run
+python scripts/specdev.py install --target "C:/Projects/my-project" --profile generic --tools codex cursor claude --dry-run
 ```
 
-Se estiver tudo certo, rode o mesmo comando sem `--dry-run`:
+If everything looks right, run the same command without `--dry-run`:
 
 ```powershell
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --profile generic --tools codex cursor claude
+python scripts/specdev.py install --target "C:/Projects/my-project" --profile generic --tools codex cursor claude
 ```
 
-No macOS/Linux, substitua o destino por um caminho do sistema, como
-`/caminho/para/meu-projeto`. As opções funcionam assim:
+On macOS/Linux, replace the destination with a local path such as
+`/path/to/my-project`. The options work as follows:
 
-| Opção | Para que serve |
+| Option | Purpose |
 | --- | --- |
-| `--target` | Caminho do projeto que vai receber o kit. Use aspas se houver espaços. |
-| `--profile` | Perfil inicial: `generic`, `python` ou `dotnet-angular`. Use só na primeira instalação. |
-| `--tools` | Clientes a instalar: `codex`, `cursor` e/ou `claude`. Se omitido na primeira instalação, instala os três. |
-| `--dry-run` | Mostra o que mudaria e aponta conflitos, sem gravar arquivos no destino. |
+| `--target` | Path of the project receiving the kit. Quote paths containing spaces. |
+| `--profile` | Initial profile: `generic`, `python` or `dotnet-angular`. Use only for the first installation. |
+| `--tools` | Clients to install: `codex`, `cursor` and/or `claude`. If omitted on first installation, all three are selected. |
+| `--dry-run` | Show planned changes and conflicts without writing to the destination. |
 
-Os perfis são pontos de partida. O `generic` não vem com comandos de validação;
-`python` e `dotnet-angular` trazem exemplos que precisam ser ajustados ao projeto.
+Profiles are starting points. `generic` has no validation commands; `python`
+and `dotnet-angular` provide examples that must be adapted to the project. New
+profiles use English by default. Existing consumer configurations are preserved;
+set `project.language` to `pt-BR` or another language if the project requires it.
 
-### Conferir a instalação
-
-```powershell
-python scripts/specdev.py check --target "C:/Projetos/meu-projeto"
-python scripts/specdev.py doctor --target "C:/Projetos/meu-projeto"
-```
-
-O `check` confere arquivos gerados, configuração e versão. O `doctor` também
-aponta configuração incompleta, diretórios ou executáveis ausentes e pré-requisitos
-que precisam ser verificados. Ele não executa os testes do projeto.
-
-Se quiser conferir apenas algumas superfícies configuradas, use por exemplo:
+### Check an installation
 
 ```powershell
-python scripts/specdev.py doctor --target "C:/Projetos/meu-projeto" --surfaces backend frontend
+python scripts/specdev.py check --target "C:/Projects/my-project"
+python scripts/specdev.py doctor --target "C:/Projects/my-project"
 ```
 
-### Atualizar ou adicionar clientes
+`check` checks generated files, configuration and version. `doctor` also reports
+incomplete configuration, missing directories or executables, and prerequisites
+that still need verification. It does not run the project's tests.
 
-Depois de atualizar sua cópia do Spec Dev, simule e aplique a atualização:
+To check only selected configured surfaces, for example:
 
 ```powershell
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --dry-run
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto"
+python scripts/specdev.py doctor --target "C:/Projects/my-project" --surfaces backend frontend
 ```
 
-Sem `--profile` e `--tools`, o instalador preserva o perfil e os clientes já
-selecionados. Para adicionar um cliente com `--tools`, inclua também os que já
-estavam instalados. Por exemplo, se o projeto já usa Codex e Cursor e você quer
-adicionar Claude:
+### Update or add clients
+
+After updating your copy of Spec Dev, simulate and apply the update:
 
 ```powershell
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --tools codex cursor claude --dry-run
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --tools codex cursor claude
+python scripts/specdev.py install --target "C:/Projects/my-project" --dry-run
+python scripts/specdev.py install --target "C:/Projects/my-project"
 ```
 
-Se aparecer um conflito, confira o arquivo indicado e preserve as alterações
-locais. As atualizações criam backups em `.specdev/backups/`; a remoção de
-adaptadores é manual. Veja o [guia de instalação](docs/INSTALACAO-MANUAL.md)
-para mais detalhes e solução de problemas.
+Without `--profile` and `--tools`, the installer preserves the profile and
+previously selected clients. To add a client with `--tools`, include the clients
+already installed as well. For example, if the project already uses Codex and
+Cursor and you want to add Claude:
 
-### Validar o próprio kit
+```powershell
+python scripts/specdev.py install --target "C:/Projects/my-project" --tools codex cursor claude --dry-run
+python scripts/specdev.py install --target "C:/Projects/my-project" --tools codex cursor claude
+```
 
-Para conferir as skills e os perfis da cópia do Spec Dev que você está usando:
+If a conflict appears, inspect the indicated file and preserve local changes.
+Updates create backups in `.specdev/backups/`; removing adapters is manual. See
+[the installation guide](docs/INSTALACAO-MANUAL.md) for details and troubleshooting.
+
+### Validate the kit itself
+
+To check the skills and profiles of the Spec Dev copy you are using:
 
 ```powershell
 python scripts/specdev.py validate
 ```
 
-Esse comando verifica o kit na pasta atual. Para conferir uma instalação em
-outro projeto, use `check --target` como mostrado acima. A lista de comandos e
-opções também está disponível com `python scripts/specdev.py --help`.
+This checks the kit in the current directory. To inspect an installation in
+another project, use `check --target` as shown above. The command and option list
+is also available through `python scripts/specdev.py --help`.
 
-## Precisa de mais detalhes?
+## More information
 
-- [Instalação manual, perfis e solução de problemas](docs/INSTALACAO-MANUAL.md)
-- [Setup guiado e retomada](docs/SETUP.md)
-- [Configuração do projeto](docs/CONFIGURATION.md)
-- [Compatibilidade entre clientes](docs/COMPATIBILITY.md)
-- [Review com evidências](docs/REVIEW.md)
-- [Critérios, evidência e retomada de entregas](docs/WORKFLOWS.md)
-- [Origem e extração do JourneyCore](docs/EXTRACTION.md)
+- [Manual installation, profiles and troubleshooting](docs/INSTALACAO-MANUAL.md)
+- [Guided setup and resuming](docs/SETUP.md)
+- [Project configuration](docs/CONFIGURATION.md)
+- [Client compatibility](docs/COMPATIBILITY.md)
+- [Evidence-based review](docs/REVIEW.md)
+- [Criteria, evidence and resuming delivery](docs/WORKFLOWS.md)
+- [JourneyCore origins and extraction](docs/EXTRACTION.md)
 
-O Spec Dev Arcega nasceu a partir de práticas do JourneyCore. Seus fluxos
-compartilhados podem ser adaptados a projetos de outras stacks e arquiteturas.
+Spec Dev Arcega grew out of JourneyCore practices. Its shared workflows can be
+adapted to projects with other stacks and architectures.

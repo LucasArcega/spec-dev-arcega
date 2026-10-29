@@ -1,26 +1,27 @@
 ---
 name: record-test
-description: "Grava vídeo da execução de um teste de UI solicitado usando o runner disponível, especialmente Playwright."
+description: "Records video of a requested UI test using the available runner, especially Playwright."
 ---
 
-# Gravar teste
+# Record a test
 
-Leia perfil e configuração real do runner. Resolva um spec e o projeto do teste;
-pergunte se faltar a identidade. Não grave a suite inteira como efeito colateral.
-Verifique serviços, credenciais de teste e versão mínima exigida pelo projeto;
-não fixe Node, portas, pasta ou project vindos de outro repositório.
+Read the profile and actual runner configuration. Resolve a spec and test
+project; ask if the identity is missing. Do not record the entire suite as a
+side effect. Use the shared native-question guidance in WORKFLOW.md to clarify
+the test when needed. Check services, test credentials and the project's required minimum
+version; do not hard-code Node, ports, folder or project from another repository.
 
-Em Playwright, video é configuração de use; não suponha uma flag --video.
-Use o mecanismo por ambiente já existente, ou uma configuração temporária que
-estenda a real e habilite vídeo nessa execução. Não deixe video=on permanente
-nem altere a configuração de produto para cumprir um pedido de gravação.
+In Playwright, video is a use configuration; do not assume a --video flag.
+Use the existing environment mechanism or a temporary configuration that extends
+the real one and enables video for this run. Do not leave video=on permanently
+or change product configuration to fulfill a recording request.
 
-Execute o spec no cwd correto. Registre o início e o diretório de saída.
-Localize o WebM realmente criado nessa rodada, distinguindo o teste pedido de
-setup/login e retries. Não reutilize um vídeo antigo como evidência.
-Se o teste falhar mas houver vídeo, entregue o arquivo com o resultado de falha.
-Sem gravação produzida, informe o motivo sem inventar um artifact.
+Run the spec in the correct cwd. Record the start and output directory.
+Locate the WebM actually created in that run, distinguishing the requested test
+from setup/login and retries. Do not reuse an old video as evidence.
+If the test fails but there is a video, deliver the file with the failure result.
+If no recording was produced, explain why without inventing an artifact.
 
-Retorne link Markdown para o caminho absoluto e resultado observado.
-Não commite vídeos, relatórios, estado autenticado ou credenciais.
-Se o runner não suportar gravação disponível, informe a limitação.
+Return a Markdown link to the absolute path and the observed result.
+Do not commit videos, reports, authenticated state or credentials.
+If the runner does not support an available recording method, report the limit.

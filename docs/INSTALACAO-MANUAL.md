@@ -2,247 +2,243 @@
 
 # Spec Dev Arcega
 
-**Skills, agentes e fluxos de trabalho para desenvolver com contexto.**
+**Skills, agents and workflows for developing with context.**
 
-Um kit orientado a especificações, adaptável ao seu projeto e à sua equipe.
+A specification-driven kit that adapts to your project and team.
 
-`Python 3.11+` · `Biblioteca padrão` · `Codex` · `Cursor` · `Claude Code`
+`Python 3.11+` · `Standard library` · `Codex` · `Cursor` · `Claude Code`
 
-[Instalação](#instalação) · [Setup guiado](#5-configure-seu-projeto) · [Skills](#conheça-as-skills) · [Atualização](#atualize-o-kit) · [Ajuda](#solução-de-problemas)
+[Installation](#installation) · [Guided setup](#5-configure-your-project) · [Skills](#explore-the-skills) · [Updates](#update-the-kit) · [Help](#troubleshooting)
 
 </div>
 
 ---
 
-O Spec Dev Arcega reúne instruções reutilizáveis para ajudar agentes a entender
-o projeto, preparar planos, implementar, revisar e entregar mudanças. O kit nasceu
-a partir de práticas do JourneyCore e mantém suas convenções específicas em um
-[exemplo separado](../examples/journey-core/project.json).
+Spec Dev Arcega collects reusable instructions to help agents understand a
+project, prepare plans, implement, review and deliver changes. The kit grew out
+of JourneyCore practices and keeps their specific conventions in a
+[separate example](../examples/journey-core/project.json).
 
-Você pode usá-lo em projetos de diferentes linguagens e arquiteturas. As
-particularidades do seu projeto ficam na configuração e nos documentos dele.
+Use it with projects in different languages and architectures. Project-specific
+information stays in the consumer's configuration and documents.
 
-## Antes de começar
+## Before you start
 
-Você vai precisar de:
+You need:
 
-1. **Uma cópia deste repositório**, contendo `scripts/specdev.py` e a pasta `.agents/`.
-2. **Python 3.11 ou superior** na máquina que executará o instalador. Não há dependências Python externas.
-3. **Um projeto de destino**: a pasta onde você quer usar as skills e os agentes.
-4. **Um agente compatível**, como Codex, Cursor ou Claude Code. Outros clientes podem ler as instruções compartilhadas pelo catálogo.
+1. **A copy of this repository** containing `scripts/specdev.py` and `.agents/`.
+2. **Python 3.11 or later** on the machine running the installer. There are no external Python dependencies.
+3. **A destination project**: the directory that will receive the skills and agents.
+4. **A compatible agent**, such as Codex, Cursor or Claude Code. Other clients can read the shared instructions through the catalog.
 
-Confira sua versão do Python:
+Check your Python version:
 
 ```bash
 python --version
 ```
 
-No macOS ou Linux, use `python3 --version` se o comando `python` não estiver
-disponível. O Python é necessário para instalar e atualizar o kit; a conversa
-do setup guiado usa as capacidades do agente.
+On macOS or Linux, use `python3 --version` if `python` is unavailable. Python is
+needed to install and update the kit; the guided setup conversation uses the
+agent's capabilities.
 
-## Instalação
+## Installation
 
-### 1. Abra um terminal na pasta do kit
+### 1. Open a terminal in the kit directory
 
-Todos os comandos a seguir são executados **na raiz deste repositório**, onde
-está `scripts/specdev.py`. O destino é a pasta do projeto que receberá o kit.
+Run all commands below **from this repository's root**, where
+`scripts/specdev.py` lives. The destination is the project receiving the kit.
+Replace example paths with real ones. Keep quotes around paths containing spaces.
 
-Substitua o caminho de exemplo pelo caminho real. Mantenha as aspas se houver
-espaços no nome de alguma pasta.
+### 2. Simulate the installation
 
-### 2. Simule a instalação
-
-O modo `--dry-run` mostra o que seria criado ou atualizado e detecta conflitos.
-Ele não grava arquivos no destino.
+`--dry-run` shows files that would be created or updated and detects conflicts.
+It does not write files to the destination.
 
 **Windows — PowerShell**
 
 ```powershell
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --profile generic --tools codex cursor claude --dry-run
+python scripts/specdev.py install --target "C:/Projects/my-project" --profile generic --tools codex cursor claude --dry-run
 ```
 
 **macOS / Linux**
 
 ```bash
-python3 scripts/specdev.py install --target "/caminho/para/meu-projeto" --profile generic --tools codex cursor claude --dry-run
+python3 scripts/specdev.py install --target "/path/to/my-project" --profile generic --tools codex cursor claude --dry-run
 ```
 
-Os exemplos selecionam os três clientes. Você pode escolher somente os que usa,
-por exemplo `--tools codex` ou `--tools cursor claude`. Se `--tools` for omitido
-na primeira instalação, os três serão selecionados.
+The examples select all three clients. Select only those you use, for example
+`--tools codex` or `--tools cursor claude`. If `--tools` is omitted on first
+installation, all three are selected.
 
-### 3. Instale o kit
+### 3. Install the kit
 
-Se a simulação estiver como esperado, execute o mesmo comando sem `--dry-run`:
+If the simulation looks right, run the same command without `--dry-run`:
 
 **Windows — PowerShell**
 
 ```powershell
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --profile generic --tools codex cursor claude
+python scripts/specdev.py install --target "C:/Projects/my-project" --profile generic --tools codex cursor claude
 ```
 
 **macOS / Linux**
 
 ```bash
-python3 scripts/specdev.py install --target "/caminho/para/meu-projeto" --profile generic --tools codex cursor claude
+python3 scripts/specdev.py install --target "/path/to/my-project" --profile generic --tools codex cursor claude
 ```
 
-O instalador preserva a configuração e as instruções existentes. Se encontrar
-um arquivo gerenciado com alterações locais que não possa atualizar com
-segurança, ele informa o conflito antes de gravar os arquivos planejados.
+The installer preserves existing configuration and instructions. If a managed
+file has local changes that cannot be updated safely, it reports a conflict
+before writing the planned files.
 
-### 4. Abra o projeto no seu agente
+### 4. Open the project in your agent
 
-Abra o **projeto de destino** no Codex, Cursor ou Claude Code e inicie uma nova
-sessão. Confira se o cliente reconhece as skills e os agentes instalados.
+Open the **destination project** in Codex, Cursor or Claude Code and start a new
+session. Check that the client recognizes the installed skills and agents.
 
-| Cliente | Como o kit é disponibilizado |
+| Client | How the kit is provided |
 | --- | --- |
-| **Codex** | `AGENTS.md`, skills em `.agents/skills/` e agentes em `.codex/agents/`. |
-| **Cursor** | `AGENTS.md`, regra em `.cursor/rules/`, skills compartilhadas e agentes em `.cursor/agents/`. |
-| **Claude Code** | `CLAUDE.md`, cópias de skills em `.claude/skills/` e agentes em `.claude/agents/`. |
-| **Outro agente** | Leia `AGENTS.md` e `.agents/CATALOG.md`; a descoberta automática depende do suporte do cliente. |
+| **Codex** | `AGENTS.md`, skills in `.agents/skills/` and agents in `.codex/agents/`. |
+| **Cursor** | `AGENTS.md`, rule in `.cursor/rules/`, shared skills and agents in `.cursor/agents/`. |
+| **Claude Code** | `CLAUDE.md`, skill copies in `.claude/skills/` and agents in `.claude/agents/`. |
+| **Other agent** | Read `AGENTS.md` and `.agents/CATALOG.md`; automatic discovery depends on client support. |
 
-Consulte [Compatibilidade](COMPATIBILITY.md) para detalhes e limitações de
-cada cliente.
+See [Compatibility](COMPATIBILITY.md) for client details and limitations.
 
-### 5. Configure seu projeto
+### 5. Configure your project
 
-Peça ao agente:
+Ask the agent:
 
-> Use setup-project para conhecer e configurar este projeto.
+> Use setup-project to learn about and configure this project.
 
-A skill investiga os arquivos disponíveis, distingue fatos de hipóteses e faz
-perguntas sobre o que falta. As respostas são registradas progressivamente; você
-pode interromper e retomar a conversa depois.
+The skill inspects available files, distinguishes facts from hypotheses and
+asks about missing decisions. Answers are recorded progressively; you can
+interrupt and resume the conversation later.
 
-O perfil **generic começa sem comandos de validação**. Configure os comandos,
-diretórios e pré-requisitos reais do projeto antes de implementar tickets. O
-agente pode ajudar nesse preenchimento; os comandos são declarativos e não são
-executados pelo instalador.
+The **generic profile starts without validation commands**. Configure the actual
+commands, directories and prerequisites before implementing tickets. The agent
+can help; commands are declarative and the installer does not execute them.
+See [Guided setup](SETUP.md) and [Configuration](CONFIGURATION.md).
 
-Saiba mais em [Setup guiado](SETUP.md) e [Configuração](CONFIGURATION.md).
+## Choose a profile
 
-## Escolha um perfil
+The profile supplies a starting point for `.specdev/project.json`. If `--profile`
+is omitted on first installation, `generic` is used.
 
-O perfil define um ponto de partida para `.specdev/project.json`. Se `--profile`
-for omitido na primeira instalação, o padrão será `generic`.
-
-| Perfil | Quando escolher | Ponto de partida |
+| Profile | When to choose it | Starting point |
 | --- | --- | --- |
-| `generic` | Qualquer stack ou arquitetura | Sem comandos de validação; configure-os para o projeto. |
-| `python` | Projeto Python | Contexto Python e exemplo de validação com `unittest`. |
-| `dotnet-angular` | Projeto com .NET e Angular | Contexto da stack e exemplos de build e testes. |
+| `generic` | Any stack or architecture | No validation commands; configure them for the project. |
+| `python` | Python project | Python context and an example `unittest` validation. |
+| `dotnet-angular` | Project with .NET and Angular | Stack context and example build and test commands. |
 
-Revise os comandos e caminhos de cada perfil: são exemplos ajustáveis, não
-detecção automática da arquitetura. Use `--profile` apenas na primeira
-instalação; depois, edite `.specdev/project.json` no projeto consumidor.
+Review the commands and paths in each profile: they are adjustable examples,
+not automatic architecture detection. Use `--profile` only for the first
+installation; later, edit `.specdev/project.json` in the consumer project. New
+profiles default to English; existing consumers retain their language. Set
+`project.language` to `pt-BR` or another appropriate language when needed.
 
-## Conheça as skills
+## Explore the skills
 
-Peça uma skill pelo nome ou descreva a tarefa ao seu agente. As instruções
-compartilhadas e os recursos de cada fluxo ficam em `.agents/skills/`.
+Ask for a skill by name or describe the task. Shared instructions and resources
+for each workflow are in `.agents/skills/`.
 
-| Skill | Para que serve |
+| Skill | Purpose |
 | --- | --- |
-| [`setup-project`](../.agents/skills/setup-project/SKILL.md) | Conhecer e configurar o projeto com perguntas guiadas. |
-| [`write-ticket`](../.agents/skills/write-ticket/SKILL.md) | Escrever ou revisar tickets com critérios verificáveis. |
-| [`enrich-plan`](../.agents/skills/enrich-plan/SKILL.md) | Investigar e completar o plano de um ticket. |
-| [`implement-ticket`](../.agents/skills/implement-ticket/SKILL.md) | Implementar, revisar e validar um ticket até o handoff. |
-| [`review-changes`](../.agents/skills/review-changes/SKILL.md) | Revisar mudanças com achados e evidências estruturados. |
-| [`create-pr`](../.agents/skills/create-pr/SKILL.md) | Criar ou reutilizar um PR e vinculá-lo ao ticket quando autorizado. |
-| [`merge-and-close`](../.agents/skills/merge-and-close/SKILL.md) | Fazer merge de um PR validado e concluir o ticket quando solicitado. |
-| [`fast-merge`](../.agents/skills/fast-merge/SKILL.md) | Executar um merge direto quando solicitado explicitamente. |
-| [`implement-in-worktree`](../.agents/skills/implement-in-worktree/SKILL.md) | Implementar uma tarefa em uma worktree isolada. |
-| [`record-test`](../.agents/skills/record-test/SKILL.md) | Gravar um teste de interface solicitado. |
+| [`setup-project`](../.agents/skills/setup-project/SKILL.md) | Learn about and configure a project with guided questions. |
+| [`write-ticket`](../.agents/skills/write-ticket/SKILL.md) | Write or review tickets with verifiable criteria. |
+| [`enrich-plan`](../.agents/skills/enrich-plan/SKILL.md) | Investigate and complete a ticket plan. |
+| [`implement-ticket`](../.agents/skills/implement-ticket/SKILL.md) | Implement, review and validate a ticket through handoff. |
+| [`review-changes`](../.agents/skills/review-changes/SKILL.md) | Review changes with structured findings and evidence. |
+| [`create-pr`](../.agents/skills/create-pr/SKILL.md) | Create or reuse a PR and link it to the ticket when authorized. |
+| [`merge-and-close`](../.agents/skills/merge-and-close/SKILL.md) | Merge a validated PR and close the ticket when requested. |
+| [`fast-merge`](../.agents/skills/fast-merge/SKILL.md) | Perform a direct merge when explicitly requested. |
+| [`implement-in-worktree`](../.agents/skills/implement-in-worktree/SKILL.md) | Implement a task in an isolated worktree. |
+| [`record-test`](../.agents/skills/record-test/SKILL.md) | Record a requested UI test. |
 
-Alguns exemplos de pedidos:
+Example requests:
 
-> Use enrich-plan para preparar o plano do ticket 12.
+> Use enrich-plan to prepare the plan for ticket 12.
 
-> Use implement-ticket para implementar o plano 12-export-report.
+> Use implement-ticket to implement plan 12-export-report.
 
-> Use review-changes para revisar as mudanças desta branch.
+> Use review-changes to review the changes on this branch.
 
-Criar PR, publicar, fazer merge ou atualizar um rastreador depende da autorização
-da tarefa. A existência de uma skill ou de uma configuração não dispara essas ações.
+Creating a PR, publishing, merging or updating a tracker depends on task
+authorization. A skill or configured preference does not trigger those actions.
 
-## O que fica no projeto
+## What goes into the project
 
-| Caminho | Finalidade |
+| Path | Purpose |
 | --- | --- |
-| `.agents/` | Fonte compartilhada de skills, papéis, regras, templates, contextos e integrações. |
-| `.specdev/project.json` | Configuração do projeto consumidor. |
-| `.specdev/manifest.json` | Versão, clientes selecionados e hashes dos arquivos gerados. |
-| `AGENTS.md` | Entrada compartilhada, com conteúdo local preservado. |
-| `.codex/`, `.cursor/` e `.claude/` | Adaptadores dos clientes selecionados; Claude também recebe cópias das skills. |
-| `CLAUDE.md` | Entrada do Claude Code, criada ou atualizada quando esse cliente é selecionado. |
+| `.agents/` | Shared source of skills, roles, rules, templates, contexts and integrations. |
+| `.specdev/project.json` | Consumer project configuration. |
+| `.specdev/manifest.json` | Version, selected clients and generated-file hashes. |
+| `AGENTS.md` | Shared entry point, preserving local content. |
+| `.codex/`, `.cursor/` and `.claude/` | Selected client adapters; Claude also receives skill copies. |
+| `CLAUDE.md` | Claude Code entry point, created or updated when that client is selected. |
 
-Durante o setup guiado, o agente também pode criar
-`.specdev/setup-state.json` para retomar a entrevista e um documento local de
-contexto, como `docs/PROJECT_CONTEXT.md`. Esses arquivos pertencem ao projeto
-consumidor. O instalador não os cria nem os gerencia.
+During guided setup, the agent may create `.specdev/setup-state.json` to resume
+the interview and a local context document such as `docs/PROJECT_CONTEXT.md`.
+These files belong to the consumer project. The installer does not create or
+manage them.
 
-O Git não é alterado pelo instalador. Para convenções compartilhadas pela equipe,
-avalie versionar as entradas, skills, perfil e manifest. No projeto consumidor,
-adicione `.specdev/backups/` e `.specdev/install.lock` ao `.gitignore`.
+The installer does not alter Git. For team conventions, consider versioning the
+entry points, skills, profile and manifest. Add `.specdev/backups/` and
+`.specdev/install.lock` to the consumer project's `.gitignore`.
 
-## Atualize o kit
+## Update the kit
 
-Após atualizar sua cópia deste repositório, execute novamente a partir da raiz
-do kit. Use o caminho do seu projeto e o mesmo comando Python da instalação.
+After updating your copy of this repository, run these from the kit root. Use
+your project path and the same Python command as for installation.
 
 ```powershell
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto" --dry-run
-python scripts/specdev.py install --target "C:/Projetos/meu-projeto"
-python scripts/specdev.py check --target "C:/Projetos/meu-projeto"
+python scripts/specdev.py install --target "C:/Projects/my-project" --dry-run
+python scripts/specdev.py install --target "C:/Projects/my-project"
+python scripts/specdev.py check --target "C:/Projects/my-project"
 ```
 
-No macOS/Linux, troque `python` por `python3` quando necessário e use o caminho
-local do projeto. O perfil e os clientes já selecionados são preservados quando
-as opções são omitidas. Para adicionar um cliente com `--tools`, informe o
-conjunto completo, incluindo os clientes já instalados. A remoção de adaptadores
-é manual; o instalador não apaga arquivos.
+On macOS/Linux, switch `python` to `python3` when needed and use a local project
+path. Omitting options preserves the profile and selected clients. To add a client
+with `--tools`, provide the complete set including installed clients. Adapter
+removal is manual; the installer does not delete files.
 
-As atualizações criam backups em `.specdev/backups/` dos arquivos substituídos.
-O planejamento detecta conflitos antes da escrita, mas uma falha de disco durante
-a gravação pode deixar uma instalação parcial. Use os backups e o `check` para
-identificar o que precisa ser restaurado. Evite instalações simultâneas no mesmo destino.
+Updates create backups of replaced files in `.specdev/backups/`. Planning finds
+conflicts before writing, but a disk failure during writing can leave a partial
+installation. Use the backups and `check` to identify what needs restoration.
+Avoid concurrent installations to the same destination.
 
-## Solução de problemas
+## Troubleshooting
 
-| Situação | O que fazer |
+| Situation | What to do |
 | --- | --- |
-| **Python não encontrado ou versão antiga** | Instale ou selecione Python 3.11+ e confira `python --version` ou `python3 --version`. |
-| **O agente não encontra uma skill** | Abra uma nova sessão na raiz do projeto de destino, confira o cliente selecionado e consulte `.agents/CATALOG.md`. |
-| **O destino já tem instruções ou arquivos gerados** | Execute `install --dry-run`, leia os conflitos e preserve as personalizações ao resolvê-los. |
-| **O check aponta arquivos ausentes ou alterados** | Confira o resultado, execute uma simulação de instalação e resolva os conflitos antes de atualizar. |
-| **O doctor indica validação ausente** | Configure os comandos e pré-requisitos reais em `.specdev/project.json`; o perfil genérico começa vazio. |
-| **Alterei uma cópia em `.claude/`** | A fonte do kit é `.agents/`. Alterações na cópia gerada podem exigir resolução manual em uma atualização. |
+| **Python missing or outdated** | Install or select Python 3.11+ and check `python --version` or `python3 --version`. |
+| **The agent cannot find a skill** | Start a new session at the destination project root, check the selected client and consult `.agents/CATALOG.md`. |
+| **The destination has existing instructions or generated files** | Run `install --dry-run`, read conflicts and preserve customizations when resolving them. |
+| **check reports missing or changed files** | Inspect the result, simulate installation and resolve conflicts before updating. |
+| **doctor reports missing validation** | Configure real commands and prerequisites in `.specdev/project.json`; the generic profile starts empty. |
+| **I edited a copy in `.claude/`** | The kit source is `.agents/`. Changes to the generated copy may need manual resolution on update. |
 
-Para conferir integridade e prontidão local, execute a partir da raiz do kit:
+To check integrity and local readiness, run from the kit root:
 
 ```powershell
-python scripts/specdev.py check --target "C:/Projetos/meu-projeto"
-python scripts/specdev.py doctor --target "C:/Projetos/meu-projeto"
+python scripts/specdev.py check --target "C:/Projects/my-project"
+python scripts/specdev.py doctor --target "C:/Projects/my-project"
 ```
 
-`check` verifica integridade e versão. `doctor` também informa configuração
-incompleta e disponibilidade local de diretórios e executáveis; ele não executa
-os testes, acessa serviços ou comprova que uma validação passou.
+`check` verifies integrity and version. `doctor` also reports incomplete
+configuration and local directory/executable availability; it does not run
+tests, contact services or prove that validation passed.
 
-## Documentação para aprofundar
+## Further documentation
 
-- [Setup guiado e retomada](SETUP.md)
-- [Configuração do projeto](CONFIGURATION.md)
-- [Compatibilidade entre clientes](COMPATIBILITY.md)
-- [Review com evidências](REVIEW.md)
-- [Critérios, evidência e retomada de entregas](WORKFLOWS.md)
-- [Origem e extração do JourneyCore](EXTRACTION.md)
-- [Catálogo compartilhado de skills e papéis](../.agents/CATALOG.md)
+- [Guided setup and resuming](SETUP.md)
+- [Project configuration](CONFIGURATION.md)
+- [Client compatibility](COMPATIBILITY.md)
+- [Evidence-based review](REVIEW.md)
+- [Criteria, evidence and resuming delivery](WORKFLOWS.md)
+- [JourneyCore origins and extraction](EXTRACTION.md)
+- [Shared skill and role catalog](../.agents/CATALOG.md)
 
-Para validar alterações no próprio kit:
+To validate changes to the kit itself:
 
 ```bash
 python -m unittest discover -s tests -v
@@ -250,5 +246,5 @@ python scripts/specdev.py validate
 python scripts/specdev.py check --target .
 ```
 
-Os testes verificam os formatos e o comportamento em disco. A descoberta e o
-uso efetivo das skills precisam ser conferidos na sessão de cada cliente.
+Tests check formats and on-disk behavior. Actual discovery and use of skills must
+be checked in each client's session.

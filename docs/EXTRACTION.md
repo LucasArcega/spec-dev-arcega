@@ -1,63 +1,65 @@
-# Extração do JourneyCore
+# JourneyCore extraction
 
-Origem: LucasArcega/journey-core, branch develop,
-commit 8084d288b0432dff01747a5832c71c20cd07cddd.
-A extração usa a versão centralizada em .agents/skills/ após o pull.
-As cópias pessoais em .codex/skills não são a fonte deste kit.
+Source: LucasArcega/journey-core, `develop` branch,
+commit `8084d288b0432dff01747a5832c71c20cd07cddd`.
+The extraction uses the centralized `.agents/skills/` version after the pull.
+Personal copies in `.codex/skills` are not the source of this kit.
 
 ## Skills
 
-| Origem | Destino compartilhado |
+| Source | Shared destination |
 | --- | --- |
 | write-kanban-tickets | write-ticket |
 | enrich-plans | enrich-plan |
 | implement-feature-ticket | implement-ticket |
 | codex-review-json | review-changes |
-| pr-to-clickup | create-pr + integrações |
+| pr-to-clickup | create-pr + integrations |
 | merge-and-close-ticket | merge-and-close |
 | fast-merge | fast-merge |
 | implement-feature-ticket-worktree | implement-in-worktree |
 | test-record | record-test |
 
-Preservados: critérios verificáveis, esclarecimento de escopo antes de escrever
-critérios dependentes, separação de planos, auditoria plano/código, revisão
-estruturada, validação por superfície, confirmação de resultados e handoff.
-Removedores de portabilidade: caminhos pessoais, perfis fixos de modelo, nomes
-de MCP, versões fixas de runtime, ports e dados de uma aplicação específica.
+Preserved: verifiable criteria, scope clarification before writing dependent
+criteria, separate plans, plan/code audit, structured review, surface-based
+validation, result confirmation and handoff. Portability obstacles removed:
+personal paths, fixed model profiles, MCP names, fixed runtime versions, ports
+and application-specific data.
 
-## Regras e AGENTS.md
+## Rules and AGENTS.md
 
-| Material de origem | Tratamento |
+| Source material | Treatment |
 | --- | --- |
-| AGENTS.md: produto, entidades e pipeline | Contexto do consumidor; não integra o núcleo |
-| scope-guardian.mdc e plans-no-optional.mdc | .agents/rules/WORKFLOW.md |
-| codex-subagent-delegation.mdc | .agents/rules/DELEGATION.md + papéis |
-| tickets-plans-branches.mdc | Perfil, templates e integrações |
-| issues-tickets-ptbr.mdc | project.language, com pt-BR como padrão |
-| clean-architecture-dependencies.mdc | Contexto dotnet-angular |
-| controllers-services-patterns.mdc | Contexto dotnet-angular |
-| domain-entities-organization.mdc e domain-validation.mdc | Contexto dotnet-angular, respeitando a arquitetura existente |
-| repository-bulk-operations.mdc | Contexto dotnet-angular; dono do commit definido pelo projeto |
-| angular-frontend-patterns.mdc e i18n-angular.mdc | Contexto dotnet-angular, incluindo overlays abertos e idiomas oferecidos |
-| naming-conventions.mdc e clean-code.mdc | Padrões existentes; sem limites universais de linhas e refatorações automáticas |
-| codex-cli-path.mdc | Resolução por capacidade do ambiente; sem caminho pessoal obrigatório |
+| AGENTS.md: product, entities and pipeline | Consumer context; not part of the core |
+| scope-guardian.mdc and plans-no-optional.mdc | .agents/rules/WORKFLOW.md |
+| codex-subagent-delegation.mdc | .agents/rules/DELEGATION.md + roles |
+| tickets-plans-branches.mdc | Profile, templates and integrations |
+| issues-tickets-ptbr.mdc | Configurable project.language; initially pt-BR, now English by default for new profiles |
+| clean-architecture-dependencies.mdc | dotnet-angular context |
+| controllers-services-patterns.mdc | dotnet-angular context |
+| domain-entities-organization.mdc and domain-validation.mdc | dotnet-angular context, respecting existing architecture |
+| repository-bulk-operations.mdc | dotnet-angular context; project defines the commit owner |
+| angular-frontend-patterns.mdc and i18n-angular.mdc | dotnet-angular context, including open overlays and supported languages |
+| naming-conventions.mdc and clean-code.mdc | Existing conventions; no universal line limits or automatic refactors |
+| codex-cli-path.mdc | Environment capability resolution; no mandatory personal path |
 
-As regras de origem divergiam sobre persistência em repositórios e perfis de
-delegação. O kit preserva o dono explícito da unidade de trabalho e um único
-contrato de delegação; cada projeto mantém sua arquitetura concreta.
+The source rules differed on repository persistence and delegation profiles.
+The kit preserves an explicit owner for the unit of work and one delegation
+contract; each project retains its actual architecture.
 
-## Scripts, configuração e worktrees
+## Scripts, configuration and worktrees
 
-Foram considerados os fluxos de create-worktree, setup-worktree, worktree-run,
-worktrees.json, templates locais e launchers de trilhas.
-A skill genérica usa capacidades nativas/Git e exige definição explícita de
-isolamento de serviços quando necessário. Não copiamos pools, portas, nomes de
-banco, infraestrutura Azure ou automação de ondas do JourneyCore.
+The extraction considered create-worktree, setup-worktree, worktree-run,
+worktrees.json, local templates and track launchers. The generic skill uses native
+or Git capabilities and requires explicit service isolation where necessary. It
+does not copy JourneyCore pools, ports, database names, Azure infrastructure or
+wave automation.
 
-CLICKUP_USAGE_RULE e MCP_SETUP viraram contratos de integração por capacidades.
-MCPs pessoais, credenciais, arquivos de ambiente e configurações de permissões
-não são redistribuídos. Arquivos ADO legados não viram dependências do kit.
+CLICKUP_USAGE_RULE and MCP_SETUP became capability-based integration contracts.
+Personal MCPs, credentials, environment files and permission settings are not
+redistributed. Legacy ADO files are not kit dependencies.
 
-O exemplo em examples/journey-core/project.json guarda remote, base, comandos
-e IDs de lista/workspace específicos. É um exemplo para revisar, não uma operação
-de migração no JourneyCore. A adoção no projeto de origem é uma etapa separada.
+The example at `examples/journey-core/project.json` retains that project's remote,
+base, commands and specific list/workspace IDs. It is an example to review, not
+an operation to migrate JourneyCore. Adoption in the source project is separate.
+The example retains its original `pt-BR` language and tracker status names; new
+generic profiles default to English.

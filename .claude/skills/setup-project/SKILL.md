@@ -1,132 +1,162 @@
 ---
 name: setup-project
-description: "Investiga e configura o kit em um projeto, com perguntas guiadas e retomada do setup."
+description: "Investigates and configures the kit for a project through guided questions and resumable setup."
 ---
 
-# Configurar o projeto
+# Configure the project
 
-Use para iniciar, continuar ou revisar o setup do kit no projeto consumidor. O
-agente conduz a conversa e usa as capacidades de leitura e edição disponíveis;
-terminal, Python, doctor e clientes específicos não são pré-requisitos.
+Use this to start, continue or review setup of the kit in a consumer project.
+The agent conducts the conversation and uses available read and edit capabilities;
+a terminal, Python, doctor or specific clients are not prerequisites.
+Use project.language for setup questions and project artifacts, respecting any explicit language choice in the user's request.
 
-## Investigar e conversar
+## Investigate and interview
 
-1. Leia as instruções locais, `.specdev/project.json`, os documentos já
-   selecionados em `context` e, se existir, `.specdev/setup-state.json`. Se o kit
-   ou perfil estiver ausente, informe a etapa de instalação ou o bloqueio; não
-   fabrique uma configuração parcial. Identifique também a documentação e os
-   arquivos relevantes ao projeto sem ler credenciais nem executar comandos.
-2. Separe fatos verificados com fonte, decisões confirmadas pelo usuário e
-   hipóteses. Valores padrão de perfil e exemplos são hipóteses, não confirmações.
-   Compare estado, arquivos e pedido atual; retome sem repetir respostas ainda
-   válidas. Para setup completo, avalie cada ID de [references/questions.md](references/questions.md);
-   para pedido delimitado, avalie os IDs pertinentes e declare os não avaliados.
-   Registre as lacunas e os campos aplicáveis, sem impor uma entrevista fixa.
-3. Apresente o que descobriu e pergunte uma decisão material por vez, com uma
-   sugestão quando houver evidência. Incorpore informação já dada; nunca invente
-   confirmação, repositório, IDs, comandos, capacidade, ambiente ou resultados.
-   Se o usuário não souber ou interromper, registre a pendência e a próxima
-   pergunta; não transforme ausência de resposta em confirmação.
+1. Read local instructions, .specdev/project.json, the documents already selected
+   in context and, if present, .specdev/setup-state.json. If the kit or profile is
+   missing, report the installation step or blocker; do not fabricate a partial
+   configuration. Identify relevant project docs and files without reading
+   credentials or running commands.
+2. Separate verified facts with sources, user-confirmed decisions and hypotheses.
+   Profile defaults and examples are hypotheses, not confirmations. Compare
+   state, files and current request; resume without repeating answers still valid.
+   For full setup, evaluate each ID in [references/questions.md](references/questions.md);
+   for a limited request, evaluate relevant IDs and report those not evaluated.
+   Record gaps and applicable fields without imposing a fixed interview.
+3. Prepare the applicable questions and their dependencies from this initial
+   investigation. Present discoveries briefly, then collect all applicable
+   answers before making any changes. Ask one material decision at a time, with
+   a suggestion when there is evidence. Use the session's native question and
+   selection tool whenever available: Cursor's question tool, Claude Code's
+   AskUserQuestion, or Codex's available user-input tool. Follow its actual
+   schema and availability, not an assumed client version or mode. Provide
+   meaningful options and a way to supply a custom answer. If the selector has
+   no custom input, offer a custom-value option and collect its value in chat.
+   Use free text when choices are inappropriate. If the selection tool is unavailable, explain
+   that limitation and ask in chat. Never claim a popup was displayed when it
+   was not. Do not treat a preselected option as an answer until submitted.
+4. During the interview, keep answers, pending items and the next question in
+   conversation context only. Between questions and while waiting, do not read
+   more files, run commands, delegate, validate, write the checkpoint or make
+   any other project changes. Wait for each response, including for asynchronous
+   question tools, before asking the next question. Adapt conditional questions
+   from the answers already collected. Incorporate information already given;
+   never invent confirmation, repository, IDs, commands, capabilities,
+   environment or results. A skipped, cancelled, unknown or missing answer is
+   unresolved, not confirmation. Continue the remaining applicable questions
+   when the user explicitly skips or says they do not know; if the interview is interrupted, stop without
+   applying changes. Resume from available conversation history without asking
+   again for valid answers. If that history is unavailable, explain that
+   unpersisted answers were lost and ask again as needed.
+5. Once every applicable question has been answered or explicitly left unresolved and
+   the interview is finished, apply the confirmed decisions together, then
+   validate and report pending items. Do not wait for a second approval solely
+   to apply the setup the user requested. An explicitly unresolved decision remains
+   pending and does not prevent applying independent confirmed decisions.
 
-## Registrar e retomar
+## Apply and resume
 
-Registre progressivamente os fatos e decisões confirmados em `.specdev/project.json`
-e no contexto local. O caminho sugerido é `docs/PROJECT_CONTEXT.md`; use outro
-caminho relativo ao projeto quando for o adotado ou acordado. Para um documento
-novo, adapte [assets/project-context.md](assets/project-context.md) apenas às
-seções aplicáveis. Se já existir, leia e preserve o conteúdo: integre somente
-trechos pertinentes ou combine outro caminho, sem presumir propriedade do arquivo.
-Acrescente o documento selecionado a `context` uma única vez, depois de existir.
-Preserve outros campos, contextos, comentários e instruções locais; não edite
-arquivos gerados nem substitua o perfil inteiro. Não registre tokens, senhas,
-conteúdo de credenciais ou dados sensíveis no contexto, perfil ou estado.
+After the interview, record confirmed facts and decisions in .specdev/project.json
+and local context. The suggested path is docs/PROJECT_CONTEXT.md; use another
+project-relative path when adopted or agreed. For a new document, adapt
+[assets/project-context.md](assets/project-context.md) only to applicable
+sections. If it already exists, read and preserve its contents: integrate only
+relevant passages or agree on another path, without assuming ownership.
+Append the selected document to context once, after it exists. Preserve other
+fields, contexts, comments and local instructions; do not edit generated files or
+replace the entire profile. Do not record tokens, passwords, credential contents
+or sensitive data in the context, profile or state.
 
-Mantenha `.specdev/setup-state.json` como arquivo do consumidor, nunca gerenciado
-pelo manifest. Crie-o apenas se ausente; atualize campos conhecidos preservando
-extensões. O contrato v1 é:
+Maintain .specdev/setup-state.json as a consumer-owned file, never managed by
+the manifest. Create it only when absent; update known fields while preserving
+extensions. The v1 contract is:
 
-```json
+~~~json
 {
   "schema_version": 1,
   "status": "in_progress",
   "context_path": "docs/PROJECT_CONTEXT.md",
   "scope": ["product.purpose"],
   "decisions": {
-    "product.purpose": {"status": "pending", "source": "a esclarecer"}
+    "product.purpose": {"status": "pending", "source": "to clarify"}
   },
   "pending": ["product.purpose"],
-  "next_question": "Qual problema o projeto resolve?",
+  "next_question": "What problem does the project solve?",
   "verification": {
-    "configuration": "pendente",
-    "availability": "não verificada",
-    "execution": "nenhum comando executado"
+    "configuration": "pending",
+    "availability": "not verified",
+    "execution": "no commands run"
   }
 }
-```
+~~~
 
-`status` geral é `in_progress`, `blocked` ou `complete`. Cada decisão usa um ID
-estável da referência e status `confirmed`, `inferred`, `pending` ou
-`not_applicable`, com fonte resumida sem segredos. `confirmed` exige confirmação
-do usuário ou fato diretamente verificado; indique a origem em `source`.
-`scope` é a lista dos IDs estáveis abrangidos pelo pedido. Em setup completo,
-registre todos os IDs do mapa; em setup parcial, apenas os escolhidos. IDs ainda
-não avaliados ficam `pending`, não desaparecem da lista. Na retomada, use esse
-escopo persistido; amplie-o somente se o pedido atual incluir novas decisões.
-Quando um ID agrupar vários campos, confirme cada campo aplicável por resposta
-do usuário ou fato verificado, ou registre sua não aplicabilidade com evidência.
-Uma única fonte para um campo não confirma os demais. Marque o ID `confirmed`
-somente quando todos os campos tiverem sido resolvidos dessa forma; use
-`not_applicable` para o ID somente quando todo o grupo não se aplicar.
-Enquanto restar campo pendente ou em hipótese, mantenha o ID `pending` ou
-`inferred` e em `pending`; pergunte uma decisão por vez. Aplique os campos já
-confirmados aos destinos apropriados e registre em `source` as origens e pendências
-por campo, sem valores sensíveis; veja os exemplos em `references/questions.md`.
-`inferred` não autoriza gravar a hipótese como fato. Registre valores confirmados
-nos arquivos próprios, não replique respostas sensíveis no estado. `pending`
-contém IDs aplicáveis ainda `pending` ou `inferred`; `next_question` é a próxima
-pergunta em texto ou `null` quando não houver. Atualize o checkpoint após cada
-resposta e antes de aguardar. Em `verification`, registre resultado ou limitação
-de estrutura, disponibilidade e execução, sem dados sensíveis. Os três campos
-são textos livres, não uma enumeração de resultados. Se não puder gravar, informe
-a limitação e continue somente no escopo possível.
+General status is in_progress, blocked or complete. Each decision uses a stable
+ID from the reference and status confirmed, inferred, pending or not_applicable,
+with a short source without secrets. confirmed requires user confirmation or a
+directly verified fact; record its origin in source.
 
-Antes de cada alteração, releia o alvo; se mudou desde a leitura, reconcilie sem
-apagar alterações alheias. Se o estado estiver inválido, usar versão desconhecida,
-apontar para caminho inseguro ou divergir dos arquivos, preserve-o, relate o
-problema e resolva a divergência antes da edição afetada. Não reinicie por reset.
-Na retomada, valide novamente as fontes e os campos registrados; a existência de
-um checkpoint não comprova que os arquivos continuem iguais.
-Para cada ID composto do escopo, inclusive os já marcados `confirmed` ou
-`not_applicable`, confira cada campo aplicável nas fontes e destinos reais antes
-de manter seu status e antes de concluir. Uma `source` genérica citando apenas
-documentos não prova que todos os campos foram resolvidos: registre nela a
-origem ou pendência de cada campo, sem dados sensíveis. Se algum campo ainda não
-estiver comprovado ou explicitamente não aplicável, reclassifique o ID como
-`pending` ou `inferred`, inclua-o em `pending` e ajuste `next_question` e o
-status geral para `in_progress` ou `blocked`. Preserve dados existentes e não
-repita perguntas sobre campos cuja evidência continua válida.
-O caminho do contexto deve permanecer relativo à raiz autorizada, sem `..`, e
-não pode atravessar link/junction que redirecione a leitura ou edição para fora.
+scope is the list of stable IDs covered by the request. For full setup, record
+all IDs in the map; for partial setup, only those selected. IDs not yet assessed
+remain pending rather than disappearing. On resumption, use the persisted scope;
+expand it only when the current request includes new decisions.
 
-## Conferir e entregar
+When an ID groups multiple fields, confirm each applicable field by user answer
+or verified fact, or record evidence that it does not apply. A single source for
+one field does not confirm the others. Mark the ID confirmed only when every
+field is resolved this way; use not_applicable for the ID only when the entire
+group does not apply. While a field remains pending or hypothetical, keep the ID
+pending or inferred and in pending; ask one decision at a time. Apply confirmed
+fields to their proper destinations and record each field's sources and pending
+items in source without sensitive values; see the examples in
+references/questions.md.
 
-Confira o perfil contra o contrato resumido em [references/questions.md](references/questions.md), a
-existência dos contextos selecionados, IDs únicos, caminhos e argumentos de cada
-validação. Se houver documentação local de configuração, consulte-a também.
-Registre no checkpoint o que está **configurado**, o que teve disponibilidade
-efetivamente verificada e o que foi **executado**, com resultado ou limitação.
-Escolha verificações adequadas às capacidades disponíveis. O doctor pode ajudar
-quando disponível; sua ausência não bloqueia o setup. Não execute comandos
-declarativos apenas porque estão no perfil nem suponha que serviços estão ativos.
+inferred does not authorize recording a hypothesis as fact. Record confirmed
+values in their proper files, and do not duplicate sensitive answers in state.
+pending contains applicable IDs still pending or inferred; next_question is the
+next question as text or null when none exists. Create or update the checkpoint
+only after the interview ends, together with the other setup changes. In
+verification, record result or limitation of
+structure, availability and execution without sensitive data. All three fields
+are free text, not an enumeration. If unable to write, report the limitation and
+continue only within the possible scope.
 
-Marque `complete` somente quando todos os IDs do escopo tiverem sido avaliados,
-as decisões aplicáveis estiverem confirmadas ou explicitamente `not_applicable`,
-sem IDs pendentes, e a estrutura estiver coerente e tiver sido conferida.
-Registre resultado ou limitação para cada tipo de verificação. Uma hipótese não confirmada,
-conflito ou decisão indispensável ausente mantém o setup pendente/bloqueado.
-Se não houver capacidade para conferir a estrutura do perfil e os caminhos,
-registre a limitação e mantenha `in_progress` ou `blocked`. Disponibilidade de
-serviços e execução de testes não são pré-requisitos de conclusão do setup.
-Conclusão do setup de configuração não afirma que testes passaram ou que serviços
-estão disponíveis. Entregue arquivos alterados, decisões, verificações realizadas,
-limitações e próxima ação. Operações externas dependem do pedido correspondente.
+Before each change, reread the target; if it changed since reading, reconcile
+without deleting others' work. If state is invalid, uses an unknown version,
+points to an unsafe path or diverges from the files, preserve it, report the
+problem and resolve the divergence before the affected edit. Do not reset.
+On resumption, revalidate recorded sources and fields; a checkpoint does not
+prove the files remain unchanged.
+
+For every composite ID in scope, including those already marked confirmed or
+not_applicable, check each applicable field in actual sources and destinations
+before retaining its status and before concluding. A generic source citing only
+documents does not prove every field was resolved: record each field's origin
+or pending state there without sensitive data. If a field is not proven or
+explicitly not applicable, reclassify the ID as pending or inferred, include it
+in pending and adjust next_question and overall status to in_progress or blocked.
+Preserve existing data and do not repeat questions for fields with valid evidence.
+The context path must remain relative to the authorized root, without .., and
+must not cross a link/junction that redirects reading or editing outside it.
+
+## Check and hand off
+
+Check the profile against the contract summarized in
+[references/questions.md](references/questions.md), the existence of selected
+contexts, unique IDs, paths and arguments for each validation. Consult local
+configuration documentation if present. Record in the checkpoint what is
+configured, what had availability actually checked and what was executed, with
+result or limitation. Choose checks suited to available capabilities. Doctor
+can help when available; its absence does not block setup. Do not run declared
+commands merely because they are in the profile or assume services are active.
+
+Mark complete only when all scoped IDs have been evaluated, applicable decisions
+are confirmed or explicitly not_applicable, no IDs are pending, and the structure
+is coherent and has been checked. Record a result or limitation for each type of
+verification. An unconfirmed hypothesis, conflict or missing essential decision
+keeps setup pending/blocked. If unable to check profile structure and paths,
+record the limitation and keep in_progress or blocked. Service availability and
+test execution are not prerequisites for setup completion.
+
+Completion of configuration does not claim tests passed or services are
+available. Deliver changed files, decisions, checks performed, limitations and
+next action. External operations depend on the corresponding request.

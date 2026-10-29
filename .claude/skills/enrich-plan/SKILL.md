@@ -1,37 +1,38 @@
 ---
 name: enrich-plan
-description: "Analisa e completa planos de um ticket sem implementar código, criar branch ou abrir PR."
+description: "Analyzes and completes a ticket plan without implementing code, creating a branch or opening a PR."
 ---
 
-# Enriquecer plano
+# Enrich a plan
 
-Leia .specdev/project.json e .agents/rules/WORKFLOW.md.
-Resolva o identificador e a pasta dentro de paths.plans. Se houver múltiplos
-candidatos, esclareça a identidade antes de editar.
-Leia o README, os planos existentes, paths.status quando existir e o código
-real dos serviços, endpoints, componentes e testes envolvidos.
+Read .specdev/project.json and .agents/rules/WORKFLOW.md. Resolve the identifier
+and folder under paths.plans. If there are multiple candidates, clarify the
+identity before editing. Read the README, existing plans, paths.status when it
+exists, and the actual code for the services, endpoints, components and tests
+involved.
 
-Mapeie critérios ausentes, decisões abertas, dependências, riscos e validação.
-Pergunte uma decisão de escopo por vez, com sugestão, antes de gravar critérios
-que dependam dessa decisão. Continue a investigação independente.
+Identify missing criteria, open decisions, dependencies, risks and validation.
+Gather related open decisions and use the shared native-question guidance in
+WORKFLOW.md. Clarify scope before writing criteria that depend on the answer;
+continue independent investigation while waiting when the session permits it.
 
 Use .agents/templates/:
-- README com contexto, branch, estado, prioridade e dependências verificadas,
-  critérios com IDs estáveis, referências existentes, validação e exclusões.
-- BACKEND.md e FRONTEND.md separados quando houver ambas as superfícies.
-- PLAYWRIGHT.md para UI com Playwright; TESTS.md para outro runner.
-  Inclua comportamento real, estados transitórios, responsividade e temas suportados.
+- A README with context, branch, status, verified priority and dependencies,
+  criteria with stable IDs, existing references, validation and exclusions.
+- Separate BACKEND.md and FRONTEND.md when both surfaces exist.
+- PLAYWRIGHT.md for a UI using Playwright; TESTS.md for another runner. Include
+  actual behavior, transient states, responsiveness and supported themes.
 
-Adapte o formato ao projeto. Campos sem fonte ficam explicitamente não definidos;
-não transforme hipóteses em fatos. Só cite caminhos verificados.
-Relacione cada critério a implementação/teste planejado e à evidência esperada.
-Antes da execução, use estado pendente e descreva o resultado esperado; não
-preencha a evidência como se o teste já tivesse passado. Para trabalho longo,
-prepare checkpoint com último passo, revisão/evidência, bloqueio e próxima ação;
-preserve registros existentes ao enriquecer um plano em andamento.
-Delegação segue .agents/rules/DELEGATION.md e separa investigações independentes.
-O principal decide e edita o plano.
+Adapt the format to the project. Fields without a source remain explicitly
+undefined; do not turn assumptions into facts. Cite only verified paths.
+Link each criterion to the planned implementation or test and expected evidence.
+Before execution, keep the status pending and describe the expected result; do
+not fill in evidence as if the test already passed. For long work, prepare a
+checkpoint with last step, review/evidence, blocker and next action; preserve
+existing records when enriching an ongoing plan.
+Delegation follows .agents/rules/DELEGATION.md and separates independent
+investigations. The lead decides and edits the plan.
 
-Valide links, critérios, fronteira de escopo e os comandos no perfil/código.
-Entregue arquivos e decisões. Não crie branch, código de produto, commit,
-PR nem status de implementação concluída neste fluxo.
+Validate links, criteria, scope boundaries and commands against the profile and
+code. Deliver the files and decisions. Do not create a branch, product code,
+commit, PR or a completed implementation status in this workflow.

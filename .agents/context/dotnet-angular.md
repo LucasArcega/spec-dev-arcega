@@ -1,34 +1,34 @@
-# Perfil .NET e Angular
+# .NET and Angular profile
 
-Leia este arquivo somente se selecionado por context. Caminhos, versões,
-comandos e convenções concretas vêm do perfil e do código existente.
+Read only when selected in context. Concrete paths, versions, commands, and
+conventions come from the profile and existing code.
 
 ## Backend
 
-Preserve o sentido de dependências das camadas já adotadas. Quando o projeto usa
-Clean Architecture, a aplicação depende de abstrações; infraestrutura implementa
-essas abstrações. Controllers tratam HTTP e delegam regras de negócio.
-Use constantes de status, validação de domínio nas factories/métodos de atualização,
-NRT, async e CancellationToken seguindo os padrões existentes.
-Organize entidades por contexto; não mova arquivos como refatoração incidental.
-Defina o dono do commit da unidade de trabalho; não adicione SaveChanges em cada
-repositório se o projeto usa commit coordenado. Evite carregar tabelas para bulk
-delete e preserve filtros de tenant. Migrations exigem validação com banco real
-quando alterarem persistência relevante.
+Preserve the direction of dependencies in the adopted layers. When the project
+uses Clean Architecture, the application depends on abstractions; infrastructure
+implements them. Controllers handle HTTP and delegate business rules.
+Use status constants, domain validation in factories/update methods, NRT, async,
+and CancellationToken in line with existing patterns.
+Organize entities by context; do not move files as an incidental refactor.
+Define who owns the unit-of-work commit; do not add SaveChanges in each repository
+if the project uses a coordinated commit. Avoid loading tables for bulk delete and
+preserve tenant filters. Migrations require validation with a real database when
+they change relevant persistence behavior.
 
 ## Frontend
 
-Siga a versão e os padrões reais do app: standalone, templates estritos, control
-flow moderno, inject e OnPush onde compatíveis. Use teardown de subscriptions
-e mantenha regras/HTTP nos serviços existentes.
-Inspecione inputs, outputs e defaults antes de reutilizar componentes.
-Valide overlays realmente abertos em desktop/mobile, além da página subjacente.
-Se o produto usa ngx-translate, mantenha as chaves em todos os idiomas configurados.
-Não imponha i18n ou dark mode a um produto que não oferece esses recursos.
+Follow the actual application version and patterns: standalone, strict templates,
+modern control flow, inject, and OnPush where compatible. Tear down subscriptions
+and keep business logic/HTTP in existing services.
+Inspect inputs, outputs, and defaults before reusing components.
+Validate actually open overlays on desktop/mobile, as well as the underlying page.
+If the product uses ngx-translate, maintain keys across all configured languages.
+Do not impose i18n or dark mode on products that do not offer those features.
 
-## Ambiente e testes
+## Environment and tests
 
-Distinga testes unitários de integração com Docker e testes de UI.
-Rebuild de imagem e exercício da rota alterada são necessários para comprovar
-código em execução quando containers forem atualizados. Credenciais ficam em
-secrets/ambiente. Portas e dados por worktree precisam de isolamento explícito.
+Distinguish unit tests from Docker-backed integration tests and UI tests.
+Rebuilding images and exercising the changed route are required to prove the
+running code when containers are updated. Keep credentials in secrets/environment.
+Ports and data must be explicitly isolated per worktree.

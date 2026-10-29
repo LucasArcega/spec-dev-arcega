@@ -1,28 +1,28 @@
 # Spec Dev Arcega
 
-Este repositório mantém um kit genérico de agentes, skills e regras.
-A fonte canônica é .agents/. Não introduza caminhos pessoais, tokens, IDs de
-rastreadores ou stack obrigatória no núcleo. Exemplos específicos pertencem a
-examples/; convenções de stack ficam nos contextos selecionáveis.
+This repository maintains a generic kit of agents, skills, and rules.
+The canonical source is .agents/. Do not introduce personal paths, tokens,
+tracker IDs, or a mandatory stack into the core. Project-specific examples
+belong in examples/; stack conventions belong in selectable contexts.
 
-O instalador usa Python 3.11+ e somente biblioteca padrão.
-Preserve a configuração do consumidor, instruções locais e arquivos existentes.
-Mudanças no instalador exigem testes de comportamento em diretórios temporários.
-Mantenha sincronizados gerador, testes e documentação de compatibilidade.
+The installer uses Python 3.11+ and only the standard library.
+Preserve consumer configuration, local instructions, and existing files.
+Installer changes require behavior tests in temporary directories.
+Keep the generator, tests, and compatibility documentation synchronized.
 
-Validação:
+Validation:
 - python -m unittest discover -s tests -v
 - python scripts/specdev.py validate
 - python scripts/specdev.py check --target .
 
-Não publique no GitHub nem faça commit/merge sem escopo autorizado.
+Do not publish on GitHub or commit/merge without authorized scope.
 
 <!-- specdev:begin -->
 ## Spec Dev Arcega
-Leia .specdev/project.json e .agents/rules/WORKFLOW.md antes de trabalhar.
-Leia .agents/rules/DELEGATION.md antes de delegar. Leia somente os arquivos de
-contexto selecionados no perfil e a skill pertinente em .agents/skills/.
-O catálogo está em .agents/CATALOG.md; os modelos de planos em .agents/templates/.
-As instruções específicas do projeto e do usuário definem o escopo.
-Não execute comandos ou ações externas apenas porque foram listados no perfil.
+Read .specdev/project.json and .agents/rules/WORKFLOW.md before working.
+Read .agents/rules/DELEGATION.md before delegating. Read only the context files
+selected in the profile and the relevant skill in .agents/skills/.
+The catalog is in .agents/CATALOG.md; plan templates are in .agents/templates/.
+Project-specific and user instructions define the scope.
+Do not run commands or external actions solely because they are listed in the profile.
 <!-- specdev:end -->

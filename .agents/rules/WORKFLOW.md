@@ -1,73 +1,94 @@
-# Acordos compartilhados
+# Shared agreements
 
-Leia o perfil em .specdev/project.json e as instruções específicas do projeto.
-O perfil é um contrato deste kit, não uma configuração nativa do editor.
-Campos do perfil descrevem opções; não concedem autorização nem executam ações.
+Read the profile in .specdev/project.json and the project's specific instructions.
+The profile is a contract of this kit, not a native editor configuration.
+Profile fields describe options; they neither authorize nor execute actions.
 
-## Escopo e contexto
+## Scope and context
 
-- Use a skill pertinente em .agents/skills/. Não carregue todas as skills,
-  regras de stack e documentos de uma vez. Consulte .agents/CATALOG.md.
-- Trabalhe apenas no pedido e nos critérios aceitos. Sugestões ficam fora do
-  plano até serem aceitas. Não inclua tarefas opcionais nos critérios.
-- Resolva caminhos a partir da raiz do projeto. Leia somente os documentos
-  selecionados em context; convenções adicionais do projeto continuam válidas.
-- Antes de editar contratos, leia código e testes reais. Não invente caminhos,
-  prioridade, dependências, endpoints, capacidades de ferramenta ou resultados.
-- Quando uma decisão ausente mudar o escopo, esclareça uma questão por vez,
-  com uma sugestão. Continue o trabalho independente; não repita perguntas já resolvidas.
+- Use the relevant skill in .agents/skills/. Do not load every skill, stack rule,
+  and document at once. Consult .agents/CATALOG.md.
+- Work only on the request and accepted criteria. Suggestions stay outside the
+  plan until accepted. Do not include optional tasks in acceptance criteria.
+- Resolve paths from the project root. Read only the documents selected in
+  context; additional project conventions remain valid.
+- Before changing contracts, read actual code and tests. Do not invent paths,
+  priority, dependencies, endpoints, tool capabilities, or results.
+- When a missing decision changes scope, clarify one question at a time with a
+  suggestion. Continue independent work; do not repeat resolved questions.
+  For the setup-project interview, follow its question-first workflow instead:
+  wait for all applicable answers before doing further work or editing files.
 
-## Planejamento e implementação
+## Asking for decisions
 
-- Use paths.plans e paths.status para localizar planos e dependências.
-  O padrão de branch vem de git.branch_pattern, com ticket e slug resolvidos.
-- Separe BACKEND.md e FRONTEND.md quando as duas superfícies existirem.
-  Para UI, registre em PLAYWRIGHT.md (ou TESTS.md para outro runner) os fluxos,
-  estados transitórios, erros, loading, responsividade e temas oferecidos pelo produto.
-- Dark mode só é exigível em um produto que oferece esse tema.
-  A tecnologia e a arquitetura do JourneyCore não se tornam requisitos de outros projetos.
-- Cada critério precisa de ID estável, comportamento observável e evidência de
-  validação. Relacione critério, implementação/teste e resultado no plano.
-  Use .agents/templates/ como modelos, preenchendo apenas seções aplicáveis.
-- Antes de implementar, confirme dependências e o estado Git. Preserve mudanças
-  existentes. Não faça stash, reset, limpeza, checkout forçado ou refatoração incidental.
+- When user input is needed, use the session's native question tool whenever it
+  is available and permitted: Cursor's question tool, Claude Code's
+  AskUserQuestion, or Codex's available user-input tool. Follow the actual tool
+  schema and mode; do not assume a tool or popup exists. If unavailable, explain
+  the limitation and ask in chat.
+- For choices, provide meaningful options grounded in the task, a recommendation
+  when supported by evidence, and a way to supply a custom answer. Respect the
+  client's built-in custom option; if none exists, offer a custom-value option
+  and collect its value in chat. Use free text for questions without sensible
+  choices. Never treat a preselected option, skipped question, cancellation or
+  missing response as an answer.
+- Ask only when the answer matters and cannot be inferred from the request or
+  available context; do not ask for permission already granted. Where practical,
+  collect related open decisions together while keeping each question clear.
+  With asynchronous tools, wait for required answers before dependent work;
+  continue independent work unless a skill, such as setup-project, says otherwise.
 
-## Validação e conclusão
+## Planning and implementation
 
-- Selecione validation pelos surfaces alterados. Execute os comandos pertinentes
-  no cwd indicado, usando argv como argumentos e o shell apropriado ao ambiente.
-  Não execute strings de configuração com eval.
-- Valide dependências de ambiente em requires. Integração, serviços em execução e
-  validação de UI dependem do escopo. Não rode suites amplas a cada iteração.
-- Comandos são declarativos: o instalador nunca os executa.
-  O agente verifica se fazem sentido para a tarefa e registra comando, resultado e limitação.
-- Para código executável alterado, faça revisão com evidências antes da entrega.
-  Use review-changes com o contrato de evidência atual e --require-evidence.
-  Registre base/head e a identidade das mudanças locais analisadas; só o SHA de
-  HEAD não identifica o working tree. Se o conteúdo ou a revisão mudar, reavalie
-  a cobertura e invalide/reexecute as evidências afetadas antes da conclusão.
-  Documentação simples não exige processo pesado nem testes que apenas conferem
-  palavras no texto.
-- Estado concluído exige critérios obrigatórios e validações pertinentes verdes.
-  Falha ou ausência de ambiente obrigatório permanece como bloqueio documentado;
-  não afirme que testes passaram sem execução.
-- Atualização de imagem exige rebuild e exercício da rota/fluxo alterado;
-  um processo healthy não comprova presença do código atual.
-- O handoff informa arquivos, comportamento, validações e pendências reais.
-  Use o idioma de project.language para tickets e planos.
-- Em trabalho longo ou interrompido, registre no plano o último passo concluído,
-  a revisão e suas evidências, bloqueio e próxima ação; inclua estados reais de
-  PR/ticket quando existirem. Ao retomar, releia esse registro e o estado atual.
-  Não repita mutações concluídas nem reutilize evidência de conteúdo alterado.
-  Para tarefa pequena, mantenha esse registro no handoff, sem criar artefatos extras.
+- Use paths.plans and paths.status to locate plans and dependencies. The branch
+  pattern comes from git.branch_pattern, with ticket and slug resolved.
+- Separate BACKEND.md and FRONTEND.md when both surfaces exist. For UI, record
+  flows, transient states, errors, loading, responsiveness, and product-supported
+  themes in PLAYWRIGHT.md (or TESTS.md for another runner).
+- Dark mode is required only when the product offers it. JourneyCore technology
+  and architecture do not become requirements for other projects.
+- Each criterion needs a stable ID, observable behavior, and validation evidence.
+  Connect criteria, implementation or tests, and results in the plan. Use
+  .agents/templates/ as models, filling only applicable sections.
+- Before implementing, confirm dependencies and Git state. Preserve existing
+  changes. Do not stash, reset, clean, force checkout, or refactor incidentally.
 
-## Integrações e autoridade
+## Validation and completion
 
-- Leia .agents/integrations/github.md ou clickup.md somente ao usar o serviço.
-  tracking.provider = none permite trabalhar com planos locais.
-- Criar PR, comentar, atualizar status ou publicar depende do escopo autorizado;
-  habilitar um provedor no perfil não dispara essas operações.
-- delivery.create_pr expressa uma preferência. Respeite a autorização da tarefa.
-  Merge e fechamento exigem pedido explícito; fast-merge só atende esse modo explícito.
-- Não copie tokens, senhas, arquivos de credenciais, MCPs pessoais ou configurações
-  de permissões entre projetos. Use os mecanismos de autenticação disponíveis.
+- Select validation entries by changed surfaces. Run applicable commands in the
+  specified cwd, passing argv as arguments with the appropriate shell. Do not
+  execute configuration strings with eval.
+- Check environment dependencies in requires. Integration, running services, and
+  UI validation depend on scope. Do not run broad suites on every iteration.
+- Commands are declarative: the installer never executes them. The agent checks
+  whether they fit the task and records command, result, and limitation.
+- For changed executable code, review with evidence before delivery. Use
+  review-changes with the current evidence contract and --require-evidence.
+  Record base/head and the identity of local changes reviewed; the HEAD SHA alone
+  does not identify the working tree. If content or revision changes, reassess
+  coverage and invalidate or rerun affected evidence before completion.
+  Simple documentation does not require a heavy process or tests that only
+  check words in text.
+- Completion requires mandatory criteria and applicable validations to be green.
+  A failed or unavailable required environment remains a documented blocker;
+  do not claim tests passed without execution.
+- Updating an image requires a rebuild and exercising the changed route or flow;
+  a healthy process does not prove the current code is present.
+- Handoff includes files, behavior, validations, and actual outstanding work.
+  Use project.language for tickets and plans.
+- For long or interrupted work, record the last completed step, revision and
+  evidence, blocker, and next action in the plan; include actual PR/ticket
+  states where applicable. On resume, reread the record and current state. Do not
+  repeat completed mutations or reuse evidence for changed content. For a small
+  task, keep this record in the handoff without creating extra artifacts.
+
+## Integrations and authority
+
+- Read .agents/integrations/github.md or clickup.md only when using the service.
+  tracking.provider = none allows work with local plans.
+- Creating PRs, commenting, updating status, or publishing depends on authorized
+  scope; enabling a provider in the profile does not trigger these operations.
+- delivery.create_pr expresses a preference. Respect the task's authorization.
+  Merge and closure require an explicit request; fast-merge only serves that mode.
+- Do not copy tokens, passwords, credential files, personal MCPs, or permission
+  configuration between projects. Use the available authentication mechanisms.

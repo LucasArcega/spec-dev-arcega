@@ -1,28 +1,28 @@
 ---
 name: write-ticket
-description: "Cria ou revisa tickets com motivação e critérios verificáveis no rastreador configurado ou em documentação local."
+description: "Creates or reviews tickets with motivation and verifiable acceptance criteria in the configured tracker or local documentation."
 ---
 
-# Escrever ticket
+# Write a ticket
 
-Leia .specdev/project.json e .agents/rules/WORKFLOW.md.
-Identifique o problema, o público, o resultado e o rastreador autorizado.
-Consulte contexto disponível antes de pedir informação.
+Read .specdev/project.json and .agents/rules/WORKFLOW.md. Identify the problem,
+the audience, the outcome and the authorized tracker. Consult available context
+before asking for information.
 
-Antes de redigir, esclareça decisões importantes ainda abertas, uma por vez,
-com uma sugestão. Não peça novamente o que o pedido ou o projeto já decidiu.
-Não invente prioridade, dependência, estimativa ou identificador.
+Before drafting, clarify important open decisions using the native-question
+guidance in WORKFLOW.md. Do not ask again about decisions already made in the request or project. Do not
+invent a priority, dependency, estimate or identifier.
 
-Use o idioma do perfil e escreva:
+Use the profile language and write:
 
-- Título curto com o padrão do projeto.
-- Por quê: problema e valor em uma ou duas frases.
-- User story quando o resultado afeta usuários finais.
-- Critérios de aceite obrigatórios, observáveis e pass/fail.
-- Contexto técnico curto com contratos/caminhos reais quando necessário.
-- Fora do escopo para exclusões relevantes.
+- A short title following the project convention.
+- Why: the problem and value in one or two sentences.
+- A user story when the outcome affects end users.
+- Required, observable, pass/fail acceptance criteria.
+- Brief technical context with real contracts and paths when needed.
+- Out-of-scope items for relevant exclusions.
 
-Se o pedido é apenas redigir, entregue o texto. Para criar/editar no rastreador,
-leia a integração pertinente e execute somente a operação autorizada.
-Com tracking.provider = none, use o arquivo local definido na tarefa.
-Confirme a criação/edição relendo o resultado e entregue arquivo ou URL.
+If the request is only to draft, deliver the text. To create or edit in a tracker,
+read the relevant integration and perform only the authorized operation.
+With tracking.provider = none, use the local file specified in the task.
+Confirm creation or editing by reading the result and provide the file or URL.

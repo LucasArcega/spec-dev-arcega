@@ -1,50 +1,52 @@
 ---
 name: implement-ticket
-description: "Implementa um ticket ou plano até revisão, validação e handoff, com entrega externa somente quando autorizada."
+description: "Implements a ticket or plan through review, validation and handoff, with external delivery only when authorized."
 ---
 
-# Implementar ticket
+# Implement a ticket
 
-Leia .specdev/project.json e .agents/rules/WORKFLOW.md.
-O principal mantém escopo, contratos, integração e conclusão.
+Read .specdev/project.json and .agents/rules/WORKFLOW.md. The lead owns scope,
+contracts, integration and completion.
 
-1. Resolva ticket/plano, dependências e estado Git. Leia código e testes reais.
-   Identifique backend, frontend, UI, infra e documentação afetados.
-   tracking.provider = none permite execução integral com plano local.
-   Ao retomar, confira o último passo registrado e o estado atual antes de agir;
-   preserve operações concluídas e reavalie evidências cujo conteúdo mudou.
-2. Se o plano precisar ser enriquecido, siga enrich-plan antes de implementar.
-   Esclareça somente decisões que mudem o escopo. Não invente dependências.
-3. Se a tarefa exigir branch, use git.branch_pattern e git.base_branch.
-   Preserve alterações existentes; reutilize a branch correta quando já ativa.
-4. Defina contratos antes de delegar partes com arquivos exclusivos.
-   Consulte .agents/rules/DELEGATION.md. Execute sequencialmente se não houver
-   trabalho independente ou runtime de subagents.
-5. Implemente os critérios aceitos, usando testes focados durante a mudança.
-   Confira plano versus código e complete lacunas obrigatórias sem expandir escopo.
-   Relacione cada ID de critério aos arquivos/testes e à evidência obtida no plano.
-6. Faça review-changes no diff pertinente; corrija bugs e regressões relevantes.
-   Use review v2 e valide com --require-evidence. Registre base/head e a identidade
-   do diff local ou snapshot dos arquivos; HEAD sozinho não cobre mudanças locais.
-   Revalide o comportamento afetado pelas correções e atualize a evidência.
-7. Execute a matriz de validation aplicável aos surfaces alterados, com cwd,
-   argumentos e pré-requisitos reais. UI exige a cobertura acordada no plano;
-   persistência e contratos compartilhados exigem integração pertinente.
-   Nenhum comando configurado significa validação ainda não definida,
-   e não aprovação automática.
-8. Só marque o plano concluído e atualize paths.status quando critérios e
-   verificações obrigatórias tiverem evidência verde. Preserve o histórico.
-   Confirme que review e testes cobrem a revisão e o conteúdo atuais; mudança de
-   head ou de arquivos exige avaliar e repetir a cobertura afetada.
-9. Prepare commit/push/PR somente quando essa entrega estiver no pedido.
-   Se delivery.create_pr estiver habilitado e houver autorização, siga create-pr.
-   Merge e fechamento não são parte deste fluxo.
+1. Resolve the ticket/plan, dependencies and Git state. Read actual code and
+   tests. Identify affected backend, frontend, UI, infrastructure and docs.
+   tracking.provider = none allows the full workflow with a local plan.
+   When resuming, check the last recorded step and current state before acting;
+   preserve completed operations and reassess evidence whose content changed.
+2. If the plan needs enrichment, follow enrich-plan before implementation.
+   Clarify only decisions that change scope, using the shared native-question
+   guidance in WORKFLOW.md. Apply the same rule to scope decisions discovered
+   during implementation; continue independent work while waiting where possible.
+   Do not invent dependencies.
+3. If the task requires a branch, use git.branch_pattern and git.base_branch.
+   Preserve existing changes; reuse the correct branch if already active.
+4. Define contracts before delegating parts with exclusive files. Consult
+   .agents/rules/DELEGATION.md. Work sequentially when there is no independent
+   work or subagent runtime.
+5. Implement accepted criteria, using focused tests during changes. Check plan
+   against code and complete required gaps without expanding scope. Link each
+   criterion ID to its files/tests and evidence in the plan.
+6. Run review-changes on the relevant diff; fix meaningful bugs and regressions.
+   Use review v2 and validate with --require-evidence. Record base/head and the
+   identity of the local diff or file snapshot; HEAD alone does not cover local
+   changes. Revalidate behavior affected by fixes and update the evidence.
+7. Run the validation matrix applicable to changed surfaces with real cwd,
+   arguments and prerequisites. UI requires the coverage agreed in the plan;
+   persistence and shared contracts require relevant integration coverage.
+   No configured commands means validation is not yet defined, not automatic approval.
+8. Mark the plan complete and update paths.status only when required criteria
+   and checks have green evidence. Preserve history. Confirm review and tests
+   cover the current revision and content; a change in head or files requires
+   reassessing and repeating affected coverage.
+9. Prepare commit/push/PR only when requested. If delivery.create_pr is enabled
+   and there is authorization, follow create-pr. Merge and closure are not part
+   of this workflow.
 
-O handoff apresenta comportamento, arquivos, branch, testes executados e seus
-resultados, bloqueios, URLs/artifacts produzidos e exclusões. Ambiente indisponível
-não é aprovação. Não afirme que publicou, revisou ou testou sem evidência.
+The handoff includes behavior, files, branch, tests and results, blockers, produced
+URLs/artifacts and exclusions. An unavailable environment is not approval. Do
+not claim publication, review or testing without evidence.
 
-Em trabalho longo, atualize um checkpoint no plano após cada fase concluída ou
-interrupção: último passo, revisão/evidências, bloqueio e próxima ação. Registre
-também PR/ticket e seus estados reais quando existirem. Retomada não concede
-autorização adicional para commit, publicação, merge ou fechamento.
+For long work, update a checkpoint in the plan after each completed phase or
+interruption: last step, revision/evidence, blocker and next action. Include
+actual PR/ticket states when applicable. Resuming does not grant additional
+authorization to commit, publish, merge or close.

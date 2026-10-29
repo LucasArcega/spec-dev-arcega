@@ -1,20 +1,20 @@
 # ClickUp
 
-Use somente quando tracking.provider = clickup e o pedido autorizar a operação.
-Use o conector autenticado disponível; nunca copie credenciais ou configure MCP
-pessoal a partir de outro projeto.
+Use only when tracking.provider = clickup and the request authorizes the operation.
+Use the available authenticated connector; never copy credentials or configure a
+personal MCP from another project.
 
-Use tracking.list_id e o workspace fornecido pelo projeto. Se ainda faltarem,
-faça a consulta de leitura necessária ou peça a informação antes da mutação.
-Use o ID/URL explícito do plano; na ausência, exija correspondência única pelo
-identificador do ticket. Não escolha a task mais parecida.
+Use tracking.list_id and the workspace provided by the project. If either is
+missing, perform the required read-only lookup or request the information before
+mutation. Use the explicit plan ID/URL; otherwise require a unique match by the
+ticket identifier. Do not select the closest-looking task.
 
-Descubra os status válidos. tracking.statuses mapeia intenções pending,
-in_progress e done para nomes exatos; valide o mapeamento na lista antes de atualizar.
-Sem mapeamento, exija um status inequívoco para a intenção; caso contrário, esclareça.
-Releia a task após a alteração.
+Discover valid statuses. tracking.statuses maps pending, in_progress, and done
+intents to exact names; validate the mapping against the list before updating.
+Without a mapping, require an unambiguous status for the intent; otherwise clarify.
+Reread the task after changing it.
 
-Para vincular PR, prefira comentário com a URL quando autorizado. Se comentário
-não estiver disponível, preserve a descrição e prepare a mudança da seção Pull
-Request; aplique só se a autorização abranger editar essa descrição.
-Evite comentários duplicados e não dispare notify_all por padrão.
+To link a PR, prefer a comment with the URL when authorized. If comments are not
+available, preserve the description and prepare a change to the Pull Request
+section; apply it only if authorization includes editing that description.
+Avoid duplicate comments and do not trigger notify_all by default.

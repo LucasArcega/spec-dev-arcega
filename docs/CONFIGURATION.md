@@ -1,34 +1,37 @@
-# Configuração
+# Configuration
 
-.specdev/project.json é lido pelo instalador e pelas skills.
-Não é uma extensão nativa de Codex, Cursor ou Claude. Editar o perfil não
-executa comandos. Nenhum token ou senha deve ser armazenado nele.
+`.specdev/project.json` is read by the installer and skills. It is not a native
+extension of Codex, Cursor or Claude. Editing the profile does not execute
+commands. Do not store tokens or passwords in it.
 
-## Campos
+## Fields
 
-| Campo | Contrato |
+| Field | Contract |
 | --- | --- |
-| schema_version | 1 |
-| project.name / language | Nome e idioma de tickets/planos |
-| git.remote / repository | Remote existente e owner/repo GitHub, se conhecido |
-| git.base_branch | Base de trabalho e de PR salvo pedido explícito |
-| git.branch_pattern | Padrão com ticket e slug, resolvidos pelo agente |
-| paths.plans / status | Caminhos relativos à raiz, usando / |
-| context | Documentos que o agente deve ler para a stack/projeto |
-| validation | Lista de comandos declarativos, selecionados por surfaces |
-| tracking.provider | none, github ou clickup |
-| tracking.list_id / workspace_id | Identificadores do ClickUp, quando aplicável |
-| tracking.statuses | Mapa de pending, in_progress e done para status reais |
-| delivery.create_pr | Preferência; não concede autoridade para publicação |
-| models | ID ou opções nativas por ferramenta (codex/cursor/claude) e papel |
+| `schema_version` | 1 |
+| `project.name` / `language` | Project name and language for tickets and plans |
+| `git.remote` / `repository` | Existing remote and GitHub owner/repo, if known |
+| `git.base_branch` | Work and PR base unless explicitly requested otherwise |
+| `git.branch_pattern` | Pattern with ticket and slug, resolved by the agent |
+| `paths.plans` / `status` | Paths relative to the root, using `/` |
+| `context` | Documents the agent should read for the stack/project |
+| `validation` | Declarative commands selected by surfaces |
+| `tracking.provider` | `none`, `github` or `clickup` |
+| `tracking.list_id` / `workspace_id` | ClickUp identifiers, when applicable |
+| `tracking.statuses` | Map from pending, in_progress and done to actual statuses |
+| `delivery.create_pr` | Preference; does not authorize publication |
+| `models` | ID or native options by tool and role |
 
-Cada comando de validation contém id único, cwd relativo, argv como lista de
-argumentos, surfaces não vazio, requires como lista de pré-requisitos descritivos,
-e required como boolean. Os comandos com required=true e surfaces pertinentes
-bloqueiam conclusão quando não houver evidência verde. required=false descreve
-checks adicionais do projeto; não transforma um critério pedido em opcional.
-Os valores dos surfaces são acordos do projeto, por exemplo backend, frontend,
-ui, infra, tooling e skills. O agente escolhe a cobertura de acordo com o diff.
+New profiles default to English (`project.language: "en"`). Existing consumer
+configurations are preserved on update. Set the language to `pt-BR` or another
+appropriate value for the project; agents use it for tickets and plans.
+
+Each `validation` command has a unique `id`, relative `cwd`, argument-list `argv`,
+nonempty `surfaces`, descriptive prerequisite list `requires`, and boolean
+`required`. Applicable `required=true` commands block completion without passing
+evidence. `required=false` describes extra checks; it does not make a requested
+criterion optional. Surfaces are project conventions, such as backend, frontend,
+ui, infra, tooling and skills. The agent chooses coverage based on the diff.
 
 ~~~json
 {
@@ -41,33 +44,29 @@ ui, infra, tooling e skills. O agente escolhe a cobertura de acordo com o diff.
 }
 ~~~
 
-O instalador não testa existência de executáveis, não inicia Docker, não altera
-Git nem chama rastreadores. Pré-requisitos reais são conferidos na tarefa.
-Configure testes de UI explicitamente se houver UI; o perfil genérico não
-inventa suites ou caminhos.
+The installer does not check executables, start Docker, alter Git or call
+trackers. Actual prerequisites are checked during the task. Configure UI tests
+explicitly when applicable; the generic profile does not invent suites or paths.
+For guided setup, use [setup-project](../.agents/skills/setup-project/SKILL.md).
+Its state contract and completion conditions are in [Guided setup](SETUP.md).
 
-Para preencher os dados do consumidor de modo guiado, use a skill
-[setup-project](../.agents/skills/setup-project/SKILL.md). Ela usa o perfil e
-documentos locais, registra decisões progressivamente e pode ser retomada. O
-contrato de estado e as condições de conclusão estão em [Setup guiado](SETUP.md).
+Branch placeholders are `{ticket}` and `{slug}`, without attribute access,
+conversions or formatters. Tracker IDs are nonempty strings or null; `statuses`
+maps pending, in_progress and done to nonempty names. Additional consumer fields
+are preserved; `doctor` flags unknown fields in the main contracts to help find
+misspellings.
 
-Os placeholders de branch são `{ticket}` e `{slug}`, sem acesso a atributos,
-conversões ou formatadores. IDs de rastreador são strings preenchidas ou null;
-statuses aceita as intenções pending, in_progress e done com nomes preenchidos.
-Campos adicionais do consumidor são preservados; doctor sinaliza campos
-desconhecidos nos contratos principais para ajudar a encontrar erros de digitação.
+## Models
 
-## Modelos
-
-Papéis: explorer, worker, reviewer e investigator.
-Sem configuração (ou com inherit), usa-se a herança da ferramenta.
-Exemplo estrutural, substituindo o ID por um disponível na sua conta:
+Roles are explorer, worker, reviewer and investigator. With no setting, or with
+`inherit`, the client's inheritance applies. Replace the example ID with one
+available to your account:
 
 ~~~json
 {
   "models": {
     "codex": {
-      "reviewer": {"model": "ID_DISPONIVEL_NO_CODEX", "reasoning_effort": "high"}
+      "reviewer": {"model": "AVAILABLE_CODEX_MODEL_ID", "reasoning_effort": "high"}
     },
     "cursor": {},
     "claude": {"explorer": {"model": "inherit", "tools": ["Read", "Grep", "Glob"]}}
@@ -75,72 +74,70 @@ Exemplo estrutural, substituindo o ID por um disponível na sua conta:
 }
 ~~~
 
-Rode install novamente após editar modelos para regenerar os papéis.
-Não há validação online de disponibilidade de modelos.
+Run `install` again after editing models to regenerate the roles. Availability
+is not checked online. The legacy string ID remains valid. Objects accept
+`model` for all clients, `reasoning_effort` only for Codex, and `tools` only for
+Claude. Effort must be supported by the chosen model; known names do not prove
+compatibility or account availability. Without explicit effort, client inheritance
+applies. Do not use `sandbox_mode` or permissions in this object.
 
-A string antiga com o ID continua válida. O objeto aceita model em todos os
-clientes, reasoning_effort somente em Codex e tools somente em Claude. O esforço
-precisa ser suportado pelo modelo escolhido; nomes conhecidos não comprovam
-compatibilidade ou disponibilidade na conta. Sem esforço explícito, a herança
-continua sob as regras do cliente. Não use sandbox_mode ou permissões nesse objeto.
+`tools` is a nonempty allowlist of tool names, not commands or approval rules.
+The example limits the explorer to reading and searching, so it cannot execute
+tests; the primary agent runs required validation. Include tools only when the
+role's task requires them. The list cannot grant permissions absent from the
+session. Without a configured list, the client inherits its tools.
 
-tools é uma allowlist não vazia de nomes de ferramentas, não comandos ou regras
-de aprovação. O exemplo limita o explorer a leitura e busca: ele não poderá
-executar testes; o principal executa a validação necessária. Inclua ferramentas
-somente quando a tarefa do papel exigir. A lista não concede permissões que a
-sessão não tenha. Sem tools configurado, preserva-se a herança do cliente.
+## Update and customize
 
-## Atualizar e personalizar
+`install` is idempotent and updates files matching the version recorded in the
+manifest. A user-modified file causes a conflict. There is no `--force` option
+that discards customizations.
 
-install é idempotente e atualiza arquivos que continuam iguais à versão
-registrada no manifest. Arquivo modificado pelo usuário causa conflito.
-Não há --force que descarte personalizações.
+Since version 0.2, managed UTF-8 text files (.md, .mdc, .py, .json, .toml, .txt,
+.yaml, .yml) use `hash_mode: text-lf`: LF and CRLF are equivalent. Checkout EOL
+conversion does not cause conflicts or rewrites; updates preserve the consumer's
+EOL. Binary content remains byte-exact. The new installer migrates version 0.1
+receipts without discarding real customizations. Consumer Git policy remains
+unchanged; the updated manifest receives hash metadata.
 
-Na versão 0.2, arquivos de texto UTF-8 gerenciados (.md, .mdc, .py, .json, .toml,
-.txt, .yaml, .yml) usam hashes com `hash_mode: text-lf`: LF e CRLF são equivalentes.
-Uma conversão de checkout não causa conflito nem reescrita do arquivo; atualizações
-preservam o EOL existente. Binários continuam exatos por bytes. O novo instalador
-migra receipts da versão 0.1 sem descartar personalizações reais. A política Git
-do consumidor não é alterada; o manifest ganha os metadados de hash na atualização.
+`AGENTS.md` and `CLAUDE.md` receive blocks delimited by specdev comments. Text
+outside the block is preserved. Changes within the block require manual resolution;
+replaced files are copied to `.specdev/backups/`.
 
-AGENTS.md e CLAUDE.md recebem um bloco delimitado por comentários specdev.
-O texto fora do bloco permanece. Alterações no próprio bloco exigem resolução
-manual; os arquivos substituídos são copiados para .specdev/backups/.
+Use `install --dry-run` to plan without creating or changing files; `check` exits
+with code 1 for drift, missing files or an outdated version. Configuration errors
+and installation conflicts exit with code 2.
 
-Use install --dry-run para planejar sem criar nem alterar arquivos; check
-retorna código 1 quando há drift/arquivos ausentes/versão desatualizada.
-Erro de configuração ou conflito de instalação retorna código 2.
-
-## Diagnóstico somente de leitura
+## Read-only diagnostics
 
 ~~~powershell
-python scripts/specdev.py doctor --target "C:/repos/meu-projeto"
-python scripts/specdev.py doctor --target "C:/repos/meu-projeto" --surfaces backend ui
+python scripts/specdev.py doctor --target "C:/Projects/my-project"
+python scripts/specdev.py doctor --target "C:/Projects/my-project" --surfaces backend ui
 ~~~
 
-doctor separa três resultados no JSON:
+`doctor` returns three groups in JSON:
 
-- integrity: arquivos, versão e configuração consistentes com o kit.
-- configuration: validações selecionadas e identidades necessárias configuradas.
-- environment: cwd e executáveis disponíveis localmente, sem executar argv.
+- `integrity`: files, version and configuration are consistent with the kit.
+- `configuration`: selected validations and required identities are configured.
+- `environment`: local cwd and executable availability, without executing argv.
 
-Exit 0 significa prontidão local para iniciar a validação; não significa que
-testes passaram. Exit 1 indica integridade, configuração ou pré-requisito obrigatório
-pendente. requires não vazio permanece requires_verification, pois não se consulta
-Docker, bancos, autenticação ou serviços. Comandos opcionais indisponíveis são
-exibidos sem bloquear; uma superfície pedida sem validação configurada bloqueia.
+Exit 0 indicates local readiness to start validation; it does not mean tests
+passed. Exit 1 indicates pending integrity, configuration or a required prerequisite.
+Nonempty `requires` remains `requires_verification` because Docker, databases,
+authentication and services are not consulted. Unavailable optional commands are
+shown without blocking; a requested surface without configured validation blocks.
 
-doctor não altera arquivos, não executa testes/comandos do perfil, não chama Git
-e não faz consultas externas. O check mantém seu contrato de integridade: um
-perfil genérico pode passar no check e ficar pendente no doctor por falta de
-validações. Resultados de testes continuam registrados na tarefa/review, não no
-diagnóstico. Modelos e descoberta efetiva nos clientes exigem verificação própria.
+`doctor` changes no files, executes no profile commands or tests, calls no Git
+and makes no external requests. `check` retains its integrity contract: a generic
+profile can pass `check` while `doctor` remains pending due to missing validation.
+Test results belong in the task/review, not the diagnostic. Models and actual
+client discovery require separate verification.
 
-Para contexto específico, mantenha documentação local e selecione seu caminho
-em context. Instale o kit antes de adicionar referências a arquivos locais.
-Não edite arquivos gerados no consumidor esperando que atualizem o repositório
-do kit: a atualização segue do kit para o consumidor.
+Keep project-specific context in local documentation and select its path in
+`context`. Install the kit before adding references to local files. Editing
+generated files in the consumer does not update the kit repository: updates flow
+from kit to consumer.
 
-O manifest é rastreabilidade, não mecanismo criptográfico de confiança contra
-quem já pode editar os arquivos. Atualizações de várias versões preservam
-arquivos que saíram do kit; remoções são revisadas manualmente.
+The manifest provides traceability, not cryptographic trust against someone who
+can already edit the files. Multi-version updates preserve files removed from the
+kit; removals are reviewed manually.

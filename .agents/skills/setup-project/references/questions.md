@@ -1,101 +1,104 @@
-# Decisões para setup
+# Setup decisions
 
-Use este mapa para localizar lacunas, não como questionário obrigatório. Prefira
-fontes existentes e respostas já fornecidas. IDs permanecem estáveis na retomada;
-para projetos com múltiplos componentes, use um sufixo estável escolhido a partir
-do componente real, por exemplo `validation.commands.api`.
+Use this map to find gaps, not as a mandatory questionnaire. Prefer existing
+sources and answers already provided. IDs remain stable on resumption; for
+projects with multiple components, use a stable suffix derived from the real
+component, for example validation.commands.api.
+Collect every applicable answer before writing decisions, destinations or state.
+During the interview, interpret the recording instructions below as in-memory
+notes; apply them only after the interview ends.
 
-| ID | Quando verificar/perguntar | Destino confirmado |
+| ID | When to check/ask | Confirmed destination |
 | --- | --- | --- |
-| `product.identity` | Nome do projeto está ausente ou é apenas valor padrão sem confirmação | Perfil: `project.name` |
-| `product.purpose` | Objetivo, público e termos de domínio não estão claros | Contexto local: produto |
-| `product.language` | Idioma de tickets e planos não está decidido | Perfil: `project.language` |
-| `architecture.structure` | Componentes, responsabilidades ou fronteiras não estão claros | Contexto local: arquitetura |
-| `architecture.context` | Existem convenções de stack/projeto que os agentes precisam ler | Perfil: `context`; documento local |
-| `environment.setup` | Preparação, dependências ou serviços necessários não estão documentados | Contexto local: ambiente |
-| `validation.commands` | Comandos, escopo, diretórios ou pré-requisitos de validação não estão definidos | Perfil: `validation`; contexto se necessário |
-| `delivery.git` | Remote, base, padrão de branch ou repositório não estão definidos para o projeto | Perfil: `git` |
-| `delivery.plans` | Caminhos de planos/estado não correspondem a uma convenção confirmada | Perfil: `paths` |
-| `delivery.tracking` | Provedor, identificação ou status aplicáveis estão indefinidos | Perfil: `tracking` |
-| `delivery.pr` | Preferência de PR importa para a equipe e não foi decidida | Perfil: `delivery.create_pr` |
-| `agents.models` | Há necessidade explícita de escolhas por ferramenta/papel | Perfil: `models` |
-| `agents.conventions` | Há instruções específicas e confirmadas para agentes | Contexto local ou instruções locais existentes |
+| product.identity | Project name is missing or only an unconfirmed default | Profile: project.name |
+| product.purpose | Purpose, audience or domain terms are unclear | Local context: product |
+| product.language | Language of tickets and plans is undecided | Profile: project.language |
+| architecture.structure | Components, responsibilities or boundaries are unclear | Local context: architecture |
+| architecture.context | Stack/project conventions exist that agents need to read | Profile: context; local document |
+| environment.setup | Setup, dependencies or required services are undocumented | Local context: environment |
+| validation.commands | Validation commands, scope, directories or prerequisites are undefined | Profile: validation; context if needed |
+| delivery.git | Remote, base, branch pattern or repository are undefined for the project | Profile: git |
+| delivery.plans | Plan/status paths do not match a confirmed convention | Profile: paths |
+| delivery.tracking | Provider, identity or applicable statuses are undefined | Profile: tracking |
+| delivery.pr | PR preference matters to the team and is undecided | Profile: delivery.create_pr |
+| agents.models | There is an explicit need for choices by tool/role | Profile: models |
+| agents.conventions | There are specific, confirmed agent instructions | Local context or existing local instructions |
 
-Para cada decisão aplicável, identifique fonte e resultado esperado; se o projeto
-não precisar dela, registre `not_applicable` após evidência ou resposta explícita.
-Não peça IDs de rastreador, status ou configurações de integração quando não
-houver provedor; uma preferência padrão como `none` ainda requer confirmação se
-não houver evidência de que representa a decisão do projeto. Não solicite modelos
-quando herança atender à equipe. O escopo do pedido pode limitar a entrevista;
-indique o que não foi avaliado em vez de preencher lacunas com suposições.
+For each applicable decision, identify the source and expected result; if the
+project does not need it, record not_applicable after evidence or explicit
+answer. Do not ask for tracker IDs, statuses or integration configuration when
+there is no provider; a default such as none still requires confirmation if no
+evidence shows it represents the project's decision. Do not ask for models
+when inheritance meets the team's needs. The request may limit the interview;
+report what was not assessed instead of filling gaps with assumptions.
 
-## Decisões com vários campos
+## Decisions with multiple fields
 
-O status de cada ID resume todos os seus campos aplicáveis. Para cada campo,
-guarde a origem resumida em `source`: resposta do usuário ou fonte diretamente
-verificada. Um campo opcional só é não aplicável quando isso tiver evidência ou
-for explicitamente informado; `null` ou ausência isolada não comprova isso.
-Registre os campos confirmados nos destinos próprios e preserve-os durante a
-retomada. Liste em `source` também os campos ainda pendentes, sem expor valores
-sensíveis. Se qualquer campo estiver em hipótese ou pendente, mantenha o ID como
-`inferred` ou `pending`, incluído na lista `pending`, e pergunte uma decisão por
-vez. Marque o ID `confirmed` quando todos os campos aplicáveis estiverem
-confirmados e os demais forem comprovadamente não aplicáveis; só use
-`not_applicable` para o ID inteiro quando nenhum dos seus campos se aplicar.
+Each ID's status summarizes all its applicable fields. For each field, store a
+short origin in source: a user response or directly verified source. An optional
+field is not applicable only when supported by evidence or explicitly stated;
+null or absence alone does not prove this. Record confirmed fields in their
+proper destinations and preserve them on resumption. Also list pending fields
+in source without exposing sensitive values. If any field is hypothetical or
+pending, keep the ID inferred or pending, included in the pending list, and ask
+one decision at a time. Mark the ID confirmed when all applicable fields are
+confirmed and the remainder are demonstrably not applicable; use not_applicable
+for the entire ID only when none of its fields apply.
 
-Na retomada, reavalie cada campo de IDs compostos mesmo quando o estado anterior
-os marque como `confirmed`. Por exemplo, `source: "README e contexto"` não
-comprova, por si só, que objetivo, público e termos foram resolvidos. Releia as
-fontes reais e registre a origem de cada campo comprovado em `source`; sinalize
-os demais como pendentes ou hipóteses. Se faltar evidência para algum campo,
-reclassifique `product.purpose` como `pending` ou `inferred`, inclua o ID em
-`pending` e atualize a próxima pergunta e o status geral. Preserve as respostas
-e arquivos existentes, e pergunte apenas pelo campo ainda não resolvido.
+On resumption, reassess each field of composite IDs even when the earlier state
+marked them confirmed. For example, source: "README and context" alone does not
+prove purpose, audience and terms were resolved. Read the actual sources again
+and record each proven field's origin in source; identify remaining fields as
+pending or hypotheses. If evidence is missing for any field, reclassify
+product.purpose as pending or inferred, include the ID in pending, and update
+the next question and overall status. Preserve existing answers and files, and
+ask only about the unresolved field.
 
-Por exemplo, em `delivery.git` avalie `remote`, `base_branch`, `branch_pattern` e
-`repository` separadamente. Se apenas a base foi verificada, a origem e o padrão
-continuam pendentes. O repositório pode ser não aplicável quando confirmado que o
-projeto não usa GitHub; não o infira a partir de `repository: null`. Registre a
-base no perfil, mantenha `delivery.git` pendente e peça uma das decisões restantes.
-Uma fonte possível é `base_branch: arquivo local verificado; remote e
-branch_pattern: pendentes; repository: não aplicável, confirmado pelo usuário`.
+For example, in delivery.git assess remote, base_branch, branch_pattern and
+repository separately. If only the base was verified, remote and pattern remain
+pending. The repository can be not applicable if confirmed that the project
+does not use GitHub; do not infer this from repository: null. Record the base in
+the profile, keep delivery.git pending and ask one of the remaining decisions.
+A possible source is: base_branch: verified local file; remote and
+branch_pattern: pending; repository: not applicable, confirmed by user.
 
-Em `product.purpose`, avalie objetivo, público e termos do domínio separadamente.
-Se o objetivo foi verificado, mas o público ainda é desconhecido, registre o
-objetivo no contexto e mantenha o ID pendente. Os termos só são não aplicáveis se
-isso foi confirmado ou verificado; não conclua que não existem por ausência de
-documentação. `source` pode registrar `objetivo: documentação verificada;
-público: pendente; termos: não aplicáveis, confirmado pelo usuário`. Pergunte
-então sobre o público, sem repetir o objetivo já confirmado.
+In product.purpose, assess purpose, audience and domain terms separately. If
+purpose was verified but the audience remains unknown, record the purpose in
+context and keep the ID pending. Terms are not applicable only if confirmed or
+verified; do not conclude there are none because documentation is absent.
+source might record purpose: verified documentation; audience: pending; terms:
+not applicable, confirmed by user. Ask about the audience without repeating the
+already confirmed purpose.
 
-Para validações, descubra o comportamento pretendido e registre cada comando
-somente quando confirmado: `id`, `cwd` relativo à raiz, `argv` em lista,
-`surfaces`, `requires` e `required`. Preserve comandos existentes e seus IDs;
-antes de alterar ou substituir um comando que conflita com a descoberta, esclareça
-a divergência. A mera presença de um arquivo de projeto não comprova que um
-comando funciona. Não execute os comandos só para coletar essa configuração.
+For validations, discover intended behavior and record each command only when
+confirmed: id, cwd relative to the root, argv as a list, surfaces, requires and
+required. Preserve existing commands and IDs; before changing or replacing a
+command that conflicts with discovery, clarify the divergence. The presence of
+a project file alone does not prove that a command works. Do not run commands
+just to collect this configuration.
 
-## Contrato do perfil
+## Profile contract
 
-O kit instalado fornece `.specdev/project.json` com `schema_version: 1` e as
-seções `project`, `git`, `paths`, `context`, `validation`, `tracking`, `delivery`
-e `models`. Preserve chaves desconhecidas e valores existentes. `project` requer
-nome e idioma; `git` contém remote, base e padrão de branch com placeholders
-`{ticket}` e `{slug}` quando usados. Caminhos de `paths`, `context` e cwd das
-validações são relativos à raiz do projeto, sem `..`; selecione apenas arquivos
-de contexto existentes. `tracking.provider` aceita `none`, `github` ou `clickup`;
-IDs, quando aplicáveis, são strings, e `statuses` mapeia pending, in_progress e
-done a nomes reais. `delivery.create_pr` é boolean e não autoriza publicação.
-`models` agrupa opções por cliente/papel; preserve herança enquanto não houver
-necessidade confirmada de override. Não invente opções ou capacidades do cliente.
+The installed kit supplies .specdev/project.json with schema_version: 1 and
+sections project, git, paths, context, validation, tracking, delivery and models.
+Preserve unknown keys and existing values. project requires name and language;
+git contains remote, base and branch pattern with {ticket} and {slug} placeholders
+when used. paths, context and validation cwd paths are relative to the project
+root, without ..; select only existing context files. tracking.provider accepts
+none, github or clickup; IDs, when applicable, are strings, and statuses maps
+pending, in_progress and done to real names. delivery.create_pr is boolean and
+does not authorize publication. models groups options by client/role; preserve
+inheritance until there is a confirmed need for an override. Do not invent
+options or client capabilities.
 
-Para cada comando, `argv` contém argumentos separados e não vazios; `surfaces` é
-lista não vazia, `requires` é lista de pré-requisitos e `required` é boolean.
-Um array vazio de validation indica cobertura ainda não configurada. Compare as
-informações com os arquivos reais e o pedido, sem assumir que a validade
-estrutural prova que ferramentas, dependências ou serviços estão disponíveis.
+For each command, argv contains separate non-empty arguments; surfaces is a
+non-empty list, requires is a list of prerequisites and required is boolean.
+An empty validation array means coverage is not configured yet. Compare
+information with actual files and the request without assuming structural
+validity proves tools, dependencies or services are available.
 
-Exemplo de pergunta contextual: “Encontrei uma suíte de integração separada da
-unitária. A documentação menciona banco. A equipe usa um banco isolado ao rodá-la?”
-Se a fonte ou o pré-requisito ainda não for conhecido, apresente-o como hipótese.
-Adapte perguntas ao idioma do perfil e às informações já disponíveis.
+Example contextual question: "I found separate integration and unit suites. The
+documentation mentions a database. Does the team use an isolated database when
+running integration tests?" If the source or prerequisite is not yet known,
+present it as a hypothesis. Adapt questions to the profile language and already
+available information.

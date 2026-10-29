@@ -1,46 +1,47 @@
 ---
 name: merge-and-close
-description: "Faz merge de um PR validado e fecha o ticket correspondente quando o usuário pedir essa entrega."
+description: "Merges a validated PR and closes its ticket when the user requests that delivery."
 ---
 
-# Merge e fechamento
+# Merge and close
 
-Use quando o usuário pedir merge e fechamento. Leia o perfil e as integrações.
-A versão inicial usa GitHub para PR e GitHub/ClickUp/nenhum para tracking.
+Use when the user requests merge and closure. Read the profile and integrations.
+The initial version uses GitHub for PRs and GitHub/ClickUp/none for tracking.
 
-Confirme estado Git e a identidade exata de repositório, número do PR, head e base.
-Não escolha commits nem altere arquivos pendentes como parte deste fluxo.
-Resolva um único PR; se ainda não existir e a criação estiver autorizada,
-siga create-pr e consulte novamente.
+Confirm Git state and the exact repository, PR number, head and base.
+Do not pick commits or modify pending files as part of this workflow.
+Resolve a single PR; if one does not yet exist and creation is authorized,
+follow create-pr and query again.
 
-Releia o estado do PR antes de decidir o próximo passo:
-- Aberto: registre o SHA de head analisado, valide mergeabilidade e checks/reviews
-  obrigatórios dessa revisão. Se draft, converta para pronto somente dentro da
-  entrega autorizada, depois de conferir as condições.
-- Já merged: confirme repositório/head/base, data e commit de merge e a associação
-  ao ticket. Pule o merge e prossiga somente com as etapas pendentes autorizadas.
-- Fechado sem merge: registre o bloqueio; não reabra nem tente outro PR por conta própria.
+Read the PR state again before choosing the next step:
+- Open: record the reviewed head SHA, validate mergeability and required
+  checks/reviews for that revision. If draft, mark ready only within the
+  authorized delivery after checking the conditions.
+- Already merged: confirm repository/head/base, merge date and commit, and the
+  association with the ticket. Skip merge and proceed only with authorized pending steps.
+- Closed without merge: record the blocker; do not reopen or choose another PR
+  on your own.
 
-Não use --admin, --force nem ignore proteções.
+Do not use --admin, --force or bypass protections.
 
-Antes do merge, resolva e leia um único ticket quando houver rastreador.
-Evite merge que depois não possa ser associado ao ticket correto.
-Somente para PR aberto, execute o método de merge adotado pelo projeto ou
-especificado pelo usuário. Use a condição de SHA esperado quando a API/CLI disponível a
-suportar. Se head mudar, invalide a aprovação anterior e revalide a revisão nova.
-Sem operação condicional, releia head e checks imediatamente antes de mesclar e
-registre que a verificação não é atômica; não prometa proteção contra corrida.
-Se o projeto exigir essa garantia e a ferramenta não a oferecer, registre o bloqueio.
-Para PR já merged, não execute esta operação novamente.
-Releia o PR e confirme estado merged, data e commit.
+Before merging, resolve and read a single ticket when a tracker is in use.
+Avoid a merge that cannot afterward be associated with the correct ticket.
+Only for an open PR, use the project's merge method or the user's specified one.
+Use an expected-SHA condition when the available API/CLI supports it. If head
+changes, invalidate the previous approval and revalidate the new revision.
+Without a conditional operation, reread head and checks immediately before
+merging and record that the check is not atomic; do not promise race protection.
+If the project requires that guarantee and the tool cannot provide it, record
+the blocker. Do not repeat the merge for an already merged PR.
+Read the PR back and confirm merged state, date and commit.
 
-Atualize a base local apenas se o checkout estiver limpo e a branch não estiver
-em uso em outra worktree. Use fast-forward; se não puder, informe a pendência.
-Releia o ticket e feche no status válido configurado apenas se ainda estiver
-pendente. Se já estiver concluído, confirme o estado e não repita a atualização.
-Se o merge já ocorreu e o fechamento falhou, informe os dois estados reais;
-não repita o merge nem declare a entrega completa.
+Update the local base only if its checkout is clean and the branch is not in
+use in another worktree. Use fast-forward; report a pending action otherwise.
+Read the ticket again and close it in the configured valid status only if still
+pending. If already complete, confirm the state without repeating the update.
+If merge succeeded and closing failed, report both actual states; do not repeat
+the merge or declare delivery complete.
 
-Registre no plano ou handoff PR/ticket, SHA validado e commit de merge, último
-passo concluído, evidência, bloqueio e próxima ação. Uma retomada começa relendo
-esses estados; atualizar a base local pode permanecer como pendência independente.
+Record in the plan or handoff the PR/ticket, validated SHA and merge commit,
+last completed step, evidence, blocker and next action. Resuming starts by
+reading these states again; updating the local base can remain independently pending.

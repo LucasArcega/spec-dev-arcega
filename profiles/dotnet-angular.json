@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project": {
     "name": "configure-me",
-    "language": "pt-BR"
+    "language": "en"
   },
   "git": {
     "remote": "origin",
@@ -42,7 +42,7 @@
         "backend"
       ],
       "requires": [
-        "Configure a separação unit/integration conforme o projeto; Docker quando necessário."
+        "Configure unit/integration separation for the project; Docker when needed."
       ],
       "required": true
     },

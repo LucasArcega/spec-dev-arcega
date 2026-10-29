@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "summary": "P2/P3 corrigidos e itens 4 a 8 implementados. Duas revisoes independentes: contratos aprovados; achados de PATH/cwd e tracking legado corrigidos e aprovados na revisao focada. Sem achados abertos.",
+  "summary": "P2/P3 fixed and items 4 through 8 implemented. Two independent reviews: contracts approved; PATH/cwd and legacy tracking findings fixed and approved in focused review. No open findings.",
   "verdict": "approve",
   "scope": {
     "base": "snapshot:specdev-before; git:unborn",
@@ -45,7 +45,7 @@
         "-v"
       ],
       "status": "passed",
-      "evidence": "49 testes passaram em Python 3.14.0, 44.999 s, exit 0. TEMP/TMP em pasta gravavel; testes usam diretorios temporarios."
+      "evidence": "49 tests passed on Python 3.14.0 in 44.999 s, exit 0. TEMP/TMP used a writable directory; tests use temporary directories."
     },
     {
       "cwd": ".",
@@ -55,7 +55,7 @@
         "validate"
       ],
       "status": "passed",
-      "evidence": "Exit 0; nove skills validas."
+      "evidence": "Exit 0; nine valid skills."
     },
     {
       "cwd": ".",
@@ -67,7 +67,7 @@
         "."
       ],
       "status": "passed",
-      "evidence": "Exit 0; ok=true, issues=[], warnings=[]. Adaptadores conferidos com fontes canonicas."
+      "evidence": "Exit 0; ok=true, issues=[], warnings=[]. Adapters checked against canonical sources."
     },
     {
       "cwd": ".",
@@ -79,7 +79,7 @@
         "."
       ],
       "status": "passed",
-      "evidence": "Exit 0; integridade, configuracao e disponibilidade local prontas; executed=false. Este resultado nao substitui os testes."
+      "evidence": "Exit 0; integrity, configuration and local availability ready; executed=false. This result does not replace tests."
     },
     {
       "cwd": ".",
@@ -92,15 +92,15 @@
         "--dry-run"
       ],
       "status": "passed",
-      "evidence": "Exit 0; changed=[] apos regeneracao dos adaptadores, versao 0.2.0."
+      "evidence": "Exit 0; changed=[] after regenerating adapters, version 0.2.0."
     }
   ],
   "limitations": [
-    "Python 3.11 nao foi executado; suite executada em 3.14.0.",
-    "Cursor e Claude nao foram exercitados como clientes; configuracoes nativas verificadas por testes e integridade.",
-    "Modelos reais, autenticacao e allowlists em clientes nao foram verificados online.",
-    "Merge e fechamento revisados como contratos, sem mutacoes externas.",
-    "Snapshot calculado por caminho UTF-8, NUL, bytes, NUL, na ordem de scope.files; exclui o proprio review e os registros de conclusao do plano."
+    "Python 3.11 was not run; the suite ran on 3.14.0.",
+    "Cursor and Claude were not exercised as clients; native configurations were verified by tests and integrity checks.",
+    "Actual models, authentication and client allowlists were not verified online.",
+    "Merge and closure were reviewed as contracts, without external mutations.",
+    "Snapshot calculated using UTF-8 path, NUL, bytes, NUL, in scope.files order; excludes the review itself and the plan completion records."
   ],
   "blockers": [],
   "findings": []
