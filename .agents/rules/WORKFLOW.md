@@ -14,6 +14,10 @@ Profile fields describe options; they neither authorize nor execute actions.
   context; additional project conventions remain valid.
 - Before changing contracts, read actual code and tests. Do not invent paths,
   priority, dependencies, endpoints, tool capabilities, or results.
+- Consult applicable architectural responsibilities, dependency boundaries,
+  exceptions and checks in the selected project context. Use verified rules and
+  their sources; do not infer a mandatory architecture from folder names or
+  assume an undocumented boundary is absent. Surface uncertainty when material.
 - When a missing decision changes scope, clarify one question at a time with a
   suggestion. Continue independent work; do not repeat resolved questions.
   For the setup-project interview, follow its question-first workflow instead:

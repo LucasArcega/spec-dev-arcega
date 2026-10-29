@@ -113,7 +113,7 @@ class InstallerTests(unittest.TestCase):
         self.assertTrue(kit.check(self.target, self.source)["ok"])
 
     def test_new_profiles_default_to_english(self):
-        for profile in ("generic", "python", "dotnet-angular"):
+        for profile in ("generic", "python", "dotnet-angular", "node", "react", "node-react"):
             with self.subTest(profile=profile):
                 config = kit.read_json(self.source / "profiles" / f"{profile}.json")
                 self.assertEqual(config["project"]["language"], "en")
@@ -149,6 +149,31 @@ class InstallerTests(unittest.TestCase):
         self.assertIn(".claude/skills/setup-project/SKILL.md", result["changed"])
         self.assertEqual(original, (state.read_bytes(), context.read_bytes(), (self.target / kit.CONFIG).read_bytes()))
         self.assertTrue(kit.check(self.target, self.source)["ok"])
+
+    def test_node_and_react_profiles_install_and_preserve_consumer_architecture(self):
+        contexts = {
+            "node": [".agents/context/node.md"],
+            "react": [".agents/context/react.md"],
+            "node-react": [".agents/context/node.md", ".agents/context/react.md"],
+        }
+        for name, selected in contexts.items():
+            with self.subTest(profile=name):
+                target = self.base / name
+                kit.install(target, profile=name, kit_root=self.source)
+                config = kit.read_json(target / kit.CONFIG)
+                self.assertEqual(config["context"], selected)
+                self.assertEqual(config["validation"], [])
+                self.assertTrue(all((target / path).is_file() for path in selected))
+                context = target / "docs/PROJECT_CONTEXT.md"
+                context.parent.mkdir()
+                context.write_text("# Local architecture\nService A must not import service B.\n", encoding="utf-8")
+                config["context"].append("docs/PROJECT_CONTEXT.md")
+                (target / kit.CONFIG).write_text(kit.json_text(config), encoding="utf-8")
+                before = (context.read_bytes(), (target / kit.CONFIG).read_bytes())
+                kit.install(target, kit_root=self.source)
+                self.assertEqual(before, (context.read_bytes(), (target / kit.CONFIG).read_bytes()))
+                self.assertNotIn("docs/PROJECT_CONTEXT.md", kit.read_json(target / kit.MANIFEST)["files"])
+                self.assertTrue(kit.check(target, self.source)["ok"])
 
     def test_crlf_checkout_is_clean_and_updates_keep_eol(self):
         self.install()
@@ -536,8 +561,8 @@ class InstallerTests(unittest.TestCase):
         with self.assertRaises(kit.KitError):
             self.install()
 
-    def test_three_profiles_work_on_distinct_consumers(self):
-        for name in ("generic", "python", "dotnet-angular"):
+    def test_profiles_work_on_distinct_consumers(self):
+        for name in ("generic", "python", "dotnet-angular", "node", "react", "node-react"):
             with self.subTest(profile=name):
                 target = self.base / name
                 kit.install(target, profile=name, kit_root=self.source)

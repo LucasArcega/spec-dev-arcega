@@ -25,7 +25,9 @@ contracts, integration and completion.
    work or subagent runtime.
 5. Implement accepted criteria, using focused tests during changes. Check plan
    against code and complete required gaps without expanding scope. Link each
-   criterion ID to its files/tests and evidence in the plan.
+   criterion ID to its files/tests and evidence in the plan. Respect applicable
+   documented architectural boundaries and exceptions in selected context; do
+   not silently introduce a new dependency or ignore a relevant unknown boundary.
 6. Run review-changes on the relevant diff; fix meaningful bugs and regressions.
    Use review v2 and validate with --require-evidence. Record base/head and the
    identity of the local diff or file snapshot; HEAD alone does not cover local

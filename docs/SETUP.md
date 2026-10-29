@@ -47,6 +47,18 @@ is adapted only to useful sections. Do not store credentials or secret values in
 the profile, context or checkpoint. Client connections and permissions remain
 the session's responsibility.
 
+For architecture, record verified components, responsibilities and applicable
+dependency boundaries in the selected local context, with sources, scope,
+exceptions and existing enforcement checks where known. Keep unresolved rules
+pending; a folder or import alone does not establish a mandatory rule. Planning,
+implementation and review use these project-specific constraints, without
+imposing a particular architecture. Existing consumer documents and setup-state
+IDs remain in use; rules are reassessed when resuming.
+
+The interview also identifies existing lint, type-check, static-analysis and
+architecture checks when applicable. Register only confirmed project commands;
+setup does not install tools or execute commands merely to discover them.
+
 ## Resuming and states
 
 Answers collected during an interrupted interview remain only in the

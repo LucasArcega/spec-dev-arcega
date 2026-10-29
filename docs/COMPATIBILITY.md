@@ -72,3 +72,8 @@ migration from 0.1 installations. See [configuration](CONFIGURATION.md),
 Version 0.4 uses English for the shared instructions and new profiles. Upgrading
 an existing installation preserves its consumer-owned `project.language` and
 other project configuration; review changes with `install --dry-run` first.
+
+Version 0.5 adds selectable Node and React contexts and profiles, and records
+project-specific architectural constraints in existing consumer-owned context.
+These profiles do not assume commands, linters, frameworks or package managers.
+Existing consumer profiles and setup-state IDs remain unchanged during updates.

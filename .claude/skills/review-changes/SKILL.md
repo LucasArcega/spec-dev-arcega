@@ -16,6 +16,14 @@ result under the lead's responsibility. Do not require a specific executable or
 change the session model. If using a CLI, inspect the version's capabilities and
 available path; do not force blocked binaries or relax permissions as a prerequisite.
 
+Inspect the selected project context for architectural boundaries and applicable
+exceptions. For affected components, check dependency direction, responsibilities
+and existing enforcement tests or static checks against the actual diff. Report
+a concrete introduced violation with its project rule, source, code location,
+condition and consequence; distinguish pre-existing violations and allowed
+exceptions. Record missing or unverified rules and checks as limitations when
+relevant; do not invent an architecture or claim an unrun check passed.
+
 Produce v2 JSON according to references/review.schema.json, with schema_version = 2:
 - summary and verdict (approve, request_changes or blocked).
 - scope with non-empty base, head and files. Resolve exact revisions; for local

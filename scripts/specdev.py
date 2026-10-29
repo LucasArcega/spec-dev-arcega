@@ -574,7 +574,7 @@ def main(argv=None):
     subs = parser.add_subparsers(dest="command", required=True)
     command = subs.add_parser("install", help="Install or update without overwriting local changes.")
     command.add_argument("--target", type=Path, required=True)
-    command.add_argument("--profile", help="generic, python or dotnet-angular; first installation only.")
+    command.add_argument("--profile", help="Initial profile name from profiles/; first installation only.")
     command.add_argument("--tools", nargs="+", choices=TOOLS)
     command.add_argument("--dry-run", action="store_true")
     command = subs.add_parser("check", help="Check configuration, integrity and version.")

@@ -14,3 +14,6 @@ claim tests ran merely because you read them. When requested, use the
 review-changes JSON contract. Identify the set or revision reviewed and its
 limitations. For new structured reviews, use v2 with evidence; a blocked review
 is not an approval.
+Check applicable documented architectural boundaries and exceptions against
+changed dependencies and responsibilities; cite the source and report relevant
+unknowns or unrun enforcement as limitations instead of inventing rules.

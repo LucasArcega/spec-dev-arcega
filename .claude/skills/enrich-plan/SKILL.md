@@ -12,6 +12,9 @@ exists, and the actual code for the services, endpoints, components and tests
 involved.
 
 Identify missing criteria, open decisions, dependencies, risks and validation.
+Consult applicable project architectural boundaries and checks from selected
+context; connect affected rules to the plan and evidence. Distinguish existing
+exceptions and undocumented boundaries from newly proposed constraints.
 Gather related open decisions and use the shared native-question guidance in
 WORKFLOW.md. Clarify scope before writing criteria that depend on the answer;
 continue independent investigation while waiting when the session permits it.

@@ -18,3 +18,4 @@ Choose the skill for the task. Read its SKILL.md before executing.
 Canonical roles: .agents/roles/explorer.md, worker.md, reviewer.md, and investigator.md.
 Shared rules: .agents/rules/WORKFLOW.md and DELEGATION.md.
 Stack context: only what is selected by .specdev/project.json.
+Node.js and React contexts can be selected independently or together.

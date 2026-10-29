@@ -129,6 +129,9 @@ is omitted on first installation, `generic` is used.
 | `generic` | Any stack or architecture | No validation commands; configure them for the project. |
 | `python` | Python project | Python context and an example `unittest` validation. |
 | `dotnet-angular` | Project with .NET and Angular | Stack context and example build and test commands. |
+| `node` | Node.js project | Node context; configure project-specific validations. |
+| `react` | React project | React context; configure project-specific validations. |
+| `node-react` | Project using both Node.js and React | Both contexts; configure project-specific validations. |
 
 Review the commands and paths in each profile: they are adjustable examples,
 not automatic architecture detection. Use `--profile` only for the first

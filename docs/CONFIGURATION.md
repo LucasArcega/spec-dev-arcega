@@ -49,6 +49,9 @@ trackers. Actual prerequisites are checked during the task. Configure UI tests
 explicitly when applicable; the generic profile does not invent suites or paths.
 For guided setup, use [setup-project](../.agents/skills/setup-project/SKILL.md).
 Its state contract and completion conditions are in [Guided setup](SETUP.md).
+Architectural rules and exceptions belong in selected consumer-owned context,
+not in a mandatory new profile field. Applicable confirmed lint and architecture
+checks use the existing validation command format.
 
 Branch placeholders are `{ticket}` and `{slug}`, without attribute access,
 conversions or formatters. Tracker IDs are nonempty strings or null; `statuses`

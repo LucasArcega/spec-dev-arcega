@@ -1,5 +1,10 @@
 # Review contract
 
+Review applicable architectural boundaries documented in the selected project
+context, including relevant exceptions and existing enforcement. Findings identify
+the actual rule, changed location, condition and effect. Unknown rules and checks
+not executed are limitations where relevant, not invented violations or passes.
+
 New reviews use `schema_version: 2` and the schema at
 `.agents/skills/review-changes/references/review.schema.json`. The Python
 validator interprets this contract directly using the standard library; it does

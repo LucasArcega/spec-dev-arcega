@@ -66,6 +66,10 @@ Append the selected document to context once, after it exists. Preserve other
 fields, contexts, comments and local instructions; do not edit generated files or
 replace the entire profile. Do not record tokens, passwords, credential contents
 or sensitive data in the context, profile or state.
+Record confirmed architectural boundaries and their evidence in the selected
+consumer-owned context as described in references/questions.md. Capture existing
+project-specific lint and architecture checks as validation only when confirmed;
+do not create a universal architecture or install a lint tool.
 
 Maintain .specdev/setup-state.json as a consumer-owned file, never managed by
 the manifest. Create it only when absent; update known fields while preserving

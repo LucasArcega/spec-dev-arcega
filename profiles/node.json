@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "project": {"name": "configure-me", "language": "en"},
+  "git": {"remote": "origin", "repository": null, "base_branch": "main", "branch_pattern": "{ticket}-{slug}"},
+  "paths": {"plans": "Plans", "status": "Plans/STATUS.md"},
+  "context": [".agents/context/node.md"],
+  "validation": [],
+  "tracking": {"provider": "none", "list_id": null, "workspace_id": null, "statuses": {}},
+  "delivery": {"create_pr": false},
+  "models": {"codex": {}, "cursor": {}, "claude": {}}
+}

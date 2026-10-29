@@ -8,7 +8,7 @@ From planning through delivery, following your team's context and rules.
 
 `Codex` · `Cursor` · `Claude Code` · `other compatible tools`
 
-Current kit version: **0.4.0**
+Current kit version: **0.5.0**
 
 </div>
 
@@ -117,12 +117,13 @@ On macOS/Linux, replace the destination with a local path such as
 | Option | Purpose |
 | --- | --- |
 | `--target` | Path of the project receiving the kit. Quote paths containing spaces. |
-| `--profile` | Initial profile: `generic`, `python` or `dotnet-angular`. Use only for the first installation. |
+| `--profile` | Initial profile: `generic`, `python`, `dotnet-angular`, `node`, `react` or `node-react`. Use only for the first installation. |
 | `--tools` | Clients to install: `codex`, `cursor` and/or `claude`. If omitted on first installation, all three are selected. |
 | `--dry-run` | Show planned changes and conflicts without writing to the destination. |
 
-Profiles are starting points. `generic` has no validation commands; `python`
-and `dotnet-angular` provide examples that must be adapted to the project. New
+Profiles are starting points. `generic`, `node`, `react` and `node-react` have
+no validation commands; `python` and `dotnet-angular` provide examples that
+must be adapted to the project. New
 profiles use English by default. Existing consumer configurations are preserved;
 set `project.language` to `pt-BR` or another language if the project requires it.
 

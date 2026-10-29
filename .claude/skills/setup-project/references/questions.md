@@ -13,10 +13,10 @@ notes; apply them only after the interview ends.
 | product.identity | Project name is missing or only an unconfirmed default | Profile: project.name |
 | product.purpose | Purpose, audience or domain terms are unclear | Local context: product |
 | product.language | Language of tickets and plans is undecided | Profile: project.language |
-| architecture.structure | Components, responsibilities or boundaries are unclear | Local context: architecture |
+| architecture.structure | Components, responsibilities or applicable dependency boundaries are unclear | Local context: architecture |
 | architecture.context | Stack/project conventions exist that agents need to read | Profile: context; local document |
 | environment.setup | Setup, dependencies or required services are undocumented | Local context: environment |
-| validation.commands | Validation commands, scope, directories or prerequisites are undefined | Profile: validation; context if needed |
+| validation.commands | Validation, lint, static-analysis or architecture checks, scope, directories or prerequisites are undefined | Profile: validation; context if needed |
 | delivery.git | Remote, base, branch pattern or repository are undefined for the project | Profile: git |
 | delivery.plans | Plan/status paths do not match a confirmed convention | Profile: paths |
 | delivery.tracking | Provider, identity or applicable statuses are undefined | Profile: tracking |
@@ -33,6 +33,15 @@ when inheritance meets the team's needs. The request may limit the interview;
 report what was not assessed instead of filling gaps with assumptions.
 
 ## Decisions with multiple fields
+
+For architecture.structure, assess real components and responsibilities, then
+applicable dependency and responsibility boundaries separately. An observed
+import or directory alone is not proof of a mandatory rule. Capture confirmed
+rules, their source, scope, explicit exceptions and existing enforcement checks
+in the local context. Where a field is unknown, keep the ID pending or inferred;
+use not_applicable only with evidence or explicit confirmation. A project can
+have no formal architecture: do not impose one. Existing checkpoints keep their
+stable ID and are reassessed on resumption without inventing or discarding data.
 
 Each ID's status summarizes all its applicable fields. For each field, store a
 short origin in source: a user response or directly verified source. An optional
@@ -76,6 +85,10 @@ required. Preserve existing commands and IDs; before changing or replacing a
 command that conflicts with discovery, clarify the divergence. The presence of
 a project file alone does not prove that a command works. Do not run commands
 just to collect this configuration.
+Include existing lint, type-check, static-analysis and architecture-boundary
+checks when applicable; discover their actual scripts, scope and prerequisites.
+An absent or unknown check is not proof that validation is unnecessary. Do not
+install tools, invent commands or assume a check is mandatory.
 
 ## Profile contract
 
